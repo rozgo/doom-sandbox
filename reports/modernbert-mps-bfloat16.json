@@ -1,0 +1,22 @@
+{
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "torch": "2.14.0",
+  "transformers": "5.17.0",
+  "checkpoint": "answerdotai/ModernBERT-base",
+  "batch_size": 1,
+  "max_tokens": 256,
+  "attention": "sdpa",
+  "untrained_action_head": true,
+  "timing_scope": "serialization + tokenization + transfer + inference + CPU action scores",
+  "results": [
+    {
+      "device": "mps",
+      "dtype": "bfloat16",
+      "iterations": 30,
+      "mean_ms": 34.18098891076321,
+      "median_ms": 33.08899997500703,
+      "p95_ms": 45.86612503044307,
+      "decisions_per_second": 29.256028917440453
+    }
+  ]
+}

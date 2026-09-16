@@ -1,0 +1,40 @@
+[project]
+name = "doom-bert"
+version = "0.1.0"
+description = "Inference-paced ViZDoom policies with ModernBERT and Apple Metal support"
+readme = "README.md"
+authors = [
+    { name = "rozgo", email = "alex.rozgo@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "av>=18.1.0",
+    "pillow>=12.3.0",
+    "vizdoom>=1.3.0",
+]
+
+[project.scripts]
+doom-bert = "doom_bert.play:main"
+doom-bert-benchmark = "doom_bert.benchmark:main"
+
+[project.optional-dependencies]
+model = [
+    "torch>=2.14.0",
+    "transformers>=5.17.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.26,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.7",
+]
