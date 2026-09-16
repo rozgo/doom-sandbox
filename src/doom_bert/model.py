@@ -81,6 +81,7 @@ class ModernBertPolicy:
             max_length=256,
             return_token_type_ids=False,
         ).to(self.device)
+        self.last_token_count = int(encoded["input_ids"].shape[-1])
         # Copying results back synchronizes GPU work, so loop timing is real latency.
         probabilities = self.model(**encoded).logits[0].float().sigmoid().cpu().tolist()
         return dict(zip(BUTTONS, probabilities, strict=True))

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import random
 import time
 from collections.abc import Callable
@@ -14,7 +15,8 @@ from pathlib import Path
 import vizdoom as vzd
 from PIL import Image
 
-from doom_bert.policy import BUTTONS, decode_scores
+from doom_bert.overlay import LiveMetrics, LivePreview, StatsOverlay
+from doom_bert.policy import BUTTONS, decode_scores, selection_notes
 from doom_bert.video import VideoRecorder
 
 TICS_PER_SECOND = 35
@@ -82,16 +84,31 @@ def advance_tics(
     tics: int,
     realtime: bool,
     recorder: VideoRecorder | None = None,
+    overlay: StatsOverlay | None = None,
+    preview: LivePreview | None = None,
+    stats: dict | None = None,
+    started: float = 0,
 ) -> None:
     """Advance the chosen action; only the optional realtime mode sleeps."""
-    if not realtime and recorder is None:
+    if not realtime and recorder is None and preview is None:
         game.advance_action(tics)
         return
     for tic in range(tics):
-        if recorder is not None:
-            # MP4 timestamps use game time, independent of decision throughput.
-            frame_state = game.get_state()
-            recorder.write(frame_state.screen_buffer if frame_state else None)
+        if recorder is not None or preview is not None:
+            elapsed = time.monotonic() - started
+            record_frame = recorder is not None and recorder.ready(elapsed)
+            preview_frame = preview is not None and preview.ready()
+            if record_frame or preview_frame:
+                frame_state = game.get_state()
+                screen = frame_state.screen_buffer if frame_state else None
+                if overlay is not None:
+                    screen = overlay.render(
+                        screen, {**(stats or {}), "display_wall_seconds": elapsed}
+                    )
+                if record_frame:
+                    recorder.write(screen, elapsed_seconds=elapsed)
+                if preview_frame:
+                    preview.present(screen)
         if not game.is_episode_finished():
             game.advance_action(1)
         if realtime:
@@ -111,16 +128,20 @@ def play(
     action_tics: int = 1,
     instruction: str = "",
     policy: Callable[[str, dict], dict[str, float]] | None = None,
+    stats: bool = False,
+    video_clock: str = "game",
 ) -> dict:
     if seconds <= 0:
         raise ValueError("seconds must be positive")
     if action_tics < 1:
         raise ValueError("action_tics must be positive")
+    if video_clock not in ("game", "wall"):
+        raise ValueError("video_clock must be game or wall")
     # Refuse to mix observations from different runs or overwrite recordings.
     output.mkdir(parents=True, exist_ok=False)
     (output / "frames").mkdir()
     rng = random.Random(seed)
-    game = create_game(scenario, headless=headless, seed=seed)
+    game = create_game(scenario, headless=headless or stats, seed=seed)
     if policy is not None:
         game.set_available_buttons([getattr(vzd.Button, button) for button in BUTTONS])
     summary = {
@@ -145,11 +166,20 @@ def play(
         "decisions": 0,
         "interrupted": False,
         "video": "replay.mp4" if video else None,
-        "video_fps": TICS_PER_SECOND if video else None,
+        "video_fps": TICS_PER_SECOND if video and video_clock == "game" else None,
+        "video_clock": video_clock if video else None,
+        "video_capture_limit_fps": 30 if video_clock == "wall" else TICS_PER_SECOND,
+        "stats_overlay": stats,
+        "headless": headless,
+        "preview_enabled": stats and not headless,
     }
     (output / "config.json").write_text(json.dumps(summary, indent=2) + "\n")
     completed_kills = 0
     recorder = None
+    overlay = None
+    preview = None
+    metrics = LiveMetrics()
+    metric_values = {}
     decision_seconds = 0.0
     previous_damage = None
     next_capture_tic = 0
@@ -158,12 +188,24 @@ def play(
     started = time.monotonic()
     try:
         game.init()
+        if stats:
+            overlay = StatsOverlay(
+                policy_name="ModernBERT" if policy is not None else "RANDOM BASELINE",
+                device=getattr(policy, "device", None),
+                dtype=getattr(policy, "dtype", None),
+                instruction=instruction,
+                untrained=bool(getattr(policy, "untrained_head", False)),
+                video_clock=video_clock,
+            )
+            if not headless:
+                preview = LivePreview()
         if video:
             recorder = VideoRecorder(
                 output / "replay.mp4",
-                width=game.get_screen_width(),
-                height=game.get_screen_height(),
-                fps=TICS_PER_SECOND,
+                width=overlay.width if overlay else game.get_screen_width(),
+                height=overlay.height if overlay else game.get_screen_height(),
+                fps=30 if video_clock == "wall" else TICS_PER_SECOND,
+                clock=video_clock,
             )
         buttons = [button.name for button in game.get_available_buttons()]
         started = time.monotonic()
@@ -267,6 +309,9 @@ def play(
                     inference_ms = (time.monotonic() - decision_started) * 1000
                     decision_seconds += inference_ms / 1000
                     summary["decisions"] += 1
+                    metric_values = metrics.update(
+                        inference_ms, time.monotonic() - started
+                    )
                 pressed = [
                     name
                     for name, value in zip(
@@ -291,11 +336,27 @@ def play(
                         "action_scores": scores,
                         "decision_ms": inference_ms,
                         "legal_action_count": len(candidates),
+                        "selection_notes": selection_notes(
+                            scores, buttons, action, candidates
+                        )
+                        if action is not None
+                        else [],
+                        "decision_count": summary["decisions"],
+                        "action_tics": action_tics,
+                        "combo_score": math.prod(
+                            scores[button] if value else 1 - scores[button]
+                            for button, value in zip(buttons, action, strict=True)
+                        )
+                        if scores is not None and action is not None
+                        else None,
+                        "input_tokens": getattr(policy, "last_token_count", None),
+                        **metric_values,
                     }
                 )
-                log.write(json.dumps(record) + "\n")
                 summary["observations"] += 1
                 summary["kills"] = completed_kills + int(variables["KILLCOUNT"])
+                record["total_kills"] = summary["kills"]
+                log.write(json.dumps(record) + "\n")
                 action_text = "+".join(pressed) if action is not None else "STOP"
                 if capture:
                     log.flush()
@@ -316,6 +377,10 @@ def play(
                     tics=tics,
                     realtime=realtime,
                     recorder=recorder,
+                    overlay=overlay,
+                    preview=preview,
+                    stats=record,
+                    started=started,
                 )
                 elapsed_tics += tics
     except KeyboardInterrupt:
@@ -332,11 +397,15 @@ def play(
             decision_seconds * 1000 / max(summary["decisions"], 1)
         )
         game.close()
+        if preview is not None:
+            preview.close()
         if recorder is not None:
             recorder.close()
             summary["video_frames"] = recorder.frames
-            summary["video_seconds"] = recorder.frames / TICS_PER_SECOND
+            summary["video_seconds"] = recorder.duration_seconds
             summary["video_encoder"] = recorder.encoder
+            summary["video_width"] = recorder.stream.width
+            summary["video_height"] = recorder.stream.height
         (output / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps(summary, indent=2), flush=True)
     return summary
@@ -364,8 +433,14 @@ def main() -> None:
     parser.add_argument(
         "--action-tics", type=int, default=1, help="Game tics per decision (default: 1)"
     )
-    parser.add_argument(
+    model_source = parser.add_mutually_exclusive_group()
+    model_source.add_argument(
         "--checkpoint", help="Fine-tuned ModernBERT policy directory or model ID"
+    )
+    model_source.add_argument(
+        "--benchmark-demo",
+        action="store_true",
+        help="Show pretrained ModernBERT throughput using an explicitly untrained action head",
     )
     parser.add_argument("--instruction", default="attack every enemy you see")
     parser.add_argument(
@@ -378,7 +453,19 @@ def main() -> None:
         "--video",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Record a 35 fps H.264 MP4 (default: enabled)",
+        help="Record an H.264 MP4 (default: enabled)",
+    )
+    parser.add_argument(
+        "--stats",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Show live performance and button-score panel (default: enabled)",
+    )
+    parser.add_argument(
+        "--video-clock",
+        choices=("wall", "game"),
+        default="wall",
+        help="Record actual wall-clock timing or fixed game-time playback (default: wall)",
     )
     parser.add_argument(
         "--output", type=Path, help="New output directory (must not already exist)"
@@ -396,19 +483,30 @@ def main() -> None:
     if output.exists():
         parser.error(f"output directory already exists: {output}")
     policy = None
-    if args.checkpoint:
+    if args.checkpoint or args.benchmark_demo:
         try:
-            from doom_bert.model import ModernBertPolicy
+            import torch
+
+            from doom_bert.model import BASE_MODEL, ModernBertPolicy
         except ImportError:
             parser.error("Model dependencies are missing; run uv sync --extra model")
 
         try:
+            torch.manual_seed(args.seed)
             policy = ModernBertPolicy(
-                args.checkpoint, device=args.device, dtype=args.dtype
+                args.checkpoint or BASE_MODEL,
+                device=args.device,
+                dtype=args.dtype,
+                allow_untrained_head=args.benchmark_demo,
             )
         except ValueError as error:
             parser.error(str(error))
         print(f"ModernBERT: {policy.device} / {policy.dtype}", flush=True)
+        from doom_bert.benchmark import sample_observation
+
+        for index in range(5):
+            policy(args.instruction, sample_observation(index))
+        policy.synchronize()
     play(
         scenario=args.scenario,
         seconds=args.seconds,
@@ -420,6 +518,8 @@ def main() -> None:
         action_tics=args.action_tics,
         instruction=args.instruction,
         policy=policy,
+        stats=args.stats,
+        video_clock=args.video_clock,
     )
 
 

@@ -8,7 +8,35 @@ Pixels are used only for screenshots and video.
 **No trained Doom policy checkpoint is included yet.** The pretrained ModernBERT
 encoder is downloaded and its seven-button head is initialized only for hardware
 benchmarking. Normal model gameplay requires saved action-head weights and named
-action labels. The CLI defaults to random actions until `--checkpoint` is supplied.
+action labels. The CLI defaults to random actions; `--checkpoint` selects a trained
+policy and `--benchmark-demo` explicitly selects the untrained-head speed demo.
+
+## Live decision dashboard
+
+```sh
+uv run --extra model doom-bert --benchmark-demo --seconds 60 \
+  --instruction "Shoot at enemies, but retreat when health falls below 40."
+```
+
+The charcoal window puts Doom on the left and instrumentation on the right:
+
+- Median and p95 decision latency over the last 60 decisions, including text
+  preparation, tokenization, model inference, transfer, and action decoding.
+- Actual full-loop decisions per wall-clock second, including rendering and
+  recording, measured between completed decisions.
+- All seven sigmoid button scores, a 0.5 marker, and executed-button indicators.
+  Cyan marks executed buttons; amber marks above-threshold buttons suppressed by
+  the legal-action constraints.
+- Legal combination count, the chosen combination's product score, and explicit
+  explanations for conflicting directions or unavailable firing.
+- Instruction, input token count, Metal/dtype, game and wall clocks, and the
+  untrained action-head status.
+
+The same layout is recorded into the MP4. The default `--video-clock wall` uses
+actual monotonic capture timestamps, so playback demonstrates measured speed.
+Video/preview capture is capped at 30 Hz without sleeping or capping decisions;
+panel text refreshes at 10 Hz for readability. `--no-stats` records just the game.
+`--headless` hides the window while retaining the recorded dashboard.
 
 ## Setup and play
 
@@ -28,8 +56,9 @@ adds PyTorch and Transformers; `uv sync --locked` alone runs the random baseline
 The game runs as fast as decisions, rendering, logging, and recording allow.
 `--seconds` means **game seconds**, not wall time. One action is applied for one
 game tic; the next decision always sees a fresh state. The engine waits during
-inference, so there is no queue of outdated model actions. MP4 playback is normal
-game speed regardless of how fast or slowly inference ran.
+inference, so there is no queue of outdated model actions. Default MP4 playback
+matches actual wall time. Use `--video-clock game` for a fixed 35 fps replay at
+normal game speed, independent of inference speed.
 
 ```sh
 # Maximum throughput without a window or video encoding
@@ -42,7 +71,7 @@ uv run doom-bert --realtime --seconds 60
 uv run doom-bert --action-tics 4 --seconds 60
 
 # Reproduce the original one-decision-per-second behavior
-uv run doom-bert --realtime --action-tics 35 --seconds 60 --seed 7
+uv run doom-bert --realtime --action-tics 35 --video-clock game --seconds 60 --seed 7
 
 # Movement arena
 uv run doom-bert --scenario deadly_corridor --seconds 60
@@ -103,11 +132,11 @@ Every run is stored under `runs/<UTC timestamp>/`:
 
 | File | Contents |
 | --- | --- |
-| `states.jsonl` | Every decision's structured observation, raw scores, buttons, rewards, timing, and episode-end events |
+| `states.jsonl` | Every decision's observation, raw scores, buttons, selection explanation, rolling metrics, rewards, and episode-end events |
 | `frames/<tic>.png` | RGB screenshot approximately once per game second, plus the final active observation |
 | `config.json` | Scenario, seed, instruction, policy device, dtype, and control interval |
 | `summary.json` | Decisions/second, mean decision latency, game/wall duration, kills, deaths, video frames and encoder |
-| `replay.mp4` | 640×480 H.264 video, one frame per game tic, played at 35 fps |
+| `replay.mp4` | 1440×900 dashboard (640×480 with `--no-stats`), H.264, actual wall-clock timing by default |
 
 The `second` field is game time; `wall_seconds` records actual elapsed time.
 `screen` is null between screenshot captures. Frame paths are relative to the run
@@ -120,7 +149,8 @@ encoding still consume time; `--headless --no-video` removes window/video overhe
 Episodes restart at the next decision after death or completion. With multi-tic
 actions, the final image is held until that action interval ends. A final
 observation or terminal event is logged without a further action. A partial
-final action is shortened to preserve the requested game/video duration.
+final action is shortened to preserve the requested game duration. With
+`--video-clock game`, this also preserves the fixed-rate video duration.
 
 The original 1 Hz random demo recorded **10 kills, 5 deaths, and 61 observations**
 in 60 seconds: [MP4](media/first-demo.mp4), [live metrics](media/first-demo.json),
@@ -139,7 +169,9 @@ git lfs ls-files
 Tests launch the real engine and check fresh one-tic policy observations without
 sleeping, legacy 35-tic spacing, seed reproducibility, action masks, object
 filtering, screenshots, episode restart, output preservation, and decoded MP4
-frame count and duration, including partial action intervals.
+frame count and duration, including partial action intervals. Additional tests
+check rolling throughput arithmetic, selection explanations, and preservation of
+irregular wall-clock video timestamps.
 
 Media extensions use Git LFS. Code, configuration, reports, and `uv.lock` stay in
 Git. `runs/`, `.venv/`, caches, and local environment files are ignored. Copy a

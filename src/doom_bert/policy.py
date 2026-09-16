@@ -13,6 +13,34 @@ BUTTONS = (
 )
 
 
+def selection_notes(
+    scores: dict[str, float] | None,
+    buttons: list[str],
+    action: list[int],
+    candidates: list[list[int]],
+) -> list[str]:
+    if scores is None:
+        return ["Uniform random sample from legal combinations."]
+    notes = []
+    pressed = {button for button, value in zip(buttons, action, strict=True) if value}
+    for left, right in (
+        ("TURN_LEFT", "TURN_RIGHT"),
+        ("MOVE_LEFT", "MOVE_RIGHT"),
+        ("MOVE_FORWARD", "MOVE_BACKWARD"),
+    ):
+        if scores.get(left, 0) > 0.5 and scores.get(right, 0) > 0.5:
+            winner = left if left in pressed else right
+            loser = right if winner == left else left
+            notes.append(f"{loser} off: conflicts with {winner}.")
+    if "ATTACK" in buttons:
+        attack = buttons.index("ATTACK")
+        if scores.get("ATTACK", 0) > 0.5 and not any(
+            action[attack] for action in candidates
+        ):
+            notes.insert(0, "ATTACK off: unavailable in current state.")
+    return notes
+
+
 def serialize_observation(observation: dict) -> str:
     variables = observation["variables"]
     px, py = variables["POSITION_X"], variables["POSITION_Y"]
