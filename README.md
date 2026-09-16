@@ -13,10 +13,18 @@ CLI defaults to random actions; `--checkpoint` selects learned gameplay and
 
 ## Controlled learned demo
 
-[Watch the trained attack demo](media/trained-modernbert-demo.mp4) ·
-[Watch the same model evade](media/trained-modernbert-evasive.mp4)
+[Watch the combined strategy demo (47 seconds)](media/trained-strategy-comparison.mp4)
 
-[![Trained ModernBERT choosing actions from live state](media/trained-modernbert-demo.png)](media/trained-modernbert-demo.mp4)
+[![Same model and state, different instructions and action scores](media/trained-strategy-comparison.png)](media/trained-strategy-comparison.mp4)
+
+The edit includes both complete recordings, attack/evade chapter labels, a
+comparison of the initial ATTACK scores, and a results card. The comparison
+starts at **0:26.5**; the evade chapter starts at **0:31.5**. Gameplay keeps its
+recorded speed, resampled to 30 fps. These are two separate seeded runs.
+See the [edit timeline and verification](reports/trained-strategy-comparison.json).
+
+Original clips: [attack](media/trained-modernbert-demo.mp4) ·
+[evade](media/trained-modernbert-evasive.mp4).
 
 | Instruction | Game time | Actual playback | Decisions/s | Mean decision | Result |
 | --- | --- | --- | --- | --- | --- |
@@ -45,6 +53,18 @@ uv run --extra model doom-bert --checkpoint models/controlled-demo \
 uv run --extra model doom-bert-train --output models/my-experiment \
   --dataset runs/my-experiment-data.jsonl
 ```
+
+To reproduce the video edit with new output filenames, install FFmpeg (including
+`ffprobe`) and run:
+
+```sh
+uv run --extra model python scripts/edit_strategy_demo.py \
+  --output media/my-strategy-edit.mp4 --work-dir runs/my-strategy-edit
+```
+
+The editor uses Pillow for charcoal title cards and FFmpeg for overlays, video
+encoding, concatenation, and chapter metadata. Encoding defaults to macOS
+VideoToolbox; `--encoder libx264` selects software encoding.
 
 Code turns the nearest visible monster's geometry into `left`, `center`, or
 `right`, bins distance and health, and reports whether ammo is available. An
