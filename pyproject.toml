@@ -17,6 +17,7 @@ dependencies = [
 [project.scripts]
 doom-bert = "doom_bert.play:main"
 doom-bert-benchmark = "doom_bert.benchmark:main"
+doom-bert-train = "doom_bert.train:main"
 
 [project.optional-dependencies]
 model = [

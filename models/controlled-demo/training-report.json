@@ -1,0 +1,330 @@
+{
+  "base_model": "answerdotai/ModernBERT-base",
+  "seed": 7,
+  "state_format": "categorical-v1",
+  "training_scope": "frozen encoder; trained prediction head and seven-button classifier",
+  "encoder_device": "mps",
+  "encoder_dtype": "float16",
+  "head_training_device": "cpu",
+  "head_training_dtype": "float32",
+  "torch": "2.14.0",
+  "transformers": "5.17.0",
+  "trainable_parameters": 595975,
+  "total_parameters": 149610247,
+  "selected_step": 150,
+  "completed_steps": 1200,
+  "initial_validation": {
+    "examples": 48,
+    "exact_vector_accuracy": 0.0,
+    "button_accuracy": 0.6279761791229248,
+    "per_button": {
+      "ATTACK": {
+        "f1": 0.0,
+        "positive_examples": 0
+      },
+      "MOVE_LEFT": {
+        "f1": 0.0,
+        "positive_examples": 18
+      },
+      "MOVE_RIGHT": {
+        "f1": 0.7692307692307693,
+        "positive_examples": 30
+      },
+      "MOVE_FORWARD": {
+        "f1": 0.0,
+        "positive_examples": 0
+      },
+      "MOVE_BACKWARD": {
+        "f1": 1.0,
+        "positive_examples": 48
+      },
+      "TURN_LEFT": {
+        "f1": 0.746268656716418,
+        "positive_examples": 30
+      },
+      "TURN_RIGHT": {
+        "f1": 0.4,
+        "positive_examples": 12
+      }
+    }
+  },
+  "metrics": {
+    "train": {
+      "examples": 372,
+      "exact_vector_accuracy": 0.9059139490127563,
+      "button_accuracy": 0.9842550158500671,
+      "per_button": {
+        "ATTACK": {
+          "f1": 0.9777777777777777,
+          "positive_examples": 22
+        },
+        "MOVE_LEFT": {
+          "f1": 0.947103274559194,
+          "positive_examples": 206
+        },
+        "MOVE_RIGHT": {
+          "f1": 0.9484536082474226,
+          "positive_examples": 92
+        },
+        "MOVE_FORWARD": {
+          "f1": 0.9230769230769231,
+          "positive_examples": 6
+        },
+        "MOVE_BACKWARD": {
+          "f1": 0.9863945578231292,
+          "positive_examples": 298
+        },
+        "TURN_LEFT": {
+          "f1": 1.0,
+          "positive_examples": 102
+        },
+        "TURN_RIGHT": {
+          "f1": 1.0,
+          "positive_examples": 150
+        }
+      }
+    },
+    "validation": {
+      "examples": 48,
+      "exact_vector_accuracy": 1.0,
+      "button_accuracy": 1.0,
+      "per_button": {
+        "ATTACK": {
+          "f1": 0.0,
+          "positive_examples": 0
+        },
+        "MOVE_LEFT": {
+          "f1": 1.0,
+          "positive_examples": 18
+        },
+        "MOVE_RIGHT": {
+          "f1": 1.0,
+          "positive_examples": 30
+        },
+        "MOVE_FORWARD": {
+          "f1": 0.0,
+          "positive_examples": 0
+        },
+        "MOVE_BACKWARD": {
+          "f1": 1.0,
+          "positive_examples": 48
+        },
+        "TURN_LEFT": {
+          "f1": 1.0,
+          "positive_examples": 30
+        },
+        "TURN_RIGHT": {
+          "f1": 1.0,
+          "positive_examples": 12
+        }
+      }
+    },
+    "test": {
+      "examples": 48,
+      "exact_vector_accuracy": 0.8125,
+      "button_accuracy": 0.9702380895614624,
+      "per_button": {
+        "ATTACK": {
+          "f1": 1.0,
+          "positive_examples": 2
+        },
+        "MOVE_LEFT": {
+          "f1": 0.9508196721311475,
+          "positive_examples": 32
+        },
+        "MOVE_RIGHT": {
+          "f1": 0.6666666666666666,
+          "positive_examples": 6
+        },
+        "MOVE_FORWARD": {
+          "f1": 0.0,
+          "positive_examples": 0
+        },
+        "MOVE_BACKWARD": {
+          "f1": 0.9866666666666667,
+          "positive_examples": 38
+        },
+        "TURN_LEFT": {
+          "f1": 1.0,
+          "positive_examples": 12
+        },
+        "TURN_RIGHT": {
+          "f1": 1.0,
+          "positive_examples": 18
+        }
+      }
+    }
+  },
+  "test_instruction_flips": [
+    {
+      "state": "health=wounded ammo=loaded nearest_enemy=center range=medium",
+      "aggressive_attack": 0.7567991018295288,
+      "evasive_attack": 0.0029039736837148666
+    }
+  ],
+  "history": [
+    {
+      "step": 50,
+      "train_exact": 0.5107526779174805,
+      "validation_exact": 0.3125,
+      "validation_loss": 0.6207676529884338
+    },
+    {
+      "step": 100,
+      "train_exact": 0.8440860509872437,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.09387723356485367
+    },
+    {
+      "step": 150,
+      "train_exact": 0.9059139490127563,
+      "validation_exact": 1.0,
+      "validation_loss": 0.03131873533129692
+    },
+    {
+      "step": 200,
+      "train_exact": 0.9435483813285828,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.06117171421647072
+    },
+    {
+      "step": 250,
+      "train_exact": 0.9086021780967712,
+      "validation_exact": 0.875,
+      "validation_loss": 0.054927922785282135
+    },
+    {
+      "step": 300,
+      "train_exact": 0.9704301357269287,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.04724322259426117
+    },
+    {
+      "step": 350,
+      "train_exact": 0.9516128897666931,
+      "validation_exact": 0.9583333134651184,
+      "validation_loss": 0.02114272490143776
+    },
+    {
+      "step": 400,
+      "train_exact": 0.9408602118492126,
+      "validation_exact": 0.8333333134651184,
+      "validation_loss": 0.21967177093029022
+    },
+    {
+      "step": 450,
+      "train_exact": 0.9838709831237793,
+      "validation_exact": 0.9166666865348816,
+      "validation_loss": 0.05225363373756409
+    },
+    {
+      "step": 500,
+      "train_exact": 1.0,
+      "validation_exact": 0.9583333134651184,
+      "validation_loss": 0.037338513880968094
+    },
+    {
+      "step": 550,
+      "train_exact": 0.9946236610412598,
+      "validation_exact": 0.9583333134651184,
+      "validation_loss": 0.032686151564121246
+    },
+    {
+      "step": 600,
+      "train_exact": 0.9220430254936218,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.04313090443611145
+    },
+    {
+      "step": 650,
+      "train_exact": 1.0,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.04396548867225647
+    },
+    {
+      "step": 700,
+      "train_exact": 1.0,
+      "validation_exact": 0.9166666865348816,
+      "validation_loss": 0.06903446465730667
+    },
+    {
+      "step": 750,
+      "train_exact": 0.9973118305206299,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.046380434185266495
+    },
+    {
+      "step": 800,
+      "train_exact": 0.9784946441650391,
+      "validation_exact": 0.9166666865348816,
+      "validation_loss": 0.06759820878505707
+    },
+    {
+      "step": 850,
+      "train_exact": 0.9516128897666931,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.03933078795671463
+    },
+    {
+      "step": 900,
+      "train_exact": 0.9811828136444092,
+      "validation_exact": 0.9583333134651184,
+      "validation_loss": 0.023826291784644127
+    },
+    {
+      "step": 950,
+      "train_exact": 0.9946236610412598,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.0219236109405756
+    },
+    {
+      "step": 1000,
+      "train_exact": 1.0,
+      "validation_exact": 0.9166666865348816,
+      "validation_loss": 0.06124863028526306
+    },
+    {
+      "step": 1050,
+      "train_exact": 1.0,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.05664578080177307
+    },
+    {
+      "step": 1100,
+      "train_exact": 1.0,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.05692966282367706
+    },
+    {
+      "step": 1150,
+      "train_exact": 1.0,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.04847997799515724
+    },
+    {
+      "step": 1200,
+      "train_exact": 1.0,
+      "validation_exact": 0.9375,
+      "validation_loss": 0.052289724349975586
+    }
+  ],
+  "split_unit": "whole categorical state, across every instruction",
+  "dataset": "data/controlled-demo.jsonl",
+  "instructions": {
+    "aggressive": [
+      "Attack enemies on sight.",
+      "Shoot enemies whenever you can."
+    ],
+    "cautious": [
+      "Shoot at enemies, but retreat when health falls below 40.",
+      "Fight, but stop shooting and retreat below 40 health."
+    ],
+    "evasive": [
+      "Do not shoot. Evade the enemies.",
+      "Never fire. Keep away from enemies."
+    ]
+  },
+  "runtime_encoder_cache": false,
+  "runtime_teacher": false,
+  "training_wall_seconds": 3.5888995830900967
+}

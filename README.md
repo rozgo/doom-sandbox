@@ -5,11 +5,60 @@ baseline, and a ModernBERT policy adapter accelerated by Apple Metal.
 Instructions and structured state enter the model; button probabilities come out.
 Pixels are used only for screenshots and video.
 
-**No trained Doom policy checkpoint is included yet.** The pretrained ModernBERT
-encoder is downloaded and its seven-button head is initialized only for hardware
-benchmarking. Normal model gameplay requires saved action-head weights and named
-action labels. The CLI defaults to random actions; `--checkpoint` selects a trained
-policy and `--benchmark-demo` explicitly selects the untrained-head speed demo.
+**A small trained checkpoint is included:** `models/controlled-demo`. It learns
+seven button scores from known instructions and a controlled description of live
+state. The full ModernBERT encoder and trained head run on every decision. The
+CLI defaults to random actions; `--checkpoint` selects learned gameplay and
+`--benchmark-demo` explicitly selects the earlier untrained-head speed demo.
+
+## Controlled learned demo
+
+```sh
+git lfs pull
+uv sync --locked --extra model
+uv run --extra model doom-bert --checkpoint models/controlled-demo \
+  --instruction "Attack enemies on sight." --action-tics 2 --seconds 60
+
+# Same trained model, opposite instruction
+uv run --extra model doom-bert --checkpoint models/controlled-demo \
+  --instruction "Do not shoot. Evade the enemies." --action-tics 2 --seconds 30
+
+# Reproduce the small training experiment in a new directory
+uv run --extra model doom-bert-train --output models/my-experiment \
+  --dataset runs/my-experiment-data.jsonl
+```
+
+Code turns the nearest visible monster's geometry into `left`, `center`, or
+`right`, bins distance and health, and reports whether ammo is available. An
+example input is `health=healthy ammo=loaded nearest_enemy=center range=medium`.
+These are perception features; the text contains no button commands. The
+checkpoint selects this serializer through its saved configuration.
+
+Offline rules generated [468 labeled examples](data/controlled-demo.jsonl) for
+three behaviors and two known phrasings per behavior. We trained **595,975 head
+parameters** and froze the encoder, preserving the complete **149.6M parameter**
+inference architecture. Encoder outputs were cached only during training.
+Gameplay imports no teacher, uses no embedding or action cache, and executes the
+highest-scoring legal vector from the model's seven sigmoid outputs.
+
+Whole state combinations are split across training (62 combinations / 372
+examples), validation (8 / 48), and test (8 / 48). The selected head gets **81.25%
+exact vector accuracy** and **97.02% individual-button accuracy** on the test set.
+The saved float16 checkpoint was reloaded and verified with 48 complete encoder
+forwards. For one held-out aligned, wounded state, ATTACK scores **0.7565** under
+the aggressive instruction and **0.0029** under the evasive instruction.
+
+This deliberately small demonstration covers a finite vocabulary and six known
+instructions. It does not establish general Doom skill or arbitrary language
+understanding. The test set has only two positive ATTACK examples and no positive
+MOVE_FORWARD examples. See the [training report](models/controlled-demo/training-report.json),
+[reload verification](reports/trained-model-verification.json), and
+[checkpoint notes](models/controlled-demo/README.md) for the complete results.
+
+The two-tic action interval requires **17.5 decisions/s** to match the engine's
+35 tics/s. Decisions remain uncapped and each receives a fresh observation. Use
+`--action-tics 1` to decide on every game tic instead. Training changes weights;
+the full inference work still happens on each call.
 
 ## Live decision dashboard
 

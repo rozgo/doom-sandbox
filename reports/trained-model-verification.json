@@ -1,0 +1,52 @@
+{
+  "checkpoint": "models/controlled-demo",
+  "device": "mps",
+  "dtype": "float16",
+  "full_encoder_forwards": 48,
+  "observations": 48,
+  "runtime_encoder_cache": false,
+  "teacher_in_runtime": false,
+  "representative_raw_values": "Different numbers within held-out categorical bins",
+  "metrics": {
+    "examples": 48,
+    "exact_vector_accuracy": 0.8125,
+    "button_accuracy": 0.9702380895614624,
+    "per_button": {
+      "ATTACK": {
+        "f1": 1.0,
+        "positive_examples": 2
+      },
+      "MOVE_LEFT": {
+        "f1": 0.9508196721311475,
+        "positive_examples": 32
+      },
+      "MOVE_RIGHT": {
+        "f1": 0.6666666666666666,
+        "positive_examples": 6
+      },
+      "MOVE_FORWARD": {
+        "f1": 0.0,
+        "positive_examples": 0
+      },
+      "MOVE_BACKWARD": {
+        "f1": 0.9866666666666667,
+        "positive_examples": 38
+      },
+      "TURN_LEFT": {
+        "f1": 1.0,
+        "positive_examples": 12
+      },
+      "TURN_RIGHT": {
+        "f1": 1.0,
+        "positive_examples": 18
+      }
+    }
+  },
+  "instruction_flips": [
+    {
+      "state": "health=wounded ammo=loaded nearest_enemy=center range=medium",
+      "aggressive_attack": 0.7565374970436096,
+      "evasive_attack": 0.0029121784027665854
+    }
+  ]
+}

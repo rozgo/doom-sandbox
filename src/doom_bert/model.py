@@ -3,7 +3,11 @@
 import torch
 from transformers import AutoConfig, AutoModelForSequenceClassification, AutoTokenizer
 
-from doom_bert.policy import BUTTONS, serialize_observation
+from doom_bert.policy import (
+    BUTTONS,
+    serialize_categorical_observation,
+    serialize_observation,
+)
 
 BASE_MODEL = "answerdotai/ModernBERT-base"
 
@@ -52,6 +56,10 @@ class ModernBertPolicy:
                 f"id2label in this order: {BUTTONS}. The base model is not a trained policy."
             )
         config.problem_type = "multi_label_classification"
+        self.state_format = getattr(config, "doom_bert_state_format", "numeric-v1")
+        if self.state_format not in ("numeric-v1", "categorical-v1"):
+            raise ValueError(f"Unknown checkpoint state format: {self.state_format}")
+        self.training_scope = getattr(config, "doom_bert_training_scope", None)
         # Older Transformers releases auto-compiled CUDA-specific paths.
         if hasattr(config, "reference_compile"):
             config.reference_compile = False
@@ -73,9 +81,14 @@ class ModernBertPolicy:
 
     @torch.inference_mode()
     def __call__(self, instruction: str, observation: dict) -> dict[str, float]:
+        self.last_state_text = (
+            serialize_categorical_observation(observation)
+            if self.state_format == "categorical-v1"
+            else serialize_observation(observation)
+        )
         encoded = self.tokenizer(
             instruction,
-            serialize_observation(observation),
+            self.last_state_text,
             return_tensors="pt",
             truncation=True,
             max_length=256,

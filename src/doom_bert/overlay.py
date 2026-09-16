@@ -77,6 +77,7 @@ class StatsOverlay:
         instruction: str,
         untrained: bool,
         video_clock: str,
+        training_scope: str | None = None,
     ):
         self.policy_name = policy_name
         self.device = "METAL / MPS" if device == "mps" else (device or "CPU").upper()
@@ -84,6 +85,7 @@ class StatsOverlay:
         self.instruction = instruction
         self.untrained = untrained
         self.video_clock = video_clock
+        self.training_scope = training_scope
         self.small = font(12, mono=True)
         self.body = font(15)
         self.mono = font(14, mono=True)
@@ -99,7 +101,9 @@ class StatsOverlay:
         draw.text((24, 20), f"DOOM / {self.policy_name}", font=self.title, fill=TEXT)
         draw.text(
             (26, 63),
-            "STATE + INSTRUCTION  >  BUTTON SCORES  >  GAME ACTION",
+            ("INPUT / " + stats["state_text"])
+            if stats.get("state_text")
+            else "STATE + INSTRUCTION  >  BUTTON SCORES  >  GAME ACTION",
             font=self.small,
             fill=MUTED,
         )
@@ -111,6 +115,8 @@ class StatsOverlay:
         )
         if self.policy_name == "RANDOM BASELINE":
             label = "RANDOM POLICY / NO MODEL"
+        elif self.training_scope:
+            label = "TRAINED HEAD / CONTROLLED STATE DEMO"
         draw.text(
             (1008, 53), label, font=self.small, fill=AMBER if self.untrained else MUTED
         )

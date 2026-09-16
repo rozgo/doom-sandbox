@@ -68,6 +68,40 @@ def serialize_observation(observation: dict) -> str:
     return " ".join(parts)
 
 
+def serialize_categorical_observation(observation: dict) -> str:
+    """Controlled perception vocabulary, with no action labels in the input."""
+    variables = observation["variables"]
+    health = variables["HEALTH"]
+    condition = "critical" if health < 20 else ("wounded" if health < 40 else "healthy")
+    ammo = "loaded" if variables["SELECTED_WEAPON_AMMO"] > 0 else "empty"
+    px, py = variables["POSITION_X"], variables["POSITION_Y"]
+    width = observation["screen_width"]
+    enemies = []
+    for obj in observation["visible_objects"]:
+        if obj.get("category") != "Monster":
+            continue
+        x, _, box_width, _ = obj["box"]
+        distance = math.hypot(obj["position"][0] - px, obj["position"][1] - py)
+        bearing = (x + box_width / 2 - width / 2) / (width / 2)
+        enemies.append((distance, obj["id"], bearing))
+    side, proximity = "none", "unknown"
+    if enemies:
+        distance, _, bearing = min(enemies)
+        side = (
+            "center" if abs(bearing) <= 0.12 else ("left" if bearing < 0 else "right")
+        )
+        proximity = (
+            "touching"
+            if distance < 160
+            else (
+                "near"
+                if distance < 240
+                else ("medium" if distance <= 500 else "distant")
+            )
+        )
+    return f"health={condition} ammo={ammo} nearest_enemy={side} range={proximity}"
+
+
 def decode_scores(
     scores: dict[str, float], buttons: list[str], candidates: list[list[int]]
 ) -> list[int]:

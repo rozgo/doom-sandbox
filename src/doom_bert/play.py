@@ -168,6 +168,8 @@ def play(
         "policy_device": getattr(policy, "device", None),
         "policy_dtype": getattr(policy, "dtype", None),
         "untrained_action_head": getattr(policy, "untrained_head", None),
+        "state_format": getattr(policy, "state_format", None),
+        "training_scope": getattr(policy, "training_scope", None),
         "instruction": instruction,
         "realtime": realtime,
         "vizdoom_version": vzd.__version__,
@@ -210,6 +212,7 @@ def play(
                 instruction=instruction,
                 untrained=bool(getattr(policy, "untrained_head", False)),
                 video_clock=video_clock,
+                training_scope=summary["training_scope"],
             )
             if not headless:
                 preview = LivePreview()
@@ -366,6 +369,7 @@ def play(
                         if scores is not None and action is not None
                         else None,
                         "input_tokens": getattr(policy, "last_token_count", None),
+                        "state_text": getattr(policy, "last_state_text", None),
                         **metric_values,
                     }
                 )
