@@ -13,6 +13,17 @@ policy and `--benchmark-demo` explicitly selects the untrained-head speed demo.
 
 ## Live decision dashboard
 
+[Watch the charcoal dashboard demo (MP4)](media/modernbert-charcoal-demo.mp4).
+
+[![ModernBERT decision dashboard with live scores and selection explanations](media/modernbert-charcoal-demo.png)](media/modernbert-charcoal-demo.mp4)
+
+This recording contains **2,100 decisions across 60 game seconds**, played back
+in **86.5 seconds of actual wall time**. On the M3 Max using MPS float16, mean
+decision latency was **30.8 ms** and the complete loop averaged **24.3 decisions/s**
+with the live window and video capture enabled. This run fell below Doom's native
+35 tics/s; the visible clocks and measured throughput retain that difference.
+[Run report and video verification](reports/modernbert-charcoal-demo.json).
+
 ```sh
 uv run --extra model doom-bert --benchmark-demo --seconds 60 \
   --instruction "Shoot at enemies, but retreat when health falls below 40."
@@ -38,7 +49,8 @@ Video/preview capture is capped at 30 Hz without sleeping or capping decisions;
 wall-clock drawing and encoding run in a background worker with one pending
 frame. If display work falls behind, stale queued frames are discarded while
 their timestamps preserve actual playback timing. The model never waits for
-encoding. Panel text refreshes at 10 Hz for readability. `--no-stats` records just the game.
+encoding. Panel text refreshes at 10 Hz for readability. `--no-stats` records just
+the game.
 `--headless` hides the window while retaining the recorded dashboard.
 
 ## Setup and play
@@ -173,8 +185,9 @@ Tests launch the real engine and check fresh one-tic policy observations without
 sleeping, legacy 35-tic spacing, seed reproducibility, action masks, object
 filtering, screenshots, episode restart, output preservation, and decoded MP4
 frame count and duration, including partial action intervals. Additional tests
-check rolling throughput arithmetic, selection explanations, and preservation of
-irregular wall-clock video timestamps.
+check rolling throughput arithmetic, selection explanations, preservation of
+irregular wall-clock video timestamps, and that a blocked encoder cannot block
+frame submission and retains only the latest pending frame.
 
 Media extensions use Git LFS. Code, configuration, reports, and `uv.lock` stay in
 Git. `runs/`, `.venv/`, caches, and local environment files are ignored. Copy a
