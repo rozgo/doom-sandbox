@@ -1,0 +1,37 @@
+{
+  "identical_initial_structured_state": true,
+  "seed": 7,
+  "state_text": "health=healthy ammo=loaded nearest_enemy=center range=distant",
+  "aggressive": {
+    "instruction": "Attack enemies on sight.",
+    "scores": {
+      "ATTACK": 0.9790357351303101,
+      "MOVE_LEFT": 0.03993731364607811,
+      "MOVE_RIGHT": 0.00014202363672666252,
+      "MOVE_FORWARD": 0.9354645609855652,
+      "MOVE_BACKWARD": 0.015543648041784763,
+      "TURN_LEFT": 0.0032476764172315598,
+      "TURN_RIGHT": 0.0010901900241151452
+    },
+    "pressed": [
+      "ATTACK",
+      "MOVE_FORWARD"
+    ]
+  },
+  "evasive": {
+    "instruction": "Do not shoot. Evade the enemies.",
+    "scores": {
+      "ATTACK": 0.025760557502508163,
+      "MOVE_LEFT": 0.7668178677558899,
+      "MOVE_RIGHT": 0.0002780309587251395,
+      "MOVE_FORWARD": 0.08494709432125092,
+      "MOVE_BACKWARD": 0.7333563566207886,
+      "TURN_LEFT": 0.0005072812782600522,
+      "TURN_RIGHT": 0.004485794343054295
+    },
+    "pressed": [
+      "MOVE_LEFT",
+      "MOVE_BACKWARD"
+    ]
+  }
+}

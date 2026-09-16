@@ -13,6 +13,24 @@ CLI defaults to random actions; `--checkpoint` selects learned gameplay and
 
 ## Controlled learned demo
 
+[Watch the trained attack demo](media/trained-modernbert-demo.mp4) ·
+[Watch the same model evade](media/trained-modernbert-evasive.mp4)
+
+[![Trained ModernBERT choosing actions from live state](media/trained-modernbert-demo.png)](media/trained-modernbert-demo.mp4)
+
+| Instruction | Game time | Actual playback | Decisions/s | Mean decision | Result |
+| --- | --- | --- | --- | --- | --- |
+| Attack enemies on sight. | 60 s | 24.0 s | 43.7 | 13.9 ms | 16 kills, 1 death |
+| Do not shoot. Evade the enemies. | 30 s | 12.1 s | 43.3 | 13.9 ms | No shots, no deaths |
+
+Both use the same checkpoint on MPS float16 with the live window and hardware
+MP4 recorder enabled. The initial structured game state is identical: changing
+only the instruction changes ATTACK from **0.979** to **0.026**. In the evasive
+run, ammo remains at 26 and ATTACK never exceeds 0.036; the no-fire behavior comes
+from model classification. Reports include [gameplay and video verification](reports/trained-modernbert-demo.json),
+[evasive verification](reports/trained-modernbert-evasive.json), and the
+[initial-state instruction contrast](reports/trained-instruction-contrast.json).
+
 ```sh
 git lfs pull
 uv sync --locked --extra model
@@ -62,7 +80,7 @@ the full inference work still happens on each call.
 
 ## Live decision dashboard
 
-[Watch the charcoal dashboard demo (MP4)](media/modernbert-charcoal-demo.mp4).
+[Watch the earlier untrained dashboard demo (MP4)](media/modernbert-charcoal-demo.mp4).
 
 [![ModernBERT decision dashboard with live scores and selection explanations](media/modernbert-charcoal-demo.png)](media/modernbert-charcoal-demo.mp4)
 
@@ -151,7 +169,7 @@ choose one explicitly.
 # Benchmark the pretrained encoder + untrained action head, not gameplay ability
 uv run --extra model doom-bert-benchmark --devices cpu mps
 
-# Once a fine-tuned checkpoint has been produced:
+# Use your own fine-tuned checkpoint:
 uv run --extra model doom-bert --checkpoint models/my-policy \
   --instruction "shoot at enemies but retreat below 40 health" \
   --device auto --seconds 60
@@ -178,9 +196,11 @@ results: [CPU/MPS benchmark](reports/modernbert-mac-benchmark.json),
 The checkpoint must use `problem_type="multi_label_classification"` and this
 `id2label` order: `ATTACK`, `MOVE_LEFT`, `MOVE_RIGHT`, `MOVE_FORWARD`,
 `MOVE_BACKWARD`, `TURN_LEFT`, `TURN_RIGHT`. These seven controls are enabled for
-model gameplay. The adapter serializes health, ammo, recent damage, enemy count,
-and the three nearest visible monsters' screen positions and distances. It
-filters by object category. No screen buffer enters the tokenizer.
+model gameplay. The original numeric adapter serializes health, ammo, recent
+damage, enemy count, and the three nearest visible monsters' screen positions
+and distances. The included trained checkpoint uses the categorical format
+described above. Both filter by object category. No screen buffer enters the
+tokenizer.
 
 The decoder chooses the highest-probability legal combination, excluding opposing
 directions and ammo-dependent firing without ammo. Instruction following is
@@ -237,9 +257,13 @@ frame count and duration, including partial action intervals. Additional tests
 check rolling throughput arithmetic, selection explanations, preservation of
 irregular wall-clock video timestamps, and that a blocked encoder cannot block
 frame submission and retains only the latest pending frame.
+Training tests check that whole state combinations remain disjoint across data
+splits and that live numeric observations map to the controlled perception
+vocabulary.
 
-Media extensions use Git LFS. Code, configuration, reports, and `uv.lock` stay in
-Git. `runs/`, `.venv/`, caches, and local environment files are ignored. Copy a
+Media, model weights, and checkpoint tokenizer data use Git LFS. Code,
+configuration, labeled examples, reports, and `uv.lock` stay in Git.
+`runs/`, `.venv/`, caches, and local environment files are ignored. Copy a
 capture worth retaining into `media/` and add it normally to track it with LFS.
 
 References: [ViZDoom game control](https://vizdoom.farama.org/api/python/doom_game/),
