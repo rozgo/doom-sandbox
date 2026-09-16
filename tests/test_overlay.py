@@ -1,10 +1,11 @@
 from fractions import Fraction
+from threading import Event
 
 import av
 import numpy as np
 import pytest
 
-from doom_bert.overlay import LiveMetrics
+from doom_bert.overlay import LiveMetrics, RenderWorker
 from doom_bert.play import legal_actions
 from doom_bert.policy import decode_scores, selection_notes
 from doom_bert.video import VideoRecorder
@@ -53,3 +54,29 @@ def test_wall_clock_video_preserves_capture_timestamps(tmp_path):
         timestamps, abs=0.001
     )
     assert frames[-1].time_base != Fraction(1, 35)
+
+
+def test_rendering_does_not_block_decisions_and_discards_stale_frames():
+    started = Event()
+    release = Event()
+    written = []
+
+    class SlowRecorder:
+        def write(self, screen, *, elapsed_seconds):
+            started.set()
+            assert release.wait(timeout=5)
+            written.append(elapsed_seconds)
+
+    worker = RenderWorker(SlowRecorder(), None)
+    screen = np.zeros((4, 4, 3), dtype=np.uint8)
+    try:
+        worker.submit(screen, {}, 0)
+        assert started.wait(timeout=5)
+        # These return while encoding remains blocked. Only the newest is kept.
+        worker.submit(screen, {}, 0.04)
+        worker.submit(screen, {}, 0.08)
+    finally:
+        release.set()
+        worker.close()
+    assert written == [0, 0.08]
+    assert worker.dropped_frames == 1

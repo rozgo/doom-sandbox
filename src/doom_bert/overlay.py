@@ -7,6 +7,8 @@ import time
 from collections import deque
 from functools import lru_cache
 from pathlib import Path
+from queue import Empty, Full, Queue
+from threading import Thread
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
@@ -78,7 +80,7 @@ class StatsOverlay:
     ):
         self.policy_name = policy_name
         self.device = "METAL / MPS" if device == "mps" else (device or "CPU").upper()
-        self.dtype = (dtype or "").upper()
+        self.dtype = (dtype or "PYTHON").upper()
         self.instruction = instruction
         self.untrained = untrained
         self.video_clock = video_clock
@@ -107,6 +109,8 @@ class StatsOverlay:
         label = (
             "UNTRAINED HEAD / SPEED DEMO" if self.untrained else "LIVE POLICY INFERENCE"
         )
+        if self.policy_name == "RANDOM BASELINE":
+            label = "RANDOM POLICY / NO MODEL"
         draw.text(
             (1008, 53), label, font=self.small, fill=AMBER if self.untrained else MUTED
         )
@@ -218,7 +222,9 @@ class StatsOverlay:
         )
         draw.text(
             (1024, 722),
-            "Max product: ON = p, OFF = 1-p.",
+            "Max product: ON = p, OFF = 1-p."
+            if scores
+            else "Uniform draw from legal combinations.",
             font=self.body,
             fill=MUTED,
         )
@@ -325,3 +331,70 @@ class LivePreview:
 
     def close(self):
         self.pygame.display.quit()
+
+
+class RenderWorker:
+    """Draw and encode away from inference; retain only the latest pending frame."""
+
+    def __init__(self, recorder, overlay, fps: int = 30):
+        self.recorder = recorder
+        self.overlay = overlay
+        self.fps = fps
+        self.pending = Queue(maxsize=1)
+        self.last_submitted = -1.0
+        self.latest_frame = None
+        self.dropped_frames = 0
+        self.error = None
+        self.thread = Thread(target=self._run, name="doom-renderer", daemon=True)
+        self.thread.start()
+
+    def ready(self, elapsed: float) -> bool:
+        self._check_error()
+        return elapsed - self.last_submitted >= 1 / self.fps
+
+    def submit(self, screen, stats: dict, elapsed: float):
+        self._check_error()
+        payload = (screen.copy() if screen is not None else None, dict(stats), elapsed)
+        try:
+            self.pending.put_nowait(payload)
+        except Full:
+            try:
+                self.pending.get_nowait()
+                self.pending.task_done()
+                self.dropped_frames += 1
+            except Empty:
+                pass
+            self.pending.put_nowait(payload)
+        self.last_submitted = elapsed
+
+    def _check_error(self):
+        if self.error is not None:
+            raise RuntimeError("Dashboard rendering failed") from self.error
+
+    def _run(self):
+        while True:
+            payload = self.pending.get()
+            try:
+                if payload is None:
+                    return
+                if self.error is not None:
+                    continue
+                screen, stats, elapsed = payload
+                if self.overlay is not None:
+                    screen = self.overlay.render(
+                        screen, {**stats, "display_wall_seconds": elapsed}
+                    )
+                if self.recorder is not None:
+                    self.recorder.write(screen, elapsed_seconds=elapsed)
+                self.latest_frame = screen
+            except Exception as error:
+                self.error = error
+            finally:
+                self.pending.task_done()
+
+    def close(self):
+        self.pending.put(None, timeout=10)
+        self.thread.join(timeout=20)
+        if self.thread.is_alive():
+            raise RuntimeError("Dashboard renderer did not finish")
+        self._check_error()

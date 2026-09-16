@@ -35,7 +35,10 @@ The charcoal window puts Doom on the left and instrumentation on the right:
 The same layout is recorded into the MP4. The default `--video-clock wall` uses
 actual monotonic capture timestamps, so playback demonstrates measured speed.
 Video/preview capture is capped at 30 Hz without sleeping or capping decisions;
-panel text refreshes at 10 Hz for readability. `--no-stats` records just the game.
+wall-clock drawing and encoding run in a background worker with one pending
+frame. If display work falls behind, stale queued frames are discarded while
+their timestamps preserve actual playback timing. The model never waits for
+encoding. Panel text refreshes at 10 Hz for readability. `--no-stats` records just the game.
 `--headless` hides the window while retaining the recorded dashboard.
 
 ## Setup and play

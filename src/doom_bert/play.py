@@ -15,7 +15,7 @@ from pathlib import Path
 import vizdoom as vzd
 from PIL import Image
 
-from doom_bert.overlay import LiveMetrics, LivePreview, StatsOverlay
+from doom_bert.overlay import LiveMetrics, LivePreview, RenderWorker, StatsOverlay
 from doom_bert.policy import BUTTONS, decode_scores, selection_notes
 from doom_bert.video import VideoRecorder
 
@@ -88,13 +88,26 @@ def advance_tics(
     preview: LivePreview | None = None,
     stats: dict | None = None,
     started: float = 0,
+    render_worker: RenderWorker | None = None,
 ) -> None:
     """Advance the chosen action; only the optional realtime mode sleeps."""
     if not realtime and recorder is None and preview is None:
         game.advance_action(tics)
         return
     for tic in range(tics):
-        if recorder is not None or preview is not None:
+        if render_worker is not None:
+            elapsed = time.monotonic() - started
+            if render_worker.ready(elapsed):
+                frame_state = game.get_state()
+                render_worker.submit(
+                    frame_state.screen_buffer if frame_state else None,
+                    stats or {},
+                    elapsed,
+                )
+            if preview is not None and preview.ready():
+                if render_worker.latest_frame is not None:
+                    preview.present(render_worker.latest_frame)
+        elif recorder is not None or preview is not None:
             elapsed = time.monotonic() - started
             record_frame = recorder is not None and recorder.ready(elapsed)
             preview_frame = preview is not None and preview.ready()
@@ -178,6 +191,7 @@ def play(
     recorder = None
     overlay = None
     preview = None
+    render_worker = None
     metrics = LiveMetrics()
     metric_values = {}
     decision_seconds = 0.0
@@ -207,6 +221,8 @@ def play(
                 fps=30 if video_clock == "wall" else TICS_PER_SECOND,
                 clock=video_clock,
             )
+        if video_clock == "wall" and (recorder is not None or preview is not None):
+            render_worker = RenderWorker(recorder, overlay)
         buttons = [button.name for button in game.get_available_buttons()]
         started = time.monotonic()
         print(
@@ -381,6 +397,7 @@ def play(
                     preview=preview,
                     stats=record,
                     started=started,
+                    render_worker=render_worker,
                 )
                 elapsed_tics += tics
     except KeyboardInterrupt:
@@ -397,6 +414,10 @@ def play(
             decision_seconds * 1000 / max(summary["decisions"], 1)
         )
         game.close()
+        if render_worker is not None:
+            render_worker.close()
+            summary["dropped_video_frames"] = render_worker.dropped_frames
+            summary["background_rendering"] = True
         if preview is not None:
             preview.close()
         if recorder is not None:
