@@ -1,4 +1,4 @@
-"""Edit the two recorded strategies into a chaptered MP4 using FFmpeg."""
+"""Edit recorded gameplay into a demonstration of real-time action classification."""
 
 import argparse
 import hashlib
@@ -14,6 +14,7 @@ from doom_bert.overlay import ACCENT, AMBER, BG, EDGE, MUTED, PANEL, TEXT, font
 ROOT = Path(__file__).resolve().parents[1]
 SIZE = (1440, 900)
 FPS = 30
+TITLE = "ModernBERT controls Doom at 44 decisions/s"
 
 
 def write_text(draw, xy, text, size=22, color=TEXT, bold=False, mono=False):
@@ -32,46 +33,86 @@ def canvas():
 def assets(work: Path, attack: dict, evade: dict, contrast: dict):
     image, draw = canvas()
     write_text(
-        draw, (72, 154), "INSTRUCTION-CONDITIONED GAMEPLAY", 18, ACCENT, mono=True
+        draw, (72, 146), "REAL-TIME ACTION CLASSIFICATION", 18, ACCENT, mono=True
     )
-    write_text(draw, (68, 204), "One model.", 88, bold=True)
-    write_text(draw, (68, 300), "Two strategies.", 88, bold=True)
-    write_text(draw, (72, 433), "Attack on sight. Then evade without firing.", 30)
+    write_text(draw, (68, 198), "ModernBERT controls Doom", 76, bold=True)
+    write_text(draw, (68, 289), "at 44 decisions/s", 88, ACCENT, bold=True)
     write_text(
-        draw, (72, 485), "Full ModernBERT inference on every decision.", 25, MUTED
+        draw,
+        (72, 431),
+        "Instruction + game state → classifier → 7 button scores → game actions",
+        27,
     )
-    for left, value, label in (
-        (72, "~43", "DECISIONS / SECOND"),
-        (512, "13.9 ms", "MEAN DECISION LATENCY"),
-        (952, "MPS FP16", "APPLE METAL"),
+    write_text(
+        draw,
+        (72, 487),
+        "The scores select a valid combination of buttons on every decision.",
+        25,
+        MUTED,
+    )
+    for left, value, label, note in (
+        (
+            72,
+            f"{attack['summary']['decisions_per_wall_second']:.1f}/s",
+            "DECISIONS / SECOND",
+            "Complete loop, including HUD and recording",
+        ),
+        (
+            512,
+            f"{attack['summary']['mean_decision_ms']:.1f} ms",
+            "PER CLASSIFICATION",
+            "Input preparation + model + action decoding",
+        ),
+        (
+            952,
+            f"{FPS} FPS",
+            "VIDEO FRAME RATE",
+            "Recording rate, independent of decisions",
+        ),
     ):
         draw.rounded_rectangle(
             (left, 591, left + 408, 740), radius=12, fill=PANEL, outline=EDGE
         )
         write_text(draw, (left + 24, 607), value, 52, ACCENT, bold=True)
         write_text(draw, (left + 24, 692), label, 16, MUTED, mono=True)
+        write_text(draw, (left + 24, 719), note, 14, MUTED)
     write_text(
         draw,
-        (72, 800),
-        "Controlled vocabulary / full encoder + trained action head",
+        (72, 782),
+        "Classification is part of the full loop. Video frames are recorded separately.",
         21,
+        MUTED,
+    )
+    write_text(
+        draw,
+        (72, 823),
+        "Apple M3 Max / MPS FP16 / full encoder + trained action head",
+        20,
         MUTED,
     )
     image.save(work / "intro.png")
 
     image, draw = canvas()
-    write_text(draw, (72, 126), "Change the instruction.", 58, bold=True)
     write_text(
-        draw, (72, 207), "Same checkpoint. Identical initial game state.", 27, MUTED
+        draw, (72, 126), "The instruction changes the class scores.", 54, bold=True
+    )
+    write_text(
+        draw, (72, 207), "Same trained classifier. Same initial game state.", 27, MUTED
     )
     for left, mode, color, lines, action in (
-        (72, "aggressive", AMBER, ["Attack enemies on sight."], "Advance + fire"),
+        (
+            72,
+            "aggressive",
+            AMBER,
+            ["Attack enemies on sight."],
+            "ATTACK + MOVE_FORWARD",
+        ),
         (
             756,
             "evasive",
             ACCENT,
             ["Do not shoot.", "Evade the enemies."],
-            "Back off + strafe",
+            "MOVE_LEFT + MOVE_BACKWARD",
         ),
     ):
         draw.rounded_rectangle(
@@ -81,7 +122,7 @@ def assets(work: Path, attack: dict, evade: dict, contrast: dict):
         write_text(
             draw,
             (left + 48, 310),
-            "ATTACK" if mode == "aggressive" else "EVADE",
+            "INPUT A" if mode == "aggressive" else "INPUT B",
             27,
             color,
             bold=True,
@@ -97,88 +138,103 @@ def assets(work: Path, attack: dict, evade: dict, contrast: dict):
             radius=5,
             fill=color,
         )
-        write_text(draw, (left + 28, 600), action, 29, color, bold=True)
+        write_text(draw, (left + 28, 581), "EXECUTED BUTTONS", 14, MUTED, mono=True)
+        write_text(draw, (left + 28, 613), action, 24, color, mono=True)
     draw.line((700, 474, 740, 474), fill=MUTED, width=3)
     draw.polygon(((730, 466), (740, 474), (730, 482)), fill=MUTED)
-    write_text(draw, (72, 712), "SHARED INPUT", 16, ACCENT, mono=True)
+    write_text(draw, (72, 712), "SAME GAME STATE", 16, ACCENT, mono=True)
     write_text(draw, (72, 745), contrast["state_text"], 21, mono=True)
     write_text(
         draw,
         (72, 812),
-        "Next: a separate seeded run with the evade instruction. Recorded playback speed is preserved.",
+        "Classifier scores select the buttons. Separate seeded runs; playback at recorded speed.",
         20,
         MUTED,
     )
     image.save(work / "change.png")
 
     image, draw = canvas()
-    write_text(
-        draw, (72, 147), "Different instructions. Learned actions.", 54, bold=True
-    )
+    write_text(draw, (72, 147), "Measured decision throughput", 54, bold=True)
     write_text(
         draw,
         (72, 224),
-        "Both runs use the same trained ModernBERT checkpoint.",
-        27,
+        "The complete loop includes classification, gameplay, dashboard and recording.",
+        25,
         MUTED,
     )
-    for left, title, color, summary, headline, detail in (
+    for left, title, color, summary, result in (
         (
             72,
-            "ATTACK",
+            "ATTACK INSTRUCTION",
             AMBER,
             attack["summary"],
-            "16 kills",
-            "60 game seconds / 1 death",
+            f"{attack['summary']['kills']} kills / {attack['summary']['deaths']} death",
         ),
         (
             756,
-            "EVADE",
+            "EVADE INSTRUCTION",
             ACCENT,
             evade["summary"],
-            "0 shots",
-            "30 game seconds / 26 rounds retained",
+            "0 shots / 26 rounds retained",
         ),
     ):
         draw.rounded_rectangle(
             (left, 327, left + 612, 689), radius=12, fill=PANEL, outline=EDGE
         )
-        write_text(draw, (left + 28, 356), title, 26, color, bold=True)
-        write_text(draw, (left + 24, 410), headline, 78, color, bold=True)
-        write_text(draw, (left + 28, 517), detail, 24)
+        write_text(draw, (left + 28, 356), title, 24, color, bold=True)
         write_text(
             draw,
-            (left + 28, 582),
-            f"{summary['decisions_per_wall_second']:.1f} decisions/s",
-            31,
+            (left + 24, 410),
+            f"{summary['decisions_per_wall_second']:.1f}/s",
+            78,
             color,
             bold=True,
         )
         write_text(
             draw,
-            (left + 28, 635),
-            f"{summary['mean_decision_ms']:.1f} ms per decision / includes full model",
-            20,
+            (left + 28, 517),
+            f"{summary['decisions']:,} decisions / {summary['wall_seconds']:.2f} seconds",
+            24,
+        )
+        write_text(
+            draw,
+            (left + 28, 582),
+            f"{summary['mean_decision_ms']:.1f} ms input + model + decode",
+            24,
             MUTED,
+        )
+        write_text(
+            draw,
+            (left + 28, 635),
+            result,
+            23,
+            color,
         )
     write_text(
         draw,
         (72, 745),
-        "Gameplay uses model scores. Rules only supplied offline training labels.",
+        "2 game tics/action need 17.5 decisions/s to keep up with Doom.",
         23,
     )
     write_text(
         draw,
-        (72, 806),
+        (72, 793),
+        "Full ModernBERT inference on every decision. MPS FP16 on Apple M3 Max.",
+        20,
+        MUTED,
+    )
+    write_text(
+        draw,
+        (72, 831),
         "Scope: controlled state vocabulary and known instructions.",
-        21,
+        19,
         MUTED,
     )
     image.save(work / "results.png")
 
     for name, label, detail, color in (
-        ("attack-tag", "01 / ATTACK", "Aim, fire, advance", AMBER),
-        ("evade-tag", "02 / EVADE", "Back off, strafe, hold fire", ACCENT),
+        ("attack-tag", "01 / MODEL ACTIONS", "Attack instruction", AMBER),
+        ("evade-tag", "02 / MODEL ACTIONS", "Evade instruction", ACCENT),
     ):
         image = Image.new("RGBA", (332, 74), (0, 0, 0, 0))
         draw = ImageDraw.Draw(image)
@@ -245,11 +301,26 @@ def edit(work: Path, output: Path, encoder: str):
     commands, segments, timeline = [], [], []
     start = 0.0
     plans = [
-        ("intro", "One model, two strategies", 2.5, None),
-        ("attack", "Strategy 1: attack", None, source_names[0]),
-        ("change", "Change instruction: ATTACK 0.979 to 0.026", 5.0, None),
-        ("evade", "Strategy 2: evade", None, source_names[1]),
-        ("results", "Results and scope", 3.5, None),
+        ("intro", TITLE, 5.0, None),
+        (
+            "attack",
+            "Classifier-controlled gameplay: attack instruction",
+            None,
+            source_names[0],
+        ),
+        (
+            "change",
+            "Instruction-conditioned classification: ATTACK 0.979 to 0.026",
+            5.0,
+            None,
+        ),
+        (
+            "evade",
+            "Classifier-controlled gameplay: evade instruction",
+            None,
+            source_names[1],
+        ),
+        ("results", "Measured decision throughput", 5.0, None),
     ]
     for name, title, duration, source in plans:
         segment = work / f"{name}.mp4"
@@ -302,7 +373,7 @@ def edit(work: Path, output: Path, encoder: str):
     concat = work / "segments.txt"
     concat.write_text("".join(f"file '{segment.name}'\n" for segment in segments))
     metadata = work / "chapters.ffmetadata"
-    text = ";FFMETADATA1\ntitle=ModernBERT - One model, two strategies\ncomment=Two seeded runs; complete clips at recorded speed, with editorial title cards.\n"
+    text = f";FFMETADATA1\ntitle={TITLE}\ncomment=Trained classifier driving game actions; complete recordings at measured wall-clock speed.\n"
     for chapter in timeline:
         text += f"[CHAPTER]\nTIMEBASE=1/1000\nSTART={round(chapter['start_seconds'] * 1000)}\nEND={round(chapter['end_seconds'] * 1000)}\ntitle={chapter['title']}\n"
     metadata.write_text(text)
@@ -335,10 +406,17 @@ def edit(work: Path, output: Path, encoder: str):
     subprocess.run(command, check=True)
     commands.append(command)
     report = {
+        "title": TITLE,
         "output": str(output.relative_to(ROOT))
         if output.is_relative_to(ROOT)
         else str(output),
         "encoder": encoder,
+        "metric_definitions": {
+            "decisions_per_second": "Completed decisions divided by gameplay wall time; includes game, dashboard, and recording overhead.",
+            "mean_classification_ms": "Text preparation, tokenization, model inference and transfer, and legal-action decoding; one part of the full loop.",
+            "video_fps": "Encoded video frames per second, independent of the decision rate.",
+            "headline_rounding": "The attack run measured 43.7 decisions/s, rounded to 44 in the title.",
+        },
         "fps": FPS,
         "resolution": list(SIZE),
         "timeline": timeline,
@@ -365,9 +443,11 @@ def edit(work: Path, output: Path, encoder: str):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--output", type=Path, default=ROOT / "media/trained-strategy-comparison.mp4"
+        "--output",
+        type=Path,
+        default=ROOT / "media/modernbert-44-decisions-per-second.mp4",
     )
-    parser.add_argument("--work-dir", type=Path, default=ROOT / "runs/strategy-edit")
+    parser.add_argument("--work-dir", type=Path, default=ROOT / "runs/classifier-edit")
     parser.add_argument(
         "--encoder",
         choices=("h264_videotoolbox", "libx264"),

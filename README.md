@@ -13,15 +13,24 @@ CLI defaults to random actions; `--checkpoint` selects learned gameplay and
 
 ## Controlled learned demo
 
-[Watch the combined strategy demo (47 seconds)](media/trained-strategy-comparison.mp4)
+[ModernBERT controls Doom at 44 decisions/s (MP4)](media/modernbert-44-decisions-per-second.mp4)
 
-[![Same model and state, different instructions and action scores](media/trained-strategy-comparison.png)](media/trained-strategy-comparison.mp4)
+[![ModernBERT controls Doom at 44 decisions per second](media/modernbert-44-decisions-per-second.png)](media/modernbert-44-decisions-per-second.mp4)
 
-The edit includes both complete recordings, attack/evade chapter labels, a
-comparison of the initial ATTACK scores, and a results card. The comparison
-starts at **0:26.5**; the evade chapter starts at **0:31.5**. Gameplay keeps its
-recorded speed, resampled to 30 fps. These are two separate seeded runs.
-See the [edit timeline and verification](reports/trained-strategy-comparison.json).
+The 51-second edit shows the classifier driving game actions from instructions
+and structured state. It distinguishes three measurements:
+
+- **About 44 decisions/s:** the complete gameplay loop, including dashboard and
+  recording overhead; the attack run measured 43.7 decisions/s.
+- **13.9 ms per classification:** mean time for text preparation, tokenization,
+  model inference and transfer, and action decoding. This is part of each loop.
+- **30 FPS video:** the recording's frame rate, independent of the decision rate.
+
+Both complete gameplay recordings are included. At **0:29**, changing the
+instruction changes the classifier's scores for the same initial state; the
+second run starts at **0:34**. These are separate seeded runs. Gameplay keeps its
+recorded wall-clock speed, resampled to 30 fps.
+See the [edit timeline and verification](reports/modernbert-44-decisions-per-second.json).
 
 Original clips: [attack](media/trained-modernbert-demo.mp4) ·
 [evade](media/trained-modernbert-evasive.mp4).
@@ -59,7 +68,7 @@ To reproduce the video edit with new output filenames, install FFmpeg (including
 
 ```sh
 uv run --extra model python scripts/edit_strategy_demo.py \
-  --output media/my-strategy-edit.mp4 --work-dir runs/my-strategy-edit
+  --output media/my-classifier-edit.mp4 --work-dir runs/my-classifier-edit
 ```
 
 The editor uses Pillow for charcoal title cards and FFmpeg for overlays, video
