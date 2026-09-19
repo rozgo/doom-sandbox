@@ -1,0 +1,305 @@
+{
+  "model": "modernbert",
+  "adapted_head": null,
+  "cases": [
+    {
+      "instruction": "Fight, but stop shooting and retreat below 40 health.",
+      "health": 20,
+      "scores": {
+        "ATTACK": 0.20197056233882904,
+        "MOVE_LEFT": 0.3940843939781189,
+        "MOVE_RIGHT": 0.003649986581876874,
+        "MOVE_FORWARD": 0.03817827254533768,
+        "MOVE_BACKWARD": 0.548764169216156,
+        "TURN_LEFT": 0.006438102573156357,
+        "TURN_RIGHT": 0.01374231930822134
+      },
+      "action": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 111.84462485834956,
+      "input_tokens": 32,
+      "model_state_text": "health=wounded ammo=loaded nearest_enemy=center range=medium",
+      "expected_attack": false,
+      "correct_raw_attack": true,
+      "retreats_if_hurt": true
+    },
+    {
+      "instruction": "Fight, but stop shooting and retreat below 40 health.",
+      "health": 39,
+      "scores": {
+        "ATTACK": 0.20197056233882904,
+        "MOVE_LEFT": 0.3940843939781189,
+        "MOVE_RIGHT": 0.003649986581876874,
+        "MOVE_FORWARD": 0.03817827254533768,
+        "MOVE_BACKWARD": 0.548764169216156,
+        "TURN_LEFT": 0.006438102573156357,
+        "TURN_RIGHT": 0.01374231930822134
+      },
+      "action": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 13.406832935288548,
+      "input_tokens": 32,
+      "model_state_text": "health=wounded ammo=loaded nearest_enemy=center range=medium",
+      "expected_attack": false,
+      "correct_raw_attack": true,
+      "retreats_if_hurt": true
+    },
+    {
+      "instruction": "Fight, but stop shooting and retreat below 40 health.",
+      "health": 40,
+      "scores": {
+        "ATTACK": 0.854520857334137,
+        "MOVE_LEFT": 0.32167303562164307,
+        "MOVE_RIGHT": 0.0003150386910419911,
+        "MOVE_FORWARD": 0.19329962134361267,
+        "MOVE_BACKWARD": 0.2297079712152481,
+        "TURN_LEFT": 0.0010362669127061963,
+        "TURN_RIGHT": 0.01182339433580637
+      },
+      "action": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_action": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "classification_ms": 12.63795793056488,
+      "input_tokens": 31,
+      "model_state_text": "health=healthy ammo=loaded nearest_enemy=center range=medium",
+      "expected_attack": true,
+      "correct_raw_attack": true,
+      "retreats_if_hurt": null
+    },
+    {
+      "instruction": "Fight, but stop shooting and retreat below 40 health.",
+      "health": 80,
+      "scores": {
+        "ATTACK": 0.854520857334137,
+        "MOVE_LEFT": 0.32167303562164307,
+        "MOVE_RIGHT": 0.0003150386910419911,
+        "MOVE_FORWARD": 0.19329962134361267,
+        "MOVE_BACKWARD": 0.2297079712152481,
+        "TURN_LEFT": 0.0010362669127061963,
+        "TURN_RIGHT": 0.01182339433580637
+      },
+      "action": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_action": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "classification_ms": 11.094250017777085,
+      "input_tokens": 31,
+      "model_state_text": "health=healthy ammo=loaded nearest_enemy=center range=medium",
+      "expected_attack": true,
+      "correct_raw_attack": true,
+      "retreats_if_hurt": null
+    },
+    {
+      "instruction": "Fire only when your health is at least 40. If lower, do not fire and move backward.",
+      "health": 20,
+      "scores": {
+        "ATTACK": 0.13095079362392426,
+        "MOVE_LEFT": 0.9763104915618896,
+        "MOVE_RIGHT": 0.00040765260928310454,
+        "MOVE_FORWARD": 0.04360952228307724,
+        "MOVE_BACKWARD": 0.963230550289154,
+        "TURN_LEFT": 0.0001837845629779622,
+        "TURN_RIGHT": 0.028490042313933372
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 12.117667123675346,
+      "input_tokens": 40,
+      "model_state_text": "health=wounded ammo=loaded nearest_enemy=center range=medium",
+      "expected_attack": false,
+      "correct_raw_attack": true,
+      "retreats_if_hurt": true
+    },
+    {
+      "instruction": "Fire only when your health is at least 40. If lower, do not fire and move backward.",
+      "health": 39,
+      "scores": {
+        "ATTACK": 0.13095079362392426,
+        "MOVE_LEFT": 0.9763104915618896,
+        "MOVE_RIGHT": 0.00040765260928310454,
+        "MOVE_FORWARD": 0.04360952228307724,
+        "MOVE_BACKWARD": 0.963230550289154,
+        "TURN_LEFT": 0.0001837845629779622,
+        "TURN_RIGHT": 0.028490042313933372
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 11.393625056371093,
+      "input_tokens": 40,
+      "model_state_text": "health=wounded ammo=loaded nearest_enemy=center range=medium",
+      "expected_attack": false,
+      "correct_raw_attack": true,
+      "retreats_if_hurt": true
+    },
+    {
+      "instruction": "Fire only when your health is at least 40. If lower, do not fire and move backward.",
+      "health": 40,
+      "scores": {
+        "ATTACK": 0.18417984247207642,
+        "MOVE_LEFT": 0.9640516638755798,
+        "MOVE_RIGHT": 0.00013135180051904172,
+        "MOVE_FORWARD": 0.032040078192949295,
+        "MOVE_BACKWARD": 0.9444848895072937,
+        "TURN_LEFT": 9.314592170994729e-05,
+        "TURN_RIGHT": 0.05997643992304802
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 14.675207901746035,
+      "input_tokens": 39,
+      "model_state_text": "health=healthy ammo=loaded nearest_enemy=center range=medium",
+      "expected_attack": true,
+      "correct_raw_attack": false,
+      "retreats_if_hurt": null
+    },
+    {
+      "instruction": "Fire only when your health is at least 40. If lower, do not fire and move backward.",
+      "health": 80,
+      "scores": {
+        "ATTACK": 0.18417984247207642,
+        "MOVE_LEFT": 0.9640516638755798,
+        "MOVE_RIGHT": 0.00013135180051904172,
+        "MOVE_FORWARD": 0.032040078192949295,
+        "MOVE_BACKWARD": 0.9444848895072937,
+        "TURN_LEFT": 9.314592170994729e-05,
+        "TURN_RIGHT": 0.05997643992304802
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 12.359916931018233,
+      "input_tokens": 39,
+      "model_state_text": "health=healthy ammo=loaded nearest_enemy=center range=medium",
+      "expected_attack": true,
+      "correct_raw_attack": false,
+      "retreats_if_hurt": null
+    }
+  ],
+  "attack_checks_passed": 6,
+  "attack_checks_total": 8,
+  "note": "Follow-up diagnostic: the original 'shoot, but retreat below 40' wording did not explicitly forbid firing while retreating. These instructions do. No weights, schemas or thresholds are changed for this check. Health categories still use the existing perception bins; this is not proof of arbitrary numeric reasoning."
+}

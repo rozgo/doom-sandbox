@@ -1,0 +1,11 @@
+{
+  "manifest_files_verified": 95,
+  "evaluation_pairs_verified": 2580,
+  "live_decisions_redecoded": 10500,
+  "live_action_mismatches": 0,
+  "adapted_heads_verified": 6,
+  "nested_training_subsets_disjoint_from_validation_and_test": true,
+  "existing_tests": "20 passed",
+  "ruff": "check and format passed",
+  "video_created": false
+}

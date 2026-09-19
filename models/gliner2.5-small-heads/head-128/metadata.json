@@ -1,0 +1,360 @@
+{
+  "base_model": "fastino/gliner2.5-small-v1",
+  "revision": "f1e4d8fdd6fe328f45dee6aca3e6a07c9db4296e",
+  "schema": {
+    "json_structures": [],
+    "classifications": [
+      {
+        "task": "buttons",
+        "labels": [
+          "ATTACK",
+          "MOVE_LEFT",
+          "MOVE_RIGHT",
+          "MOVE_FORWARD",
+          "MOVE_BACKWARD",
+          "TURN_LEFT",
+          "TURN_RIGHT"
+        ],
+        "true_label": [
+          "N/A"
+        ],
+        "multi_label": true,
+        "cls_threshold": 0.5,
+        "class_act": "sigmoid",
+        "prompt": "Choose the game-control buttons to press now, given the player's instruction and current game state. Select actions that carry out the instruction. Several buttons can be pressed together, or none.",
+        "label_descriptions": {
+          "ATTACK": "Fire the equipped weapon at a target in front of the player.",
+          "MOVE_LEFT": "Strafe sideways to the player's left without changing aim.",
+          "MOVE_RIGHT": "Strafe sideways to the player's right without changing aim.",
+          "MOVE_FORWARD": "Walk forward in the direction the player is facing.",
+          "MOVE_BACKWARD": "Walk backward, away from what the player is facing.",
+          "TURN_LEFT": "Rotate the player's view and aim toward the left.",
+          "TURN_RIGHT": "Rotate the player's view and aim toward the right."
+        }
+      }
+    ],
+    "entities": {},
+    "relations": [],
+    "json_descriptions": {},
+    "entity_descriptions": {}
+  },
+  "training_examples": 128,
+  "trainable_parameters": 296449,
+  "selected_dataset_rows": [
+    145,
+    122,
+    100,
+    109,
+    423,
+    238,
+    348,
+    392,
+    430,
+    234,
+    98,
+    286,
+    7,
+    177,
+    17,
+    379,
+    80,
+    101,
+    426,
+    254,
+    172,
+    421,
+    140,
+    316,
+    84,
+    309,
+    370,
+    463,
+    123,
+    263,
+    0,
+    62,
+    209,
+    199,
+    357,
+    154,
+    391,
+    182,
+    95,
+    342,
+    284,
+    10,
+    181,
+    255,
+    274,
+    324,
+    51,
+    191,
+    372,
+    363,
+    107,
+    216,
+    261,
+    275,
+    1,
+    212,
+    220,
+    228,
+    171,
+    82,
+    144,
+    15,
+    257,
+    360,
+    381,
+    148,
+    229,
+    446,
+    16,
+    192,
+    111,
+    142,
+    78,
+    230,
+    89,
+    241,
+    153,
+    419,
+    204,
+    218,
+    329,
+    312,
+    188,
+    137,
+    414,
+    8,
+    454,
+    102,
+    176,
+    23,
+    175,
+    81,
+    214,
+    96,
+    315,
+    94,
+    174,
+    356,
+    292,
+    6,
+    459,
+    88,
+    289,
+    405,
+    196,
+    288,
+    225,
+    341,
+    445,
+    134,
+    64,
+    433,
+    195,
+    125,
+    48,
+    435,
+    317,
+    253,
+    368,
+    376,
+    138,
+    291,
+    22,
+    439,
+    308,
+    310,
+    420,
+    206
+  ],
+  "positive_training_examples": {
+    "ATTACK": 7.0,
+    "MOVE_LEFT": 67.0,
+    "MOVE_RIGHT": 39.0,
+    "MOVE_FORWARD": 1.0,
+    "MOVE_BACKWARD": 106.0,
+    "TURN_LEFT": 41.0,
+    "TURN_RIGHT": 53.0
+  },
+  "seed": 7,
+  "selected_step": 600,
+  "completed_steps": 600,
+  "encoder_frozen": true,
+  "runtime_feature_cache": false,
+  "head_training_device": "cpu",
+  "head_training_dtype": "float32",
+  "encoder_feature_device": "mps",
+  "encoder_feature_dtype": "float16",
+  "optimization_seconds": 1.1677960420493037,
+  "selection": "Best validation exact vector agreement, then validation BCE; test unused for selection",
+  "metrics_cached_features": {
+    "selected_train": {
+      "exact_teacher_agreement": 0.7578125,
+      "button_teacher_agreement": 0.9419642686843872
+    },
+    "validation": {
+      "exact_teacher_agreement": 0.9375,
+      "button_teacher_agreement": 0.988095223903656
+    },
+    "test": {
+      "exact_teacher_agreement": 0.6666666865348816,
+      "button_teacher_agreement": 0.913690447807312
+    }
+  },
+  "history": [
+    {
+      "step": 25,
+      "exact_teacher_agreement": 0.0,
+      "button_teacher_agreement": 0.613095223903656,
+      "validation_loss": 0.7809953093528748
+    },
+    {
+      "step": 50,
+      "exact_teacher_agreement": 0.0,
+      "button_teacher_agreement": 0.5982142686843872,
+      "validation_loss": 0.7594172358512878
+    },
+    {
+      "step": 75,
+      "exact_teacher_agreement": 0.0,
+      "button_teacher_agreement": 0.6547619104385376,
+      "validation_loss": 0.6975125670433044
+    },
+    {
+      "step": 100,
+      "exact_teacher_agreement": 0.0,
+      "button_teacher_agreement": 0.6875,
+      "validation_loss": 0.6740294098854065
+    },
+    {
+      "step": 125,
+      "exact_teacher_agreement": 0.0,
+      "button_teacher_agreement": 0.7232142686843872,
+      "validation_loss": 0.6078287363052368
+    },
+    {
+      "step": 150,
+      "exact_teacher_agreement": 0.02083333395421505,
+      "button_teacher_agreement": 0.761904776096344,
+      "validation_loss": 0.5736772418022156
+    },
+    {
+      "step": 175,
+      "exact_teacher_agreement": 0.1458333283662796,
+      "button_teacher_agreement": 0.8303571343421936,
+      "validation_loss": 0.5168184041976929
+    },
+    {
+      "step": 200,
+      "exact_teacher_agreement": 0.4166666567325592,
+      "button_teacher_agreement": 0.8928571343421936,
+      "validation_loss": 0.48818060755729675
+    },
+    {
+      "step": 225,
+      "exact_teacher_agreement": 0.2708333432674408,
+      "button_teacher_agreement": 0.8482142686843872,
+      "validation_loss": 0.45195356011390686
+    },
+    {
+      "step": 250,
+      "exact_teacher_agreement": 0.8333333134651184,
+      "button_teacher_agreement": 0.976190447807312,
+      "validation_loss": 0.37251463532447815
+    },
+    {
+      "step": 275,
+      "exact_teacher_agreement": 0.4791666567325592,
+      "button_teacher_agreement": 0.9166666865348816,
+      "validation_loss": 0.4174748361110687
+    },
+    {
+      "step": 300,
+      "exact_teacher_agreement": 0.7083333134651184,
+      "button_teacher_agreement": 0.9464285969734192,
+      "validation_loss": 0.3787180483341217
+    },
+    {
+      "step": 325,
+      "exact_teacher_agreement": 0.6458333134651184,
+      "button_teacher_agreement": 0.9464285969734192,
+      "validation_loss": 0.32970380783081055
+    },
+    {
+      "step": 350,
+      "exact_teacher_agreement": 0.7708333134651184,
+      "button_teacher_agreement": 0.9553571343421936,
+      "validation_loss": 0.301182359457016
+    },
+    {
+      "step": 375,
+      "exact_teacher_agreement": 0.9166666865348816,
+      "button_teacher_agreement": 0.988095223903656,
+      "validation_loss": 0.2575942873954773
+    },
+    {
+      "step": 400,
+      "exact_teacher_agreement": 0.6875,
+      "button_teacher_agreement": 0.9553571343421936,
+      "validation_loss": 0.2745014429092407
+    },
+    {
+      "step": 425,
+      "exact_teacher_agreement": 0.9166666865348816,
+      "button_teacher_agreement": 0.988095223903656,
+      "validation_loss": 0.24584583938121796
+    },
+    {
+      "step": 450,
+      "exact_teacher_agreement": 0.5208333134651184,
+      "button_teacher_agreement": 0.925595223903656,
+      "validation_loss": 0.2672642767429352
+    },
+    {
+      "step": 475,
+      "exact_teacher_agreement": 0.7708333134651184,
+      "button_teacher_agreement": 0.9672619104385376,
+      "validation_loss": 0.2267572283744812
+    },
+    {
+      "step": 500,
+      "exact_teacher_agreement": 0.9166666865348816,
+      "button_teacher_agreement": 0.988095223903656,
+      "validation_loss": 0.1953621804714203
+    },
+    {
+      "step": 525,
+      "exact_teacher_agreement": 0.9166666865348816,
+      "button_teacher_agreement": 0.988095223903656,
+      "validation_loss": 0.1784953624010086
+    },
+    {
+      "step": 550,
+      "exact_teacher_agreement": 0.9375,
+      "button_teacher_agreement": 0.9910714030265808,
+      "validation_loss": 0.1587022840976715
+    },
+    {
+      "step": 575,
+      "exact_teacher_agreement": 0.9375,
+      "button_teacher_agreement": 0.988095223903656,
+      "validation_loss": 0.15758340060710907
+    },
+    {
+      "step": 600,
+      "exact_teacher_agreement": 0.9375,
+      "button_teacher_agreement": 0.988095223903656,
+      "validation_loss": 0.14162807166576385
+    }
+  ],
+  "dataset_sha256": "862cc232efaecab3dfad14e81445cb0ac3466bcb090aa0cc12c53dc5f4c5297e",
+  "optimizer": "AdamW",
+  "learning_rate": 0.0005,
+  "weight_decay": 0.01,
+  "batch_size": 64,
+  "loss": "BCEWithLogitsLoss; per-button positive weight clipped to [1,20]",
+  "state_format": "natural-language-v1"
+}

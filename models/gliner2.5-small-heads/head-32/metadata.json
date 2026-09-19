@@ -1,0 +1,264 @@
+{
+  "base_model": "fastino/gliner2.5-small-v1",
+  "revision": "f1e4d8fdd6fe328f45dee6aca3e6a07c9db4296e",
+  "schema": {
+    "json_structures": [],
+    "classifications": [
+      {
+        "task": "buttons",
+        "labels": [
+          "ATTACK",
+          "MOVE_LEFT",
+          "MOVE_RIGHT",
+          "MOVE_FORWARD",
+          "MOVE_BACKWARD",
+          "TURN_LEFT",
+          "TURN_RIGHT"
+        ],
+        "true_label": [
+          "N/A"
+        ],
+        "multi_label": true,
+        "cls_threshold": 0.5,
+        "class_act": "sigmoid",
+        "prompt": "Choose the game-control buttons to press now, given the player's instruction and current game state. Select actions that carry out the instruction. Several buttons can be pressed together, or none.",
+        "label_descriptions": {
+          "ATTACK": "Fire the equipped weapon at a target in front of the player.",
+          "MOVE_LEFT": "Strafe sideways to the player's left without changing aim.",
+          "MOVE_RIGHT": "Strafe sideways to the player's right without changing aim.",
+          "MOVE_FORWARD": "Walk forward in the direction the player is facing.",
+          "MOVE_BACKWARD": "Walk backward, away from what the player is facing.",
+          "TURN_LEFT": "Rotate the player's view and aim toward the left.",
+          "TURN_RIGHT": "Rotate the player's view and aim toward the right."
+        }
+      }
+    ],
+    "entities": {},
+    "relations": [],
+    "json_descriptions": {},
+    "entity_descriptions": {}
+  },
+  "training_examples": 32,
+  "trainable_parameters": 296449,
+  "selected_dataset_rows": [
+    145,
+    122,
+    100,
+    109,
+    423,
+    238,
+    348,
+    392,
+    430,
+    234,
+    98,
+    286,
+    7,
+    177,
+    17,
+    379,
+    80,
+    101,
+    426,
+    254,
+    172,
+    421,
+    140,
+    316,
+    84,
+    309,
+    370,
+    463,
+    123,
+    263,
+    0,
+    62
+  ],
+  "positive_training_examples": {
+    "ATTACK": 3.0,
+    "MOVE_LEFT": 14.0,
+    "MOVE_RIGHT": 10.0,
+    "MOVE_FORWARD": 0.0,
+    "MOVE_BACKWARD": 24.0,
+    "TURN_LEFT": 10.0,
+    "TURN_RIGHT": 13.0
+  },
+  "seed": 7,
+  "selected_step": 600,
+  "completed_steps": 600,
+  "encoder_frozen": true,
+  "runtime_feature_cache": false,
+  "head_training_device": "cpu",
+  "head_training_dtype": "float32",
+  "encoder_feature_device": "mps",
+  "encoder_feature_dtype": "float16",
+  "optimization_seconds": 0.7482065828517079,
+  "selection": "Best validation exact vector agreement, then validation BCE; test unused for selection",
+  "metrics_cached_features": {
+    "selected_train": {
+      "exact_teacher_agreement": 0.90625,
+      "button_teacher_agreement": 0.9732142686843872
+    },
+    "validation": {
+      "exact_teacher_agreement": 0.7291666865348816,
+      "button_teacher_agreement": 0.9583333134651184
+    },
+    "test": {
+      "exact_teacher_agreement": 0.6458333134651184,
+      "button_teacher_agreement": 0.913690447807312
+    }
+  },
+  "history": [
+    {
+      "step": 25,
+      "exact_teacher_agreement": 0.0,
+      "button_teacher_agreement": 0.601190447807312,
+      "validation_loss": 0.7880593538284302
+    },
+    {
+      "step": 50,
+      "exact_teacher_agreement": 0.0,
+      "button_teacher_agreement": 0.601190447807312,
+      "validation_loss": 0.774094820022583
+    },
+    {
+      "step": 75,
+      "exact_teacher_agreement": 0.0,
+      "button_teacher_agreement": 0.625,
+      "validation_loss": 0.730817973613739
+    },
+    {
+      "step": 100,
+      "exact_teacher_agreement": 0.0,
+      "button_teacher_agreement": 0.6428571343421936,
+      "validation_loss": 0.6834078431129456
+    },
+    {
+      "step": 125,
+      "exact_teacher_agreement": 0.02083333395421505,
+      "button_teacher_agreement": 0.6875,
+      "validation_loss": 0.6487597227096558
+    },
+    {
+      "step": 150,
+      "exact_teacher_agreement": 0.02083333395421505,
+      "button_teacher_agreement": 0.6785714030265808,
+      "validation_loss": 0.6121340990066528
+    },
+    {
+      "step": 175,
+      "exact_teacher_agreement": 0.02083333395421505,
+      "button_teacher_agreement": 0.738095223903656,
+      "validation_loss": 0.5745161771774292
+    },
+    {
+      "step": 200,
+      "exact_teacher_agreement": 0.0416666679084301,
+      "button_teacher_agreement": 0.761904776096344,
+      "validation_loss": 0.5489288568496704
+    },
+    {
+      "step": 225,
+      "exact_teacher_agreement": 0.2083333283662796,
+      "button_teacher_agreement": 0.8392857313156128,
+      "validation_loss": 0.5432823300361633
+    },
+    {
+      "step": 250,
+      "exact_teacher_agreement": 0.125,
+      "button_teacher_agreement": 0.7678571343421936,
+      "validation_loss": 0.5094443559646606
+    },
+    {
+      "step": 275,
+      "exact_teacher_agreement": 0.5,
+      "button_teacher_agreement": 0.9107142686843872,
+      "validation_loss": 0.4583616852760315
+    },
+    {
+      "step": 300,
+      "exact_teacher_agreement": 0.4791666567325592,
+      "button_teacher_agreement": 0.9017857313156128,
+      "validation_loss": 0.41438865661621094
+    },
+    {
+      "step": 325,
+      "exact_teacher_agreement": 0.4375,
+      "button_teacher_agreement": 0.913690447807312,
+      "validation_loss": 0.4187350571155548
+    },
+    {
+      "step": 350,
+      "exact_teacher_agreement": 0.5833333134651184,
+      "button_teacher_agreement": 0.9404761791229248,
+      "validation_loss": 0.37745556235313416
+    },
+    {
+      "step": 375,
+      "exact_teacher_agreement": 0.4791666567325592,
+      "button_teacher_agreement": 0.925595223903656,
+      "validation_loss": 0.36018532514572144
+    },
+    {
+      "step": 400,
+      "exact_teacher_agreement": 0.6041666865348816,
+      "button_teacher_agreement": 0.9434523582458496,
+      "validation_loss": 0.30429792404174805
+    },
+    {
+      "step": 425,
+      "exact_teacher_agreement": 0.5,
+      "button_teacher_agreement": 0.9285714030265808,
+      "validation_loss": 0.32402873039245605
+    },
+    {
+      "step": 450,
+      "exact_teacher_agreement": 0.5833333134651184,
+      "button_teacher_agreement": 0.9404761791229248,
+      "validation_loss": 0.2806631624698639
+    },
+    {
+      "step": 475,
+      "exact_teacher_agreement": 0.6041666865348816,
+      "button_teacher_agreement": 0.9375,
+      "validation_loss": 0.26562926173210144
+    },
+    {
+      "step": 500,
+      "exact_teacher_agreement": 0.5,
+      "button_teacher_agreement": 0.9285714030265808,
+      "validation_loss": 0.24905836582183838
+    },
+    {
+      "step": 525,
+      "exact_teacher_agreement": 0.6458333134651184,
+      "button_teacher_agreement": 0.949404776096344,
+      "validation_loss": 0.21169333159923553
+    },
+    {
+      "step": 550,
+      "exact_teacher_agreement": 0.5,
+      "button_teacher_agreement": 0.925595223903656,
+      "validation_loss": 0.23225857317447662
+    },
+    {
+      "step": 575,
+      "exact_teacher_agreement": 0.625,
+      "button_teacher_agreement": 0.9464285969734192,
+      "validation_loss": 0.19845308363437653
+    },
+    {
+      "step": 600,
+      "exact_teacher_agreement": 0.7291666865348816,
+      "button_teacher_agreement": 0.9583333134651184,
+      "validation_loss": 0.17694301903247833
+    }
+  ],
+  "dataset_sha256": "862cc232efaecab3dfad14e81445cb0ac3466bcb090aa0cc12c53dc5f4c5297e",
+  "optimizer": "AdamW",
+  "learning_rate": 0.0005,
+  "weight_decay": 0.01,
+  "batch_size": 32,
+  "loss": "BCEWithLogitsLoss; per-button positive weight clipped to [1,20]",
+  "state_format": "natural-language-v1"
+}

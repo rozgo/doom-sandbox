@@ -1,0 +1,3707 @@
+{
+  "results": [
+    {
+      "model": "small",
+      "device": "cpu",
+      "dtype": "float32",
+      "cpu_threads": 4,
+      "latency": {
+        "count": 55,
+        "mean_ms": 36.55297644013031,
+        "median_ms": 36.561750108376145,
+        "p95_ms": 37.66999999061227,
+        "classifications_per_second": 27.357553266226848
+      },
+      "behavior": {
+        "checks": {
+          "fires_at_aligned_enemy_when_aggressive": true,
+          "does_not_fire_when_evasive": true,
+          "evades_with_movement": false,
+          "no_fire_paraphrase_0": true,
+          "no_fire_paraphrase_1": true,
+          "cautious_stops_firing_below_40": true,
+          "cautious_fires_at_40": false,
+          "cautious_retreats_below_40": true,
+          "turns_left_for_enemy_on_left": false,
+          "turns_right_for_enemy_on_right": false,
+          "raw_no_fire_without_ammo": false,
+          "raw_no_fire_without_enemy": false
+        },
+        "passed": 6,
+        "total": 12,
+        "attack_instruction_score_delta": 0.5329923403261638,
+        "scope": "Targeted smoke checks, not a broad generalization benchmark; evaluated before legal masking."
+      },
+      "max_absolute_score_difference_vs_mps_fp16": 0.0006188811326802157,
+      "probes": [
+        {
+          "id": "no_ammo",
+          "scores": {
+            "ATTACK": 0.812820420324706,
+            "MOVE_LEFT": 0.11107880746727329,
+            "MOVE_RIGHT": 0.1689518678906636,
+            "MOVE_FORWARD": 0.1290708403368502,
+            "MOVE_BACKWARD": 0.0909448770949142,
+            "TURN_LEFT": 0.11004070768317276,
+            "TURN_RIGHT": 0.20134830113677296
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.756084067747,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 0. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_cautious",
+          "scores": {
+            "ATTACK": 0.3281202196224548,
+            "MOVE_LEFT": 0.11775151144091624,
+            "MOVE_RIGHT": 0.16199130918655588,
+            "MOVE_FORWARD": 0.19232470058986048,
+            "MOVE_BACKWARD": 0.5378997776035633,
+            "TURN_LEFT": 0.0955912598903528,
+            "TURN_RIGHT": 0.1595216315119119
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 37.35387488268316,
+          "input_tokens": 250,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_aggressive",
+          "scores": {
+            "ATTACK": 0.8016770528141068,
+            "MOVE_LEFT": 0.11538736570462822,
+            "MOVE_RIGHT": 0.17827848261794582,
+            "MOVE_FORWARD": 0.13489108833702515,
+            "MOVE_BACKWARD": 0.09432532381389305,
+            "TURN_LEFT": 0.1121981411440056,
+            "TURN_RIGHT": 0.20703261354080027
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 35.115000093355775,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_aggressive",
+          "scores": {
+            "ATTACK": 0.8016770528141068,
+            "MOVE_LEFT": 0.11538736570462822,
+            "MOVE_RIGHT": 0.17827848261794582,
+            "MOVE_FORWARD": 0.13489108833702515,
+            "MOVE_BACKWARD": 0.09432532381389305,
+            "TURN_LEFT": 0.1121981411440056,
+            "TURN_RIGHT": 0.20703261354080027
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 35.7009160798043,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_0",
+          "scores": {
+            "ATTACK": 0.3255884709602134,
+            "MOVE_LEFT": 0.15983641074580038,
+            "MOVE_RIGHT": 0.2502748892607285,
+            "MOVE_FORWARD": 0.2776948215760831,
+            "MOVE_BACKWARD": 0.20551437150722962,
+            "TURN_LEFT": 0.14323048618530576,
+            "TURN_RIGHT": 0.24758046184116186
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.96591593325138,
+          "input_tokens": 249,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_left",
+          "scores": {
+            "ATTACK": 0.7953300033149544,
+            "MOVE_LEFT": 0.24855119613975946,
+            "MOVE_RIGHT": 0.2431873736728737,
+            "MOVE_FORWARD": 0.09861302026601511,
+            "MOVE_BACKWARD": 0.11129606953244556,
+            "TURN_LEFT": 0.3065554523122754,
+            "TURN_RIGHT": 0.295727800206116
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 35.71262490004301,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the left of the player's aim, at medium range."
+        },
+        {
+          "id": "center_aggressive",
+          "scores": {
+            "ATTACK": 0.8016770528141068,
+            "MOVE_LEFT": 0.11538736570462822,
+            "MOVE_RIGHT": 0.17827848261794582,
+            "MOVE_FORWARD": 0.13489108833702515,
+            "MOVE_BACKWARD": 0.09432532381389305,
+            "TURN_LEFT": 0.1121981411440056,
+            "TURN_RIGHT": 0.20703261354080027
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.34620783850551,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_cautious",
+          "scores": {
+            "ATTACK": 0.3281202196224548,
+            "MOVE_LEFT": 0.11775151144091624,
+            "MOVE_RIGHT": 0.16199130918655588,
+            "MOVE_FORWARD": 0.19232470058986048,
+            "MOVE_BACKWARD": 0.5378997776035633,
+            "TURN_LEFT": 0.0955912598903528,
+            "TURN_RIGHT": 0.1595216315119119
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 37.26570797152817,
+          "input_tokens": 250,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_0",
+          "scores": {
+            "ATTACK": 0.3255884709602134,
+            "MOVE_LEFT": 0.15983641074580038,
+            "MOVE_RIGHT": 0.2502748892607285,
+            "MOVE_FORWARD": 0.2776948215760831,
+            "MOVE_BACKWARD": 0.20551437150722962,
+            "TURN_LEFT": 0.14323048618530576,
+            "TURN_RIGHT": 0.24758046184116186
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 37.140625063329935,
+          "input_tokens": 249,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_enemy",
+          "scores": {
+            "ATTACK": 0.8249521855725177,
+            "MOVE_LEFT": 0.10030239729676774,
+            "MOVE_RIGHT": 0.12981946551669238,
+            "MOVE_FORWARD": 0.05204295279334926,
+            "MOVE_BACKWARD": 0.07272354252241098,
+            "TURN_LEFT": 0.09078554090670266,
+            "TURN_RIGHT": 0.15769285995196722
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 34.73337506875396,
+          "input_tokens": 227,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. No enemy is visible."
+        },
+        {
+          "id": "enemy_left",
+          "scores": {
+            "ATTACK": 0.7953300033149544,
+            "MOVE_LEFT": 0.24855119613975946,
+            "MOVE_RIGHT": 0.2431873736728737,
+            "MOVE_FORWARD": 0.09861302026601511,
+            "MOVE_BACKWARD": 0.11129606953244556,
+            "TURN_LEFT": 0.3065554523122754,
+            "TURN_RIGHT": 0.295727800206116
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 35.755832912400365,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the left of the player's aim, at medium range."
+        },
+        {
+          "id": "no_enemy",
+          "scores": {
+            "ATTACK": 0.8249521855725177,
+            "MOVE_LEFT": 0.10030239729676774,
+            "MOVE_RIGHT": 0.12981946551669238,
+            "MOVE_FORWARD": 0.05204295279334926,
+            "MOVE_BACKWARD": 0.07272354252241098,
+            "TURN_LEFT": 0.09078554090670266,
+            "TURN_RIGHT": 0.15769285995196722
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.36266593821347,
+          "input_tokens": 227,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. No enemy is visible."
+        },
+        {
+          "id": "enemy_right",
+          "scores": {
+            "ATTACK": 0.7950212148115814,
+            "MOVE_LEFT": 0.14654025888476935,
+            "MOVE_RIGHT": 0.26608998630985764,
+            "MOVE_FORWARD": 0.10438538763932341,
+            "MOVE_BACKWARD": 0.09822745695712969,
+            "TURN_LEFT": 0.17374744834348466,
+            "TURN_RIGHT": 0.3171682930048869
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.791250109672546,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the right of the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_39",
+          "scores": {
+            "ATTACK": 0.310158476385575,
+            "MOVE_LEFT": 0.12769951940933075,
+            "MOVE_RIGHT": 0.1743871753071134,
+            "MOVE_FORWARD": 0.1936982492925995,
+            "MOVE_BACKWARD": 0.5170788643261769,
+            "TURN_LEFT": 0.10361116902324796,
+            "TURN_RIGHT": 0.169831266035764
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 36.30525013431907,
+          "input_tokens": 250,
+          "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_right",
+          "scores": {
+            "ATTACK": 0.7950212148115814,
+            "MOVE_LEFT": 0.14654025888476935,
+            "MOVE_RIGHT": 0.26608998630985764,
+            "MOVE_FORWARD": 0.10438538763932341,
+            "MOVE_BACKWARD": 0.09822745695712969,
+            "TURN_LEFT": 0.17374744834348466,
+            "TURN_RIGHT": 0.3171682930048869
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 35.61283298768103,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the right of the player's aim, at medium range."
+        },
+        {
+          "id": "center_aggressive",
+          "scores": {
+            "ATTACK": 0.8016770528141068,
+            "MOVE_LEFT": 0.11538736570462822,
+            "MOVE_RIGHT": 0.17827848261794582,
+            "MOVE_FORWARD": 0.13489108833702515,
+            "MOVE_BACKWARD": 0.09432532381389305,
+            "TURN_LEFT": 0.1121981411440056,
+            "TURN_RIGHT": 0.20703261354080027
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.656040931120515,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_right",
+          "scores": {
+            "ATTACK": 0.7950212148115814,
+            "MOVE_LEFT": 0.14654025888476935,
+            "MOVE_RIGHT": 0.26608998630985764,
+            "MOVE_FORWARD": 0.10438538763932341,
+            "MOVE_BACKWARD": 0.09822745695712969,
+            "TURN_LEFT": 0.17374744834348466,
+            "TURN_RIGHT": 0.3171682930048869
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 37.07808302715421,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the right of the player's aim, at medium range."
+        },
+        {
+          "id": "no_ammo",
+          "scores": {
+            "ATTACK": 0.812820420324706,
+            "MOVE_LEFT": 0.11107880746727329,
+            "MOVE_RIGHT": 0.1689518678906636,
+            "MOVE_FORWARD": 0.1290708403368502,
+            "MOVE_BACKWARD": 0.0909448770949142,
+            "TURN_LEFT": 0.11004070768317276,
+            "TURN_RIGHT": 0.20134830113677296
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.736167035996914,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 0. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_ammo",
+          "scores": {
+            "ATTACK": 0.812820420324706,
+            "MOVE_LEFT": 0.11107880746727329,
+            "MOVE_RIGHT": 0.1689518678906636,
+            "MOVE_FORWARD": 0.1290708403368502,
+            "MOVE_BACKWARD": 0.0909448770949142,
+            "TURN_LEFT": 0.11004070768317276,
+            "TURN_RIGHT": 0.20134830113677296
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.769916070625186,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 0. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_evasive",
+          "scores": {
+            "ATTACK": 0.268684712487943,
+            "MOVE_LEFT": 0.15312561635055363,
+            "MOVE_RIGHT": 0.22273035095020957,
+            "MOVE_FORWARD": 0.1836192466221117,
+            "MOVE_BACKWARD": 0.15692655262217747,
+            "TURN_LEFT": 0.14563143638580645,
+            "TURN_RIGHT": 0.23492201820282585
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 37.27837512269616,
+          "input_tokens": 246,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_40",
+          "scores": {
+            "ATTACK": 0.31682451719284854,
+            "MOVE_LEFT": 0.12728055728477508,
+            "MOVE_RIGHT": 0.1566752406245917,
+            "MOVE_FORWARD": 0.17859783607219853,
+            "MOVE_BACKWARD": 0.5337830083529299,
+            "TURN_LEFT": 0.0994686335080925,
+            "TURN_RIGHT": 0.15575623712810835
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 36.78466682322323,
+          "input_tokens": 250,
+          "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_cautious",
+          "scores": {
+            "ATTACK": 0.3281202196224548,
+            "MOVE_LEFT": 0.11775151144091624,
+            "MOVE_RIGHT": 0.16199130918655588,
+            "MOVE_FORWARD": 0.19232470058986048,
+            "MOVE_BACKWARD": 0.5378997776035633,
+            "TURN_LEFT": 0.0955912598903528,
+            "TURN_RIGHT": 0.1595216315119119
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 37.16141590848565,
+          "input_tokens": 250,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_enemy",
+          "scores": {
+            "ATTACK": 0.8249521855725177,
+            "MOVE_LEFT": 0.10030239729676774,
+            "MOVE_RIGHT": 0.12981946551669238,
+            "MOVE_FORWARD": 0.05204295279334926,
+            "MOVE_BACKWARD": 0.07272354252241098,
+            "TURN_LEFT": 0.09078554090670266,
+            "TURN_RIGHT": 0.15769285995196722
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 34.946541069075465,
+          "input_tokens": 227,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. No enemy is visible."
+        },
+        {
+          "id": "no_fire_paraphrase_1",
+          "scores": {
+            "ATTACK": 0.3192498468931917,
+            "MOVE_LEFT": 0.1445069810657788,
+            "MOVE_RIGHT": 0.21289056226412453,
+            "MOVE_FORWARD": 0.20844030347866166,
+            "MOVE_BACKWARD": 0.1666460502373618,
+            "TURN_LEFT": 0.14212183421424426,
+            "TURN_RIGHT": 0.2232511641261571
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 37.66999999061227,
+          "input_tokens": 245,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_evasive",
+          "scores": {
+            "ATTACK": 0.268684712487943,
+            "MOVE_LEFT": 0.15312561635055363,
+            "MOVE_RIGHT": 0.22273035095020957,
+            "MOVE_FORWARD": 0.1836192466221117,
+            "MOVE_BACKWARD": 0.15692655262217747,
+            "TURN_LEFT": 0.14563143638580645,
+            "TURN_RIGHT": 0.23492201820282585
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.315375007689,
+          "input_tokens": 246,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_39",
+          "scores": {
+            "ATTACK": 0.310158476385575,
+            "MOVE_LEFT": 0.12769951940933075,
+            "MOVE_RIGHT": 0.1743871753071134,
+            "MOVE_FORWARD": 0.1936982492925995,
+            "MOVE_BACKWARD": 0.5170788643261769,
+            "TURN_LEFT": 0.10361116902324796,
+            "TURN_RIGHT": 0.169831266035764
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 36.23916697688401,
+          "input_tokens": 250,
+          "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_40",
+          "scores": {
+            "ATTACK": 0.31682451719284854,
+            "MOVE_LEFT": 0.12728055728477508,
+            "MOVE_RIGHT": 0.1566752406245917,
+            "MOVE_FORWARD": 0.17859783607219853,
+            "MOVE_BACKWARD": 0.5337830083529299,
+            "TURN_LEFT": 0.0994686335080925,
+            "TURN_RIGHT": 0.15575623712810835
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 36.561750108376145,
+          "input_tokens": 250,
+          "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_evasive",
+          "scores": {
+            "ATTACK": 0.268684712487943,
+            "MOVE_LEFT": 0.15312561635055363,
+            "MOVE_RIGHT": 0.22273035095020957,
+            "MOVE_FORWARD": 0.1836192466221117,
+            "MOVE_BACKWARD": 0.15692655262217747,
+            "TURN_LEFT": 0.14563143638580645,
+            "TURN_RIGHT": 0.23492201820282585
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 37.658250192180276,
+          "input_tokens": 246,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_left",
+          "scores": {
+            "ATTACK": 0.7953300033149544,
+            "MOVE_LEFT": 0.24855119613975946,
+            "MOVE_RIGHT": 0.2431873736728737,
+            "MOVE_FORWARD": 0.09861302026601511,
+            "MOVE_BACKWARD": 0.11129606953244556,
+            "TURN_LEFT": 0.3065554523122754,
+            "TURN_RIGHT": 0.295727800206116
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.3985828589648,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the left of the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_right",
+          "scores": {
+            "ATTACK": 0.7950212148115814,
+            "MOVE_LEFT": 0.14654025888476935,
+            "MOVE_RIGHT": 0.26608998630985764,
+            "MOVE_FORWARD": 0.10438538763932341,
+            "MOVE_BACKWARD": 0.09822745695712969,
+            "TURN_LEFT": 0.17374744834348466,
+            "TURN_RIGHT": 0.3171682930048869
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.392249865457416,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the right of the player's aim, at medium range."
+        },
+        {
+          "id": "no_enemy",
+          "scores": {
+            "ATTACK": 0.8249521855725177,
+            "MOVE_LEFT": 0.10030239729676774,
+            "MOVE_RIGHT": 0.12981946551669238,
+            "MOVE_FORWARD": 0.05204295279334926,
+            "MOVE_BACKWARD": 0.07272354252241098,
+            "TURN_LEFT": 0.09078554090670266,
+            "TURN_RIGHT": 0.15769285995196722
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 35.53370898589492,
+          "input_tokens": 227,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. No enemy is visible."
+        },
+        {
+          "id": "no_fire_paraphrase_0",
+          "scores": {
+            "ATTACK": 0.3255884709602134,
+            "MOVE_LEFT": 0.15983641074580038,
+            "MOVE_RIGHT": 0.2502748892607285,
+            "MOVE_FORWARD": 0.2776948215760831,
+            "MOVE_BACKWARD": 0.20551437150722962,
+            "TURN_LEFT": 0.14323048618530576,
+            "TURN_RIGHT": 0.24758046184116186
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.1177499871701,
+          "input_tokens": 249,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_left",
+          "scores": {
+            "ATTACK": 0.7953300033149544,
+            "MOVE_LEFT": 0.24855119613975946,
+            "MOVE_RIGHT": 0.2431873736728737,
+            "MOVE_FORWARD": 0.09861302026601511,
+            "MOVE_BACKWARD": 0.11129606953244556,
+            "TURN_LEFT": 0.3065554523122754,
+            "TURN_RIGHT": 0.295727800206116
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.80912498384714,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the left of the player's aim, at medium range."
+        },
+        {
+          "id": "center_aggressive",
+          "scores": {
+            "ATTACK": 0.8016770528141068,
+            "MOVE_LEFT": 0.11538736570462822,
+            "MOVE_RIGHT": 0.17827848261794582,
+            "MOVE_FORWARD": 0.13489108833702515,
+            "MOVE_BACKWARD": 0.09432532381389305,
+            "TURN_LEFT": 0.1121981411440056,
+            "TURN_RIGHT": 0.20703261354080027
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.0062918625772,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_40",
+          "scores": {
+            "ATTACK": 0.31682451719284854,
+            "MOVE_LEFT": 0.12728055728477508,
+            "MOVE_RIGHT": 0.1566752406245917,
+            "MOVE_FORWARD": 0.17859783607219853,
+            "MOVE_BACKWARD": 0.5337830083529299,
+            "TURN_LEFT": 0.0994686335080925,
+            "TURN_RIGHT": 0.15575623712810835
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 37.00000001117587,
+          "input_tokens": 250,
+          "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_left",
+          "scores": {
+            "ATTACK": 0.7953300033149544,
+            "MOVE_LEFT": 0.24855119613975946,
+            "MOVE_RIGHT": 0.2431873736728737,
+            "MOVE_FORWARD": 0.09861302026601511,
+            "MOVE_BACKWARD": 0.11129606953244556,
+            "TURN_LEFT": 0.3065554523122754,
+            "TURN_RIGHT": 0.295727800206116
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.94312507286668,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the left of the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_1",
+          "scores": {
+            "ATTACK": 0.3192498468931917,
+            "MOVE_LEFT": 0.1445069810657788,
+            "MOVE_RIGHT": 0.21289056226412453,
+            "MOVE_FORWARD": 0.20844030347866166,
+            "MOVE_BACKWARD": 0.1666460502373618,
+            "TURN_LEFT": 0.14212183421424426,
+            "TURN_RIGHT": 0.2232511641261571
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.42791695892811,
+          "input_tokens": 245,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_39",
+          "scores": {
+            "ATTACK": 0.310158476385575,
+            "MOVE_LEFT": 0.12769951940933075,
+            "MOVE_RIGHT": 0.1743871753071134,
+            "MOVE_FORWARD": 0.1936982492925995,
+            "MOVE_BACKWARD": 0.5170788643261769,
+            "TURN_LEFT": 0.10361116902324796,
+            "TURN_RIGHT": 0.169831266035764
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 36.88429202884436,
+          "input_tokens": 250,
+          "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_1",
+          "scores": {
+            "ATTACK": 0.3192498468931917,
+            "MOVE_LEFT": 0.1445069810657788,
+            "MOVE_RIGHT": 0.21289056226412453,
+            "MOVE_FORWARD": 0.20844030347866166,
+            "MOVE_BACKWARD": 0.1666460502373618,
+            "TURN_LEFT": 0.14212183421424426,
+            "TURN_RIGHT": 0.2232511641261571
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.26287495717406,
+          "input_tokens": 245,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_39",
+          "scores": {
+            "ATTACK": 0.310158476385575,
+            "MOVE_LEFT": 0.12769951940933075,
+            "MOVE_RIGHT": 0.1743871753071134,
+            "MOVE_FORWARD": 0.1936982492925995,
+            "MOVE_BACKWARD": 0.5170788643261769,
+            "TURN_LEFT": 0.10361116902324796,
+            "TURN_RIGHT": 0.169831266035764
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 36.38833318836987,
+          "input_tokens": 250,
+          "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_39",
+          "scores": {
+            "ATTACK": 0.310158476385575,
+            "MOVE_LEFT": 0.12769951940933075,
+            "MOVE_RIGHT": 0.1743871753071134,
+            "MOVE_FORWARD": 0.1936982492925995,
+            "MOVE_BACKWARD": 0.5170788643261769,
+            "TURN_LEFT": 0.10361116902324796,
+            "TURN_RIGHT": 0.169831266035764
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 35.62762518413365,
+          "input_tokens": 250,
+          "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_cautious",
+          "scores": {
+            "ATTACK": 0.3281202196224548,
+            "MOVE_LEFT": 0.11775151144091624,
+            "MOVE_RIGHT": 0.16199130918655588,
+            "MOVE_FORWARD": 0.19232470058986048,
+            "MOVE_BACKWARD": 0.5378997776035633,
+            "TURN_LEFT": 0.0955912598903528,
+            "TURN_RIGHT": 0.1595216315119119
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 38.93899987451732,
+          "input_tokens": 250,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_cautious",
+          "scores": {
+            "ATTACK": 0.3281202196224548,
+            "MOVE_LEFT": 0.11775151144091624,
+            "MOVE_RIGHT": 0.16199130918655588,
+            "MOVE_FORWARD": 0.19232470058986048,
+            "MOVE_BACKWARD": 0.5378997776035633,
+            "TURN_LEFT": 0.0955912598903528,
+            "TURN_RIGHT": 0.1595216315119119
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 36.51158302091062,
+          "input_tokens": 250,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_enemy",
+          "scores": {
+            "ATTACK": 0.8249521855725177,
+            "MOVE_LEFT": 0.10030239729676774,
+            "MOVE_RIGHT": 0.12981946551669238,
+            "MOVE_FORWARD": 0.05204295279334926,
+            "MOVE_BACKWARD": 0.07272354252241098,
+            "TURN_LEFT": 0.09078554090670266,
+            "TURN_RIGHT": 0.15769285995196722
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 34.54258292913437,
+          "input_tokens": 227,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. No enemy is visible."
+        },
+        {
+          "id": "cautious_health_40",
+          "scores": {
+            "ATTACK": 0.31682451719284854,
+            "MOVE_LEFT": 0.12728055728477508,
+            "MOVE_RIGHT": 0.1566752406245917,
+            "MOVE_FORWARD": 0.17859783607219853,
+            "MOVE_BACKWARD": 0.5337830083529299,
+            "TURN_LEFT": 0.0994686335080925,
+            "TURN_RIGHT": 0.15575623712810835
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 36.3972089253366,
+          "input_tokens": 250,
+          "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_1",
+          "scores": {
+            "ATTACK": 0.3192498468931917,
+            "MOVE_LEFT": 0.1445069810657788,
+            "MOVE_RIGHT": 0.21289056226412453,
+            "MOVE_FORWARD": 0.20844030347866166,
+            "MOVE_BACKWARD": 0.1666460502373618,
+            "TURN_LEFT": 0.14212183421424426,
+            "TURN_RIGHT": 0.2232511641261571
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.97420912794769,
+          "input_tokens": 245,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_evasive",
+          "scores": {
+            "ATTACK": 0.268684712487943,
+            "MOVE_LEFT": 0.15312561635055363,
+            "MOVE_RIGHT": 0.22273035095020957,
+            "MOVE_FORWARD": 0.1836192466221117,
+            "MOVE_BACKWARD": 0.15692655262217747,
+            "TURN_LEFT": 0.14563143638580645,
+            "TURN_RIGHT": 0.23492201820282585
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 35.842458019033074,
+          "input_tokens": 246,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_40",
+          "scores": {
+            "ATTACK": 0.31682451719284854,
+            "MOVE_LEFT": 0.12728055728477508,
+            "MOVE_RIGHT": 0.1566752406245917,
+            "MOVE_FORWARD": 0.17859783607219853,
+            "MOVE_BACKWARD": 0.5337830083529299,
+            "TURN_LEFT": 0.0994686335080925,
+            "TURN_RIGHT": 0.15575623712810835
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 37.56129206158221,
+          "input_tokens": 250,
+          "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_evasive",
+          "scores": {
+            "ATTACK": 0.268684712487943,
+            "MOVE_LEFT": 0.15312561635055363,
+            "MOVE_RIGHT": 0.22273035095020957,
+            "MOVE_FORWARD": 0.1836192466221117,
+            "MOVE_BACKWARD": 0.15692655262217747,
+            "TURN_LEFT": 0.14563143638580645,
+            "TURN_RIGHT": 0.23492201820282585
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 38.61345793120563,
+          "input_tokens": 246,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_1",
+          "scores": {
+            "ATTACK": 0.3192498468931917,
+            "MOVE_LEFT": 0.1445069810657788,
+            "MOVE_RIGHT": 0.21289056226412453,
+            "MOVE_FORWARD": 0.20844030347866166,
+            "MOVE_BACKWARD": 0.1666460502373618,
+            "TURN_LEFT": 0.14212183421424426,
+            "TURN_RIGHT": 0.2232511641261571
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.32358298636973,
+          "input_tokens": 245,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_0",
+          "scores": {
+            "ATTACK": 0.3255884709602134,
+            "MOVE_LEFT": 0.15983641074580038,
+            "MOVE_RIGHT": 0.2502748892607285,
+            "MOVE_FORWARD": 0.2776948215760831,
+            "MOVE_BACKWARD": 0.20551437150722962,
+            "TURN_LEFT": 0.14323048618530576,
+            "TURN_RIGHT": 0.24758046184116186
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 37.25587506778538,
+          "input_tokens": 249,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_right",
+          "scores": {
+            "ATTACK": 0.7950212148115814,
+            "MOVE_LEFT": 0.14654025888476935,
+            "MOVE_RIGHT": 0.26608998630985764,
+            "MOVE_FORWARD": 0.10438538763932341,
+            "MOVE_BACKWARD": 0.09822745695712969,
+            "TURN_LEFT": 0.17374744834348466,
+            "TURN_RIGHT": 0.3171682930048869
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.29600000567734,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the right of the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_0",
+          "scores": {
+            "ATTACK": 0.3255884709602134,
+            "MOVE_LEFT": 0.15983641074580038,
+            "MOVE_RIGHT": 0.2502748892607285,
+            "MOVE_FORWARD": 0.2776948215760831,
+            "MOVE_BACKWARD": 0.20551437150722962,
+            "TURN_LEFT": 0.14323048618530576,
+            "TURN_RIGHT": 0.24758046184116186
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.86162503436208,
+          "input_tokens": 249,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_ammo",
+          "scores": {
+            "ATTACK": 0.812820420324706,
+            "MOVE_LEFT": 0.11107880746727329,
+            "MOVE_RIGHT": 0.1689518678906636,
+            "MOVE_FORWARD": 0.1290708403368502,
+            "MOVE_BACKWARD": 0.0909448770949142,
+            "TURN_LEFT": 0.11004070768317276,
+            "TURN_RIGHT": 0.20134830113677296
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.96420812048018,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 0. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_ammo",
+          "scores": {
+            "ATTACK": 0.812820420324706,
+            "MOVE_LEFT": 0.11107880746727329,
+            "MOVE_RIGHT": 0.1689518678906636,
+            "MOVE_FORWARD": 0.1290708403368502,
+            "MOVE_BACKWARD": 0.0909448770949142,
+            "TURN_LEFT": 0.11004070768317276,
+            "TURN_RIGHT": 0.20134830113677296
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 36.764832912012935,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 0. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        }
+      ]
+    },
+    {
+      "model": "base",
+      "device": "cpu",
+      "dtype": "float32",
+      "cpu_threads": 4,
+      "latency": {
+        "count": 55,
+        "mean_ms": 74.87646215595305,
+        "median_ms": 74.97362489812076,
+        "p95_ms": 77.26525003090501,
+        "classifications_per_second": 13.355331852047113
+      },
+      "behavior": {
+        "checks": {
+          "fires_at_aligned_enemy_when_aggressive": true,
+          "does_not_fire_when_evasive": true,
+          "evades_with_movement": true,
+          "no_fire_paraphrase_0": true,
+          "no_fire_paraphrase_1": true,
+          "cautious_stops_firing_below_40": false,
+          "cautious_fires_at_40": true,
+          "cautious_retreats_below_40": true,
+          "turns_left_for_enemy_on_left": true,
+          "turns_right_for_enemy_on_right": false,
+          "raw_no_fire_without_ammo": false,
+          "raw_no_fire_without_enemy": false
+        },
+        "passed": 8,
+        "total": 12,
+        "attack_instruction_score_delta": 0.9537387741129255,
+        "scope": "Targeted smoke checks, not a broad generalization benchmark; evaluated before legal masking."
+      },
+      "max_absolute_score_difference_vs_mps_fp16": 0.002229329079823761,
+      "probes": [
+        {
+          "id": "no_ammo",
+          "scores": {
+            "ATTACK": 0.9745078160969449,
+            "MOVE_LEFT": 0.05242053923833767,
+            "MOVE_RIGHT": 0.14653210382007958,
+            "MOVE_FORWARD": 0.12415165640609324,
+            "MOVE_BACKWARD": 0.0005176241260472337,
+            "TURN_LEFT": 0.02374561564712844,
+            "TURN_RIGHT": 0.04388218399132263
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.73249989561737,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 0. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_cautious",
+          "scores": {
+            "ATTACK": 0.9267446239240613,
+            "MOVE_LEFT": 0.1289595230779945,
+            "MOVE_RIGHT": 0.09372550194592338,
+            "MOVE_FORWARD": 0.1322069230081519,
+            "MOVE_BACKWARD": 0.9703336699563972,
+            "TURN_LEFT": 0.08970835427270336,
+            "TURN_RIGHT": 0.03406830611410409
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 74.91749990731478,
+          "input_tokens": 250,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_aggressive",
+          "scores": {
+            "ATTACK": 0.9761718210387013,
+            "MOVE_LEFT": 0.050707258390893,
+            "MOVE_RIGHT": 0.13709817345665026,
+            "MOVE_FORWARD": 0.11837807976611285,
+            "MOVE_BACKWARD": 0.00043074920747661756,
+            "TURN_LEFT": 0.023179880927948003,
+            "TURN_RIGHT": 0.041686110576497286
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.65112505108118,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_aggressive",
+          "scores": {
+            "ATTACK": 0.9761718210387013,
+            "MOVE_LEFT": 0.050707258390893,
+            "MOVE_RIGHT": 0.13709817345665026,
+            "MOVE_FORWARD": 0.11837807976611285,
+            "MOVE_BACKWARD": 0.00043074920747661756,
+            "TURN_LEFT": 0.023179880927948003,
+            "TURN_RIGHT": 0.041686110576497286
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.03749988973141,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_0",
+          "scores": {
+            "ATTACK": 0.067472276944449,
+            "MOVE_LEFT": 0.4842992168519904,
+            "MOVE_RIGHT": 0.5326142447653683,
+            "MOVE_FORWARD": 0.4452867993575388,
+            "MOVE_BACKWARD": 0.013753958388220003,
+            "TURN_LEFT": 0.2909432754304138,
+            "TURN_RIGHT": 0.24225575914856207
+          },
+          "action": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.09174996428192,
+          "input_tokens": 249,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_left",
+          "scores": {
+            "ATTACK": 0.9617920005159907,
+            "MOVE_LEFT": 0.29954728396838215,
+            "MOVE_RIGHT": 0.03285328488212995,
+            "MOVE_FORWARD": 0.01998868252207335,
+            "MOVE_BACKWARD": 0.003175235491690714,
+            "TURN_LEFT": 0.6588584653606662,
+            "TURN_RIGHT": 0.019203752994524422
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "classification_ms": 79.01670900173485,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the left of the player's aim, at medium range."
+        },
+        {
+          "id": "center_aggressive",
+          "scores": {
+            "ATTACK": 0.9761718210387013,
+            "MOVE_LEFT": 0.050707258390893,
+            "MOVE_RIGHT": 0.13709817345665026,
+            "MOVE_FORWARD": 0.11837807976611285,
+            "MOVE_BACKWARD": 0.00043074920747661756,
+            "TURN_LEFT": 0.023179880927948003,
+            "TURN_RIGHT": 0.041686110576497286
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.24508384428918,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_cautious",
+          "scores": {
+            "ATTACK": 0.9267446239240613,
+            "MOVE_LEFT": 0.1289595230779945,
+            "MOVE_RIGHT": 0.09372550194592338,
+            "MOVE_FORWARD": 0.1322069230081519,
+            "MOVE_BACKWARD": 0.9703336699563972,
+            "TURN_LEFT": 0.08970835427270336,
+            "TURN_RIGHT": 0.03406830611410409
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 75.21112496033311,
+          "input_tokens": 250,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_0",
+          "scores": {
+            "ATTACK": 0.067472276944449,
+            "MOVE_LEFT": 0.4842992168519904,
+            "MOVE_RIGHT": 0.5326142447653683,
+            "MOVE_FORWARD": 0.4452867993575388,
+            "MOVE_BACKWARD": 0.013753958388220003,
+            "TURN_LEFT": 0.2909432754304138,
+            "TURN_RIGHT": 0.24225575914856207
+          },
+          "action": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.84912492893636,
+          "input_tokens": 249,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_enemy",
+          "scores": {
+            "ATTACK": 0.9400168658645303,
+            "MOVE_LEFT": 0.4491133579624127,
+            "MOVE_RIGHT": 0.056587706320245804,
+            "MOVE_FORWARD": 0.030756737439525582,
+            "MOVE_BACKWARD": 0.13583121791446487,
+            "TURN_LEFT": 0.25221612584023057,
+            "TURN_RIGHT": 0.023648689395328656
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 72.1752920653671,
+          "input_tokens": 227,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. No enemy is visible."
+        },
+        {
+          "id": "enemy_left",
+          "scores": {
+            "ATTACK": 0.9617920005159907,
+            "MOVE_LEFT": 0.29954728396838215,
+            "MOVE_RIGHT": 0.03285328488212995,
+            "MOVE_FORWARD": 0.01998868252207335,
+            "MOVE_BACKWARD": 0.003175235491690714,
+            "TURN_LEFT": 0.6588584653606662,
+            "TURN_RIGHT": 0.019203752994524422
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "classification_ms": 74.56562505103648,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the left of the player's aim, at medium range."
+        },
+        {
+          "id": "no_enemy",
+          "scores": {
+            "ATTACK": 0.9400168658645303,
+            "MOVE_LEFT": 0.4491133579624127,
+            "MOVE_RIGHT": 0.056587706320245804,
+            "MOVE_FORWARD": 0.030756737439525582,
+            "MOVE_BACKWARD": 0.13583121791446487,
+            "TURN_LEFT": 0.25221612584023057,
+            "TURN_RIGHT": 0.023648689395328656
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 71.83395908214152,
+          "input_tokens": 227,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. No enemy is visible."
+        },
+        {
+          "id": "enemy_right",
+          "scores": {
+            "ATTACK": 0.9587354644125301,
+            "MOVE_LEFT": 0.07908298889806313,
+            "MOVE_RIGHT": 0.3908455705971179,
+            "MOVE_FORWARD": 0.05598873180941974,
+            "MOVE_BACKWARD": 0.0019078464276289088,
+            "TURN_LEFT": 0.05900324821305797,
+            "TURN_RIGHT": 0.2804243284275879
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.2302080616355,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the right of the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_39",
+          "scores": {
+            "ATTACK": 0.9371045133571645,
+            "MOVE_LEFT": 0.0885900194824626,
+            "MOVE_RIGHT": 0.05743377523719378,
+            "MOVE_FORWARD": 0.08122192004141357,
+            "MOVE_BACKWARD": 0.9813594578889828,
+            "TURN_LEFT": 0.06027804344796672,
+            "TURN_RIGHT": 0.020068801549072427
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 76.55070908367634,
+          "input_tokens": 250,
+          "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_right",
+          "scores": {
+            "ATTACK": 0.9587354644125301,
+            "MOVE_LEFT": 0.07908298889806313,
+            "MOVE_RIGHT": 0.3908455705971179,
+            "MOVE_FORWARD": 0.05598873180941974,
+            "MOVE_BACKWARD": 0.0019078464276289088,
+            "TURN_LEFT": 0.05900324821305797,
+            "TURN_RIGHT": 0.2804243284275879
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.7957918792963,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the right of the player's aim, at medium range."
+        },
+        {
+          "id": "center_aggressive",
+          "scores": {
+            "ATTACK": 0.9761718210387013,
+            "MOVE_LEFT": 0.050707258390893,
+            "MOVE_RIGHT": 0.13709817345665026,
+            "MOVE_FORWARD": 0.11837807976611285,
+            "MOVE_BACKWARD": 0.00043074920747661756,
+            "TURN_LEFT": 0.023179880927948003,
+            "TURN_RIGHT": 0.041686110576497286
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.97362489812076,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_right",
+          "scores": {
+            "ATTACK": 0.9587354644125301,
+            "MOVE_LEFT": 0.07908298889806313,
+            "MOVE_RIGHT": 0.3908455705971179,
+            "MOVE_FORWARD": 0.05598873180941974,
+            "MOVE_BACKWARD": 0.0019078464276289088,
+            "TURN_LEFT": 0.05900324821305797,
+            "TURN_RIGHT": 0.2804243284275879
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.53312508389354,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the right of the player's aim, at medium range."
+        },
+        {
+          "id": "no_ammo",
+          "scores": {
+            "ATTACK": 0.9745078160969449,
+            "MOVE_LEFT": 0.05242053923833767,
+            "MOVE_RIGHT": 0.14653210382007958,
+            "MOVE_FORWARD": 0.12415165640609324,
+            "MOVE_BACKWARD": 0.0005176241260472337,
+            "TURN_LEFT": 0.02374561564712844,
+            "TURN_RIGHT": 0.04388218399132263
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.86049993894994,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 0. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_ammo",
+          "scores": {
+            "ATTACK": 0.9745078160969449,
+            "MOVE_LEFT": 0.05242053923833767,
+            "MOVE_RIGHT": 0.14653210382007958,
+            "MOVE_FORWARD": 0.12415165640609324,
+            "MOVE_BACKWARD": 0.0005176241260472337,
+            "TURN_LEFT": 0.02374561564712844,
+            "TURN_RIGHT": 0.04388218399132263
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 73.66724987514317,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 0. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_evasive",
+          "scores": {
+            "ATTACK": 0.022433046925775694,
+            "MOVE_LEFT": 0.5382686490551557,
+            "MOVE_RIGHT": 0.3494944127512519,
+            "MOVE_FORWARD": 0.3067399687874492,
+            "MOVE_BACKWARD": 0.2849383988037692,
+            "TURN_LEFT": 0.3547360567438859,
+            "TURN_RIGHT": 0.10778920440606377
+          },
+          "action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.95420791767538,
+          "input_tokens": 246,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_40",
+          "scores": {
+            "ATTACK": 0.9161710123096191,
+            "MOVE_LEFT": 0.12256437174120492,
+            "MOVE_RIGHT": 0.08210641142574546,
+            "MOVE_FORWARD": 0.11673409314615649,
+            "MOVE_BACKWARD": 0.9759561445762989,
+            "TURN_LEFT": 0.0845576575380273,
+            "TURN_RIGHT": 0.030266627693719593
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 75.71308291517198,
+          "input_tokens": 250,
+          "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_cautious",
+          "scores": {
+            "ATTACK": 0.9267446239240613,
+            "MOVE_LEFT": 0.1289595230779945,
+            "MOVE_RIGHT": 0.09372550194592338,
+            "MOVE_FORWARD": 0.1322069230081519,
+            "MOVE_BACKWARD": 0.9703336699563972,
+            "TURN_LEFT": 0.08970835427270336,
+            "TURN_RIGHT": 0.03406830611410409
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 74.87925002351403,
+          "input_tokens": 250,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_enemy",
+          "scores": {
+            "ATTACK": 0.9400168658645303,
+            "MOVE_LEFT": 0.4491133579624127,
+            "MOVE_RIGHT": 0.056587706320245804,
+            "MOVE_FORWARD": 0.030756737439525582,
+            "MOVE_BACKWARD": 0.13583121791446487,
+            "TURN_LEFT": 0.25221612584023057,
+            "TURN_RIGHT": 0.023648689395328656
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 70.86437498219311,
+          "input_tokens": 227,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. No enemy is visible."
+        },
+        {
+          "id": "no_fire_paraphrase_1",
+          "scores": {
+            "ATTACK": 0.013419318967417621,
+            "MOVE_LEFT": 0.6600075923436873,
+            "MOVE_RIGHT": 0.4323728154117698,
+            "MOVE_FORWARD": 0.46951062805464716,
+            "MOVE_BACKWARD": 0.11654417864289479,
+            "TURN_LEFT": 0.3656002071814518,
+            "TURN_RIGHT": 0.13220221830343604
+          },
+          "action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 77.26525003090501,
+          "input_tokens": 245,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_evasive",
+          "scores": {
+            "ATTACK": 0.022433046925775694,
+            "MOVE_LEFT": 0.5382686490551557,
+            "MOVE_RIGHT": 0.3494944127512519,
+            "MOVE_FORWARD": 0.3067399687874492,
+            "MOVE_BACKWARD": 0.2849383988037692,
+            "TURN_LEFT": 0.3547360567438859,
+            "TURN_RIGHT": 0.10778920440606377
+          },
+          "action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.41329187713563,
+          "input_tokens": 246,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_39",
+          "scores": {
+            "ATTACK": 0.9371045133571645,
+            "MOVE_LEFT": 0.0885900194824626,
+            "MOVE_RIGHT": 0.05743377523719378,
+            "MOVE_FORWARD": 0.08122192004141357,
+            "MOVE_BACKWARD": 0.9813594578889828,
+            "TURN_LEFT": 0.06027804344796672,
+            "TURN_RIGHT": 0.020068801549072427
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 74.78595804423094,
+          "input_tokens": 250,
+          "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_40",
+          "scores": {
+            "ATTACK": 0.9161710123096191,
+            "MOVE_LEFT": 0.12256437174120492,
+            "MOVE_RIGHT": 0.08210641142574546,
+            "MOVE_FORWARD": 0.11673409314615649,
+            "MOVE_BACKWARD": 0.9759561445762989,
+            "TURN_LEFT": 0.0845576575380273,
+            "TURN_RIGHT": 0.030266627693719593
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 76.76062500104308,
+          "input_tokens": 250,
+          "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_evasive",
+          "scores": {
+            "ATTACK": 0.022433046925775694,
+            "MOVE_LEFT": 0.5382686490551557,
+            "MOVE_RIGHT": 0.3494944127512519,
+            "MOVE_FORWARD": 0.3067399687874492,
+            "MOVE_BACKWARD": 0.2849383988037692,
+            "TURN_LEFT": 0.3547360567438859,
+            "TURN_RIGHT": 0.10778920440606377
+          },
+          "action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.62262495048344,
+          "input_tokens": 246,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_left",
+          "scores": {
+            "ATTACK": 0.9617920005159907,
+            "MOVE_LEFT": 0.29954728396838215,
+            "MOVE_RIGHT": 0.03285328488212995,
+            "MOVE_FORWARD": 0.01998868252207335,
+            "MOVE_BACKWARD": 0.003175235491690714,
+            "TURN_LEFT": 0.6588584653606662,
+            "TURN_RIGHT": 0.019203752994524422
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "classification_ms": 74.62537498213351,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the left of the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_right",
+          "scores": {
+            "ATTACK": 0.9587354644125301,
+            "MOVE_LEFT": 0.07908298889806313,
+            "MOVE_RIGHT": 0.3908455705971179,
+            "MOVE_FORWARD": 0.05598873180941974,
+            "MOVE_BACKWARD": 0.0019078464276289088,
+            "TURN_LEFT": 0.05900324821305797,
+            "TURN_RIGHT": 0.2804243284275879
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.19879199005663,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the right of the player's aim, at medium range."
+        },
+        {
+          "id": "no_enemy",
+          "scores": {
+            "ATTACK": 0.9400168658645303,
+            "MOVE_LEFT": 0.4491133579624127,
+            "MOVE_RIGHT": 0.056587706320245804,
+            "MOVE_FORWARD": 0.030756737439525582,
+            "MOVE_BACKWARD": 0.13583121791446487,
+            "TURN_LEFT": 0.25221612584023057,
+            "TURN_RIGHT": 0.023648689395328656
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 71.28454209305346,
+          "input_tokens": 227,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. No enemy is visible."
+        },
+        {
+          "id": "no_fire_paraphrase_0",
+          "scores": {
+            "ATTACK": 0.067472276944449,
+            "MOVE_LEFT": 0.4842992168519904,
+            "MOVE_RIGHT": 0.5326142447653683,
+            "MOVE_FORWARD": 0.4452867993575388,
+            "MOVE_BACKWARD": 0.013753958388220003,
+            "TURN_LEFT": 0.2909432754304138,
+            "TURN_RIGHT": 0.24225575914856207
+          },
+          "action": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.25674998760223,
+          "input_tokens": 249,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_left",
+          "scores": {
+            "ATTACK": 0.9617920005159907,
+            "MOVE_LEFT": 0.29954728396838215,
+            "MOVE_RIGHT": 0.03285328488212995,
+            "MOVE_FORWARD": 0.01998868252207335,
+            "MOVE_BACKWARD": 0.003175235491690714,
+            "TURN_LEFT": 0.6588584653606662,
+            "TURN_RIGHT": 0.019203752994524422
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "classification_ms": 75.60787512920797,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the left of the player's aim, at medium range."
+        },
+        {
+          "id": "center_aggressive",
+          "scores": {
+            "ATTACK": 0.9761718210387013,
+            "MOVE_LEFT": 0.050707258390893,
+            "MOVE_RIGHT": 0.13709817345665026,
+            "MOVE_FORWARD": 0.11837807976611285,
+            "MOVE_BACKWARD": 0.00043074920747661756,
+            "TURN_LEFT": 0.023179880927948003,
+            "TURN_RIGHT": 0.041686110576497286
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 73.71566700749099,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_40",
+          "scores": {
+            "ATTACK": 0.9161710123096191,
+            "MOVE_LEFT": 0.12256437174120492,
+            "MOVE_RIGHT": 0.08210641142574546,
+            "MOVE_FORWARD": 0.11673409314615649,
+            "MOVE_BACKWARD": 0.9759561445762989,
+            "TURN_LEFT": 0.0845576575380273,
+            "TURN_RIGHT": 0.030266627693719593
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 74.19254188425839,
+          "input_tokens": 250,
+          "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_left",
+          "scores": {
+            "ATTACK": 0.9617920005159907,
+            "MOVE_LEFT": 0.29954728396838215,
+            "MOVE_RIGHT": 0.03285328488212995,
+            "MOVE_FORWARD": 0.01998868252207335,
+            "MOVE_BACKWARD": 0.003175235491690714,
+            "TURN_LEFT": 0.6588584653606662,
+            "TURN_RIGHT": 0.019203752994524422
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          "classification_ms": 75.48250001855195,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the left of the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_1",
+          "scores": {
+            "ATTACK": 0.013419318967417621,
+            "MOVE_LEFT": 0.6600075923436873,
+            "MOVE_RIGHT": 0.4323728154117698,
+            "MOVE_FORWARD": 0.46951062805464716,
+            "MOVE_BACKWARD": 0.11654417864289479,
+            "TURN_LEFT": 0.3656002071814518,
+            "TURN_RIGHT": 0.13220221830343604
+          },
+          "action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.40149993635714,
+          "input_tokens": 245,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_39",
+          "scores": {
+            "ATTACK": 0.9371045133571645,
+            "MOVE_LEFT": 0.0885900194824626,
+            "MOVE_RIGHT": 0.05743377523719378,
+            "MOVE_FORWARD": 0.08122192004141357,
+            "MOVE_BACKWARD": 0.9813594578889828,
+            "TURN_LEFT": 0.06027804344796672,
+            "TURN_RIGHT": 0.020068801549072427
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 75.13666618615389,
+          "input_tokens": 250,
+          "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_1",
+          "scores": {
+            "ATTACK": 0.013419318967417621,
+            "MOVE_LEFT": 0.6600075923436873,
+            "MOVE_RIGHT": 0.4323728154117698,
+            "MOVE_FORWARD": 0.46951062805464716,
+            "MOVE_BACKWARD": 0.11654417864289479,
+            "TURN_LEFT": 0.3656002071814518,
+            "TURN_RIGHT": 0.13220221830343604
+          },
+          "action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.02695901691914,
+          "input_tokens": 245,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_39",
+          "scores": {
+            "ATTACK": 0.9371045133571645,
+            "MOVE_LEFT": 0.0885900194824626,
+            "MOVE_RIGHT": 0.05743377523719378,
+            "MOVE_FORWARD": 0.08122192004141357,
+            "MOVE_BACKWARD": 0.9813594578889828,
+            "TURN_LEFT": 0.06027804344796672,
+            "TURN_RIGHT": 0.020068801549072427
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 74.57641698420048,
+          "input_tokens": 250,
+          "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_39",
+          "scores": {
+            "ATTACK": 0.9371045133571645,
+            "MOVE_LEFT": 0.0885900194824626,
+            "MOVE_RIGHT": 0.05743377523719378,
+            "MOVE_FORWARD": 0.08122192004141357,
+            "MOVE_BACKWARD": 0.9813594578889828,
+            "TURN_LEFT": 0.06027804344796672,
+            "TURN_RIGHT": 0.020068801549072427
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 77.36679096706212,
+          "input_tokens": 250,
+          "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_cautious",
+          "scores": {
+            "ATTACK": 0.9267446239240613,
+            "MOVE_LEFT": 0.1289595230779945,
+            "MOVE_RIGHT": 0.09372550194592338,
+            "MOVE_FORWARD": 0.1322069230081519,
+            "MOVE_BACKWARD": 0.9703336699563972,
+            "TURN_LEFT": 0.08970835427270336,
+            "TURN_RIGHT": 0.03406830611410409
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 75.26354095898569,
+          "input_tokens": 250,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_cautious",
+          "scores": {
+            "ATTACK": 0.9267446239240613,
+            "MOVE_LEFT": 0.1289595230779945,
+            "MOVE_RIGHT": 0.09372550194592338,
+            "MOVE_FORWARD": 0.1322069230081519,
+            "MOVE_BACKWARD": 0.9703336699563972,
+            "TURN_LEFT": 0.08970835427270336,
+            "TURN_RIGHT": 0.03406830611410409
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 75.86324983276427,
+          "input_tokens": 250,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_enemy",
+          "scores": {
+            "ATTACK": 0.9400168658645303,
+            "MOVE_LEFT": 0.4491133579624127,
+            "MOVE_RIGHT": 0.056587706320245804,
+            "MOVE_FORWARD": 0.030756737439525582,
+            "MOVE_BACKWARD": 0.13583121791446487,
+            "TURN_LEFT": 0.25221612584023057,
+            "TURN_RIGHT": 0.023648689395328656
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 71.80341612547636,
+          "input_tokens": 227,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. No enemy is visible."
+        },
+        {
+          "id": "cautious_health_40",
+          "scores": {
+            "ATTACK": 0.9161710123096191,
+            "MOVE_LEFT": 0.12256437174120492,
+            "MOVE_RIGHT": 0.08210641142574546,
+            "MOVE_FORWARD": 0.11673409314615649,
+            "MOVE_BACKWARD": 0.9759561445762989,
+            "TURN_LEFT": 0.0845576575380273,
+            "TURN_RIGHT": 0.030266627693719593
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 74.9117499217391,
+          "input_tokens": 250,
+          "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_1",
+          "scores": {
+            "ATTACK": 0.013419318967417621,
+            "MOVE_LEFT": 0.6600075923436873,
+            "MOVE_RIGHT": 0.4323728154117698,
+            "MOVE_FORWARD": 0.46951062805464716,
+            "MOVE_BACKWARD": 0.11654417864289479,
+            "TURN_LEFT": 0.3656002071814518,
+            "TURN_RIGHT": 0.13220221830343604
+          },
+          "action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.1527501270175,
+          "input_tokens": 245,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_evasive",
+          "scores": {
+            "ATTACK": 0.022433046925775694,
+            "MOVE_LEFT": 0.5382686490551557,
+            "MOVE_RIGHT": 0.3494944127512519,
+            "MOVE_FORWARD": 0.3067399687874492,
+            "MOVE_BACKWARD": 0.2849383988037692,
+            "TURN_LEFT": 0.3547360567438859,
+            "TURN_RIGHT": 0.10778920440606377
+          },
+          "action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.35549998283386,
+          "input_tokens": 246,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "cautious_health_40",
+          "scores": {
+            "ATTACK": 0.9161710123096191,
+            "MOVE_LEFT": 0.12256437174120492,
+            "MOVE_RIGHT": 0.08210641142574546,
+            "MOVE_FORWARD": 0.11673409314615649,
+            "MOVE_BACKWARD": 0.9759561445762989,
+            "TURN_LEFT": 0.0845576575380273,
+            "TURN_RIGHT": 0.030266627693719593
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          "classification_ms": 75.1303331926465,
+          "input_tokens": 250,
+          "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "center_evasive",
+          "scores": {
+            "ATTACK": 0.022433046925775694,
+            "MOVE_LEFT": 0.5382686490551557,
+            "MOVE_RIGHT": 0.3494944127512519,
+            "MOVE_FORWARD": 0.3067399687874492,
+            "MOVE_BACKWARD": 0.2849383988037692,
+            "TURN_LEFT": 0.3547360567438859,
+            "TURN_RIGHT": 0.10778920440606377
+          },
+          "action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.48733411729336,
+          "input_tokens": 246,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_1",
+          "scores": {
+            "ATTACK": 0.013419318967417621,
+            "MOVE_LEFT": 0.6600075923436873,
+            "MOVE_RIGHT": 0.4323728154117698,
+            "MOVE_FORWARD": 0.46951062805464716,
+            "MOVE_BACKWARD": 0.11654417864289479,
+            "TURN_LEFT": 0.3656002071814518,
+            "TURN_RIGHT": 0.13220221830343604
+          },
+          "action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.97612503357232,
+          "input_tokens": 245,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_0",
+          "scores": {
+            "ATTACK": 0.067472276944449,
+            "MOVE_LEFT": 0.4842992168519904,
+            "MOVE_RIGHT": 0.5326142447653683,
+            "MOVE_FORWARD": 0.4452867993575388,
+            "MOVE_BACKWARD": 0.013753958388220003,
+            "TURN_LEFT": 0.2909432754304138,
+            "TURN_RIGHT": 0.24225575914856207
+          },
+          "action": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.59316698461771,
+          "input_tokens": 249,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "enemy_right",
+          "scores": {
+            "ATTACK": 0.9587354644125301,
+            "MOVE_LEFT": 0.07908298889806313,
+            "MOVE_RIGHT": 0.3908455705971179,
+            "MOVE_FORWARD": 0.05598873180941974,
+            "MOVE_BACKWARD": 0.0019078464276289088,
+            "TURN_LEFT": 0.05900324821305797,
+            "TURN_RIGHT": 0.2804243284275879
+          },
+          "action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.5333339329809,
+          "input_tokens": 241,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the right of the player's aim, at medium range."
+        },
+        {
+          "id": "no_fire_paraphrase_0",
+          "scores": {
+            "ATTACK": 0.067472276944449,
+            "MOVE_LEFT": 0.4842992168519904,
+            "MOVE_RIGHT": 0.5326142447653683,
+            "MOVE_FORWARD": 0.4452867993575388,
+            "MOVE_BACKWARD": 0.013753958388220003,
+            "TURN_LEFT": 0.2909432754304138,
+            "TURN_RIGHT": 0.24225575914856207
+          },
+          "action": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 76.21195795945823,
+          "input_tokens": 249,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_ammo",
+          "scores": {
+            "ATTACK": 0.9745078160969449,
+            "MOVE_LEFT": 0.05242053923833767,
+            "MOVE_RIGHT": 0.14653210382007958,
+            "MOVE_FORWARD": 0.12415165640609324,
+            "MOVE_BACKWARD": 0.0005176241260472337,
+            "TURN_LEFT": 0.02374561564712844,
+            "TURN_RIGHT": 0.04388218399132263
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 74.65562503784895,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 0. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        },
+        {
+          "id": "no_ammo",
+          "scores": {
+            "ATTACK": 0.9745078160969449,
+            "MOVE_LEFT": 0.05242053923833767,
+            "MOVE_RIGHT": 0.14653210382007958,
+            "MOVE_FORWARD": 0.12415165640609324,
+            "MOVE_BACKWARD": 0.0005176241260472337,
+            "TURN_LEFT": 0.02374561564712844,
+            "TURN_RIGHT": 0.04388218399132263
+          },
+          "action": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "raw_action": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "classification_ms": 75.1977909822017,
+          "input_tokens": 243,
+          "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 0. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+        }
+      ]
+    }
+  ],
+  "note": "55 batch-one classifications per model after all 11 probe shapes warmed; CPU timings include the same preprocessing and action decoding as MPS."
+}

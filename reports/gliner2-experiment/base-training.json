@@ -1,0 +1,72 @@
+{
+  "model": "fastino/gliner2.5-base-v1",
+  "revision": "78cea040597df251eedefa9d7ee2a756af39fe64",
+  "feature_extraction_examples": 468,
+  "feature_extraction_seconds": 13.892290208954364,
+  "max_original_head_reconstruction_error": 0.00010414421558380127,
+  "wall_seconds_including_load_features_and_all_budgets": 25.06592533411458,
+  "timing_note": "Optimization times exclude shared model loading and feature extraction; not directly comparable with the earlier 3.6-second ModernBERT training timer.",
+  "budgets": [
+    {
+      "budget": 32,
+      "head": "runs/gliner2-base-heads/head-32",
+      "selected_step": 600,
+      "optimization_seconds": 1.7949863749090582,
+      "metrics_cached_features": {
+        "selected_train": {
+          "exact_teacher_agreement": 0.875,
+          "button_teacher_agreement": 0.9776785969734192
+        },
+        "validation": {
+          "exact_teacher_agreement": 0.9583333134651184,
+          "button_teacher_agreement": 0.9940476417541504
+        },
+        "test": {
+          "exact_teacher_agreement": 0.6458333134651184,
+          "button_teacher_agreement": 0.9166666865348816
+        }
+      }
+    },
+    {
+      "budget": 128,
+      "head": "runs/gliner2-base-heads/head-128",
+      "selected_step": 600,
+      "optimization_seconds": 2.9253156250342727,
+      "metrics_cached_features": {
+        "selected_train": {
+          "exact_teacher_agreement": 0.8125,
+          "button_teacher_agreement": 0.9642857313156128
+        },
+        "validation": {
+          "exact_teacher_agreement": 0.9166666865348816,
+          "button_teacher_agreement": 0.988095223903656
+        },
+        "test": {
+          "exact_teacher_agreement": 0.6458333134651184,
+          "button_teacher_agreement": 0.9196428656578064
+        }
+      }
+    },
+    {
+      "budget": 372,
+      "head": "runs/gliner2-base-heads/head-372",
+      "selected_step": 550,
+      "optimization_seconds": 2.948220083024353,
+      "metrics_cached_features": {
+        "selected_train": {
+          "exact_teacher_agreement": 0.6962365508079529,
+          "button_teacher_agreement": 0.93049156665802
+        },
+        "validation": {
+          "exact_teacher_agreement": 0.9583333134651184,
+          "button_teacher_agreement": 0.9940476417541504
+        },
+        "test": {
+          "exact_teacher_agreement": 0.5833333134651184,
+          "button_teacher_agreement": 0.9017857313156128
+        }
+      }
+    }
+  ],
+  "evaluation_note": "Cached-feature metrics only. Reload adapted heads and run compare.py for full-forward inference and live gameplay verification."
+}

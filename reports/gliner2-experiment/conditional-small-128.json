@@ -1,0 +1,305 @@
+{
+  "model": "small",
+  "adapted_head": "runs/gliner2-small-heads/head-128",
+  "cases": [
+    {
+      "instruction": "Fight, but stop shooting and retreat below 40 health.",
+      "health": 20,
+      "scores": {
+        "ATTACK": 0.7090191337850932,
+        "MOVE_LEFT": 0.9061560406079822,
+        "MOVE_RIGHT": 0.5646386924084453,
+        "MOVE_FORWARD": 0.00402290993572915,
+        "MOVE_BACKWARD": 0.8515829016098734,
+        "TURN_LEFT": 0.021328081660092035,
+        "TURN_RIGHT": 0.13184244236397977
+      },
+      "action": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 157.15770819224417,
+      "input_tokens": 249,
+      "model_state_text": "Health: 20 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range.",
+      "expected_attack": false,
+      "correct_raw_attack": false,
+      "retreats_if_hurt": true
+    },
+    {
+      "instruction": "Fight, but stop shooting and retreat below 40 health.",
+      "health": 39,
+      "scores": {
+        "ATTACK": 0.6964746801255385,
+        "MOVE_LEFT": 0.9005297861178929,
+        "MOVE_RIGHT": 0.537982106555605,
+        "MOVE_FORWARD": 0.004215159621187134,
+        "MOVE_BACKWARD": 0.8438951025545426,
+        "TURN_LEFT": 0.02337531504012681,
+        "TURN_RIGHT": 0.13173070518939284
+      },
+      "action": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 15.210208017379045,
+      "input_tokens": 249,
+      "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range.",
+      "expected_attack": false,
+      "correct_raw_attack": false,
+      "retreats_if_hurt": true
+    },
+    {
+      "instruction": "Fight, but stop shooting and retreat below 40 health.",
+      "health": 40,
+      "scores": {
+        "ATTACK": 0.6123096702680609,
+        "MOVE_LEFT": 0.9144436500485809,
+        "MOVE_RIGHT": 0.5313309662327549,
+        "MOVE_FORWARD": 0.0039148236056371685,
+        "MOVE_BACKWARD": 0.7039566617217692,
+        "TURN_LEFT": 0.027637721873581197,
+        "TURN_RIGHT": 0.16518870923628381
+      },
+      "action": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 13.612499926239252,
+      "input_tokens": 249,
+      "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range.",
+      "expected_attack": true,
+      "correct_raw_attack": true,
+      "retreats_if_hurt": null
+    },
+    {
+      "instruction": "Fight, but stop shooting and retreat below 40 health.",
+      "health": 80,
+      "scores": {
+        "ATTACK": 0.6897237499113223,
+        "MOVE_LEFT": 0.9031234594061358,
+        "MOVE_RIGHT": 0.5069270470002827,
+        "MOVE_FORWARD": 0.002790037654330648,
+        "MOVE_BACKWARD": 0.7624240662773001,
+        "TURN_LEFT": 0.02048855468474385,
+        "TURN_RIGHT": 0.16981850978871627
+      },
+      "action": [
+        1,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        1,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 13.871417148038745,
+      "input_tokens": 249,
+      "model_state_text": "Health: 80 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range.",
+      "expected_attack": true,
+      "correct_raw_attack": true,
+      "retreats_if_hurt": null
+    },
+    {
+      "instruction": "Fire only when your health is at least 40. If lower, do not fire and move backward.",
+      "health": 20,
+      "scores": {
+        "ATTACK": 0.01691491326672651,
+        "MOVE_LEFT": 0.740924892403682,
+        "MOVE_RIGHT": 0.5897754332676899,
+        "MOVE_FORWARD": 0.0005254230495830163,
+        "MOVE_BACKWARD": 0.994466612060986,
+        "TURN_LEFT": 0.03079216644429231,
+        "TURN_RIGHT": 0.2135411347306347
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 29.19404092244804,
+      "input_tokens": 258,
+      "model_state_text": "Health: 20 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range.",
+      "expected_attack": false,
+      "correct_raw_attack": true,
+      "retreats_if_hurt": true
+    },
+    {
+      "instruction": "Fire only when your health is at least 40. If lower, do not fire and move backward.",
+      "health": 39,
+      "scores": {
+        "ATTACK": 0.012336100420869755,
+        "MOVE_LEFT": 0.7158214700253839,
+        "MOVE_RIGHT": 0.588830023352003,
+        "MOVE_FORWARD": 0.0006166297347617124,
+        "MOVE_BACKWARD": 0.9958980707421329,
+        "TURN_LEFT": 0.02494025393741596,
+        "TURN_RIGHT": 0.21206880435710532
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 14.290542108938098,
+      "input_tokens": 258,
+      "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range.",
+      "expected_attack": false,
+      "correct_raw_attack": true,
+      "retreats_if_hurt": true
+    },
+    {
+      "instruction": "Fire only when your health is at least 40. If lower, do not fire and move backward.",
+      "health": 40,
+      "scores": {
+        "ATTACK": 0.006463137718154743,
+        "MOVE_LEFT": 0.7346909745190238,
+        "MOVE_RIGHT": 0.6802417074409427,
+        "MOVE_FORWARD": 0.0012843081201339697,
+        "MOVE_BACKWARD": 0.9977038409935028,
+        "TURN_LEFT": 0.030043369411322737,
+        "TURN_RIGHT": 0.2949252208690291
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 13.094333000481129,
+      "input_tokens": 258,
+      "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range.",
+      "expected_attack": true,
+      "correct_raw_attack": false,
+      "retreats_if_hurt": null
+    },
+    {
+      "instruction": "Fire only when your health is at least 40. If lower, do not fire and move backward.",
+      "health": 80,
+      "scores": {
+        "ATTACK": 0.01621503010931627,
+        "MOVE_LEFT": 0.7424217173984088,
+        "MOVE_RIGHT": 0.6115559781753017,
+        "MOVE_FORWARD": 0.0007495314256624536,
+        "MOVE_BACKWARD": 0.9954438862855455,
+        "TURN_LEFT": 0.03670035387577421,
+        "TURN_RIGHT": 0.26980631547125805
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        1,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 13.509042095392942,
+      "input_tokens": 258,
+      "model_state_text": "Health: 80 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range.",
+      "expected_attack": true,
+      "correct_raw_attack": false,
+      "retreats_if_hurt": null
+    }
+  ],
+  "attack_checks_passed": 4,
+  "attack_checks_total": 8,
+  "note": "Follow-up diagnostic: the original 'shoot, but retreat below 40' wording did not explicitly forbid firing while retreating. These instructions do. No weights, schemas or thresholds are changed for this check. Health categories still use the existing perception bins; this is not proof of arbitrary numeric reasoning."
+}

@@ -5,6 +5,10 @@ baseline, and a ModernBERT policy adapter accelerated by Apple Metal.
 Instructions and structured state enter the model; button probabilities come out.
 Pixels are used only for screenshots and video.
 
+The [GLiNER2.5 comparison](experiments/gliner2/RESULTS.md) tests zero-shot action
+classification and small imitation-training runs against this ModernBERT policy
+on the same Mac. [Experiment setup and reproduction](experiments/gliner2/README.md).
+
 **A small trained checkpoint is included:** `models/controlled-demo`. It learns
 seven button scores from known instructions and a controlled description of live
 state. The full ModernBERT encoder and trained head run on every decision. The

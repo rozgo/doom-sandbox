@@ -1,0 +1,15 @@
+[project]
+name = "doom-gliner2-experiment"
+version = "0.1.0"
+description = "Isolated zero-shot GLiNER2.5 comparison for the Doom classifier demo"
+requires-python = ">=3.12"
+dependencies = [
+    "doom-bert",
+    "gliner2[local]==2.0.0",
+    "protobuf>=5,<7",
+    "sentencepiece>=0.2.0",
+    "torch==2.14.0",
+]
+
+[tool.uv.sources]
+doom-bert = { path = "../..", editable = true }

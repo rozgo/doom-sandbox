@@ -1,0 +1,341 @@
+{
+  "policies": [
+    {
+      "id": "modernbert",
+      "doom_training_examples": 372,
+      "classification_mean_ms": 12.004917185634461,
+      "classification_median_ms": 11.787979048676789,
+      "gameplay_classification_mean_ms": 13.313214475222464,
+      "headless_decisions_per_second": 53.52227546131105,
+      "test_decoded_teacher_agreement": 0.8125,
+      "new_instruction_decoded_teacher_agreement": 0.5625,
+      "gameplay_decisions": 2100,
+      "gameplay": [
+        {
+          "seed": 7,
+          "mode": "aggressive",
+          "kills": 8,
+          "deaths": 0,
+          "ammo_consumed_observed": 26.0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 7,
+          "mode": "evasive",
+          "kills": 0,
+          "deaths": 0,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 7,
+          "mode": "cautious",
+          "kills": 3,
+          "deaths": 1,
+          "ammo_consumed_observed": 30.0,
+          "damage_taken_observed": 80.0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 19,
+          "mode": "aggressive",
+          "kills": 10,
+          "deaths": 0,
+          "ammo_consumed_observed": 26.0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 19,
+          "mode": "evasive",
+          "kills": 0,
+          "deaths": 0,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 19,
+          "mode": "cautious",
+          "kills": 6,
+          "deaths": 0,
+          "ammo_consumed_observed": 26.0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        }
+      ]
+    },
+    {
+      "id": "small-zero-shot",
+      "doom_training_examples": 0,
+      "classification_mean_ms": 15.791718447364348,
+      "classification_median_ms": 13.666353886947036,
+      "gameplay_classification_mean_ms": 16.916842952348468,
+      "headless_decisions_per_second": 46.11634495026023,
+      "test_decoded_teacher_agreement": 0.020833333333333332,
+      "new_instruction_decoded_teacher_agreement": 0.020833333333333332,
+      "gameplay_decisions": 2100,
+      "gameplay": [
+        {
+          "seed": 7,
+          "mode": "aggressive",
+          "kills": 3,
+          "deaths": 2,
+          "ammo_consumed_observed": 49.0,
+          "damage_taken_observed": 176.0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 7,
+          "mode": "evasive",
+          "kills": 0,
+          "deaths": 2,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 176.0,
+          "noop_decisions": 350
+        },
+        {
+          "seed": 7,
+          "mode": "cautious",
+          "kills": 0,
+          "deaths": 2,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 172.0,
+          "noop_decisions": 34
+        },
+        {
+          "seed": 19,
+          "mode": "aggressive",
+          "kills": 6,
+          "deaths": 2,
+          "ammo_consumed_observed": 50.0,
+          "damage_taken_observed": 174.0,
+          "noop_decisions": 1
+        },
+        {
+          "seed": 19,
+          "mode": "evasive",
+          "kills": 0,
+          "deaths": 2,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 208.0,
+          "noop_decisions": 350
+        },
+        {
+          "seed": 19,
+          "mode": "cautious",
+          "kills": 0,
+          "deaths": 2,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 172.0,
+          "noop_decisions": 14
+        }
+      ]
+    },
+    {
+      "id": "base-zero-shot",
+      "doom_training_examples": 0,
+      "classification_mean_ms": 24.366318403883987,
+      "classification_median_ms": 22.607708582654595,
+      "gameplay_classification_mean_ms": 25.762929078524134,
+      "headless_decisions_per_second": 31.340476972211444,
+      "test_decoded_teacher_agreement": 0.041666666666666664,
+      "new_instruction_decoded_teacher_agreement": 0.041666666666666664,
+      "gameplay_decisions": 2100,
+      "gameplay": [
+        {
+          "seed": 7,
+          "mode": "aggressive",
+          "kills": 4,
+          "deaths": 2,
+          "ammo_consumed_observed": 50.0,
+          "damage_taken_observed": 172.0,
+          "noop_decisions": 1
+        },
+        {
+          "seed": 7,
+          "mode": "evasive",
+          "kills": 0,
+          "deaths": 0,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 80.0,
+          "noop_decisions": 98
+        },
+        {
+          "seed": 7,
+          "mode": "cautious",
+          "kills": 12,
+          "deaths": 1,
+          "ammo_consumed_observed": 39.0,
+          "damage_taken_observed": 116.0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 19,
+          "mode": "aggressive",
+          "kills": 4,
+          "deaths": 1,
+          "ammo_consumed_observed": 31.0,
+          "damage_taken_observed": 88.0,
+          "noop_decisions": 27
+        },
+        {
+          "seed": 19,
+          "mode": "evasive",
+          "kills": 0,
+          "deaths": 1,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 90.0,
+          "noop_decisions": 4
+        },
+        {
+          "seed": 19,
+          "mode": "cautious",
+          "kills": 9,
+          "deaths": 0,
+          "ammo_consumed_observed": 26.0,
+          "damage_taken_observed": 36.0,
+          "noop_decisions": 0
+        }
+      ]
+    },
+    {
+      "id": "small-128",
+      "doom_training_examples": 128,
+      "classification_mean_ms": 14.620424269485584,
+      "classification_median_ms": 13.31331254914403,
+      "gameplay_classification_mean_ms": 17.690510656462894,
+      "headless_decisions_per_second": 42.805601418699936,
+      "test_decoded_teacher_agreement": 0.75,
+      "new_instruction_decoded_teacher_agreement": 0.7083333333333334,
+      "gameplay_decisions": 2100,
+      "gameplay": [
+        {
+          "seed": 7,
+          "mode": "aggressive",
+          "kills": 6,
+          "deaths": 1,
+          "ammo_consumed_observed": 34.0,
+          "damage_taken_observed": 104.0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 7,
+          "mode": "evasive",
+          "kills": 0,
+          "deaths": 0,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 7,
+          "mode": "cautious",
+          "kills": 0,
+          "deaths": 0,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 19,
+          "mode": "aggressive",
+          "kills": 8,
+          "deaths": 0,
+          "ammo_consumed_observed": 26.0,
+          "damage_taken_observed": 76.0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 19,
+          "mode": "evasive",
+          "kills": 0,
+          "deaths": 0,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 19,
+          "mode": "cautious",
+          "kills": 0,
+          "deaths": 0,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        }
+      ]
+    },
+    {
+      "id": "base-32",
+      "doom_training_examples": 32,
+      "classification_mean_ms": 23.45768493724727,
+      "classification_median_ms": 22.34595804475248,
+      "gameplay_classification_mean_ms": 29.275451661309315,
+      "headless_decisions_per_second": 27.49842866121936,
+      "test_decoded_teacher_agreement": 0.7083333333333334,
+      "new_instruction_decoded_teacher_agreement": 0.4166666666666667,
+      "gameplay_decisions": 2100,
+      "gameplay": [
+        {
+          "seed": 7,
+          "mode": "aggressive",
+          "kills": 8,
+          "deaths": 1,
+          "ammo_consumed_observed": 32.0,
+          "damage_taken_observed": 94.0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 7,
+          "mode": "evasive",
+          "kills": 0,
+          "deaths": 0,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 7,
+          "mode": "cautious",
+          "kills": 0,
+          "deaths": 0,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 19,
+          "mode": "aggressive",
+          "kills": 11,
+          "deaths": 0,
+          "ammo_consumed_observed": 26.0,
+          "damage_taken_observed": 12.0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 19,
+          "mode": "evasive",
+          "kills": 0,
+          "deaths": 0,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        },
+        {
+          "seed": 19,
+          "mode": "cautious",
+          "kills": 0,
+          "deaths": 0,
+          "ammo_consumed_observed": 0,
+          "damage_taken_observed": 0,
+          "noop_decisions": 0
+        }
+      ]
+    }
+  ],
+  "scope": "Five pipelines, each 516 evaluation pairs, 11 initial probes, and six 20-game-second headless runs; plus explicit conditional follow-up and CPU precision check.",
+  "caution": "Small exploratory comparison. Same underlying observations, model-appropriate text formats. Fixed 600-step head adaptation is not an optimized training benchmark. Earlier 44 decisions/s video includes display and encoding overhead and is not directly comparable."
+}
