@@ -1,0 +1,1430 @@
+{
+  "created_at": "2026-10-07T03:25:09.129688+00:00",
+  "model": "base",
+  "checkpoint": "fastino/gliner2.5-base-v1",
+  "device": "cuda",
+  "dtype": "float16",
+  "platform": "Linux-6.8.0-142-generic-x86_64-with-glibc2.39",
+  "python": "3.12.12",
+  "hardware": "NVIDIA GeForce RTX 4090",
+  "versions": {
+    "torch": "2.14.0",
+    "transformers": "4.57.6",
+    "vizdoom": "1.3.0"
+  },
+  "torch_cpu_threads": 4,
+  "doom_training_examples": 12000,
+  "adapted_head": null,
+  "fine_tuned_weights": "../../runs/gliner2-v2/base-head",
+  "training_scope": "GLiNER2.5 head adapted, encoder frozen on 12000 teacher-labelled Doom examples",
+  "batch_size": 1,
+  "warmup_calls": 10,
+  "classification_timing_scope": "input serialization + tokenization + encoder + scores to CPU + identical legal action decoding; warmup excluded",
+  "gameplay_conditions": "headless, no video or dashboard; existing state logs and periodic PNGs; 2 game tics per decision; uncapped",
+  "teacher_agreement_note": "Agreement with existing scripted training targets, not an objective measure of optimal play. GLiNER receives button meanings, not the teacher rules.",
+  "new_instruction_note": "Fixed paraphrases declared before evaluation; same held-out state categories as the original test split.",
+  "runtime_teacher": false,
+  "runtime_embedding_or_action_cache": false,
+  "action_descriptions": {
+    "ATTACK": "Fire the equipped weapon at a target in front of the player.",
+    "MOVE_LEFT": "Strafe sideways to the player's left without changing aim.",
+    "MOVE_RIGHT": "Strafe sideways to the player's right without changing aim.",
+    "MOVE_FORWARD": "Walk forward in the direction the player is facing.",
+    "MOVE_BACKWARD": "Walk backward, away from what the player is facing.",
+    "TURN_LEFT": "Rotate the player's view and aim toward the left.",
+    "TURN_RIGHT": "Rotate the player's view and aim toward the right."
+  },
+  "task_instruction": "Choose the game-control buttons to press now, given the player's instruction and current game state. Select actions that carry out the instruction. Several buttons can be pressed together, or none.",
+  "gliner2_version": "2.0.0",
+  "schema": {
+    "json_structures": [],
+    "classifications": [
+      {
+        "task": "buttons",
+        "labels": [
+          "ATTACK",
+          "MOVE_LEFT",
+          "MOVE_RIGHT",
+          "MOVE_FORWARD",
+          "MOVE_BACKWARD",
+          "TURN_LEFT",
+          "TURN_RIGHT"
+        ],
+        "true_label": [
+          "N/A"
+        ],
+        "multi_label": true,
+        "cls_threshold": 0.5,
+        "class_act": "sigmoid",
+        "prompt": "Choose the game-control buttons to press now, given the player's instruction and current game state. Select actions that carry out the instruction. Several buttons can be pressed together, or none.",
+        "label_descriptions": {
+          "ATTACK": "Fire the equipped weapon at a target in front of the player.",
+          "MOVE_LEFT": "Strafe sideways to the player's left without changing aim.",
+          "MOVE_RIGHT": "Strafe sideways to the player's right without changing aim.",
+          "MOVE_FORWARD": "Walk forward in the direction the player is facing.",
+          "MOVE_BACKWARD": "Walk backward, away from what the player is facing.",
+          "TURN_LEFT": "Rotate the player's view and aim toward the left.",
+          "TURN_RIGHT": "Rotate the player's view and aim toward the right."
+        }
+      }
+    ],
+    "entities": {},
+    "relations": [],
+    "json_descriptions": {},
+    "entity_descriptions": {}
+  },
+  "model_revision": "78cea040597df251eedefa9d7ee2a756af39fe64",
+  "encoder_attention": "eager",
+  "total_parameters": 193581591,
+  "dataset_sha256": "862cc232efaecab3dfad14e81445cb0ac3466bcb090aa0cc12c53dc5f4c5297e",
+  "classification_latency": {
+    "count": 516,
+    "mean_ms": 12.266297878376244,
+    "median_ms": 11.865266948007047,
+    "p95_ms": 12.823777040466666,
+    "classifications_per_second": 81.52419009511087
+  },
+  "input_tokens": {
+    "min": 227,
+    "max": 253
+  },
+  "agreement": {
+    "train": {
+      "examples": 372,
+      "raw_action": {
+        "exact_teacher_agreement": 0.6908602150537635,
+        "button_teacher_agreement": 0.9404761904761905,
+        "positive_button_f1": {
+          "ATTACK": {
+            "f1": 0.4444444444444444,
+            "target_positives": 22.0,
+            "predicted_positives": 14
+          },
+          "MOVE_LEFT": {
+            "f1": 0.919431279620853,
+            "target_positives": 206.0,
+            "predicted_positives": 216
+          },
+          "MOVE_RIGHT": {
+            "f1": 0.8121212121212121,
+            "target_positives": 92.0,
+            "predicted_positives": 73
+          },
+          "MOVE_FORWARD": {
+            "f1": 0.0,
+            "target_positives": 6.0,
+            "predicted_positives": 0
+          },
+          "MOVE_BACKWARD": {
+            "f1": 0.9010238907849829,
+            "target_positives": 298.0,
+            "predicted_positives": 288
+          },
+          "TURN_LEFT": {
+            "f1": 1.0,
+            "target_positives": 102.0,
+            "predicted_positives": 102
+          },
+          "TURN_RIGHT": {
+            "f1": 0.9795918367346939,
+            "target_positives": 150.0,
+            "predicted_positives": 144
+          }
+        },
+        "all_buttons_released_fraction": 0.016129032258064516
+      },
+      "action": {
+        "exact_teacher_agreement": 0.7016129032258065,
+        "button_teacher_agreement": 0.9427803379416283,
+        "positive_button_f1": {
+          "ATTACK": {
+            "f1": 0.5333333333333333,
+            "target_positives": 22.0,
+            "predicted_positives": 8
+          },
+          "MOVE_LEFT": {
+            "f1": 0.919431279620853,
+            "target_positives": 206.0,
+            "predicted_positives": 216
+          },
+          "MOVE_RIGHT": {
+            "f1": 0.8121212121212121,
+            "target_positives": 92.0,
+            "predicted_positives": 73
+          },
+          "MOVE_FORWARD": {
+            "f1": 0.0,
+            "target_positives": 6.0,
+            "predicted_positives": 0
+          },
+          "MOVE_BACKWARD": {
+            "f1": 0.9010238907849829,
+            "target_positives": 298.0,
+            "predicted_positives": 288
+          },
+          "TURN_LEFT": {
+            "f1": 1.0,
+            "target_positives": 102.0,
+            "predicted_positives": 102
+          },
+          "TURN_RIGHT": {
+            "f1": 0.9795918367346939,
+            "target_positives": 150.0,
+            "predicted_positives": 144
+          }
+        },
+        "all_buttons_released_fraction": 0.016129032258064516
+      }
+    },
+    "validation": {
+      "examples": 48,
+      "raw_action": {
+        "exact_teacher_agreement": 0.6875,
+        "button_teacher_agreement": 0.9523809523809523,
+        "positive_button_f1": {
+          "ATTACK": {
+            "f1": 0.0,
+            "target_positives": 0.0,
+            "predicted_positives": 0
+          },
+          "MOVE_LEFT": {
+            "f1": 0.9411764705882353,
+            "target_positives": 18.0,
+            "predicted_positives": 16
+          },
+          "MOVE_RIGHT": {
+            "f1": 0.9285714285714286,
+            "target_positives": 30.0,
+            "predicted_positives": 26
+          },
+          "MOVE_FORWARD": {
+            "f1": 0.0,
+            "target_positives": 0.0,
+            "predicted_positives": 0
+          },
+          "MOVE_BACKWARD": {
+            "f1": 0.8837209302325582,
+            "target_positives": 48.0,
+            "predicted_positives": 38
+          },
+          "TURN_LEFT": {
+            "f1": 1.0,
+            "target_positives": 30.0,
+            "predicted_positives": 30
+          },
+          "TURN_RIGHT": {
+            "f1": 1.0,
+            "target_positives": 12.0,
+            "predicted_positives": 12
+          }
+        },
+        "all_buttons_released_fraction": 0.0
+      },
+      "action": {
+        "exact_teacher_agreement": 0.6875,
+        "button_teacher_agreement": 0.9523809523809523,
+        "positive_button_f1": {
+          "ATTACK": {
+            "f1": 0.0,
+            "target_positives": 0.0,
+            "predicted_positives": 0
+          },
+          "MOVE_LEFT": {
+            "f1": 0.9411764705882353,
+            "target_positives": 18.0,
+            "predicted_positives": 16
+          },
+          "MOVE_RIGHT": {
+            "f1": 0.9285714285714286,
+            "target_positives": 30.0,
+            "predicted_positives": 26
+          },
+          "MOVE_FORWARD": {
+            "f1": 0.0,
+            "target_positives": 0.0,
+            "predicted_positives": 0
+          },
+          "MOVE_BACKWARD": {
+            "f1": 0.8837209302325582,
+            "target_positives": 48.0,
+            "predicted_positives": 38
+          },
+          "TURN_LEFT": {
+            "f1": 1.0,
+            "target_positives": 30.0,
+            "predicted_positives": 30
+          },
+          "TURN_RIGHT": {
+            "f1": 1.0,
+            "target_positives": 12.0,
+            "predicted_positives": 12
+          }
+        },
+        "all_buttons_released_fraction": 0.0
+      }
+    },
+    "test": {
+      "examples": 48,
+      "raw_action": {
+        "exact_teacher_agreement": 0.6875,
+        "button_teacher_agreement": 0.9434523809523809,
+        "positive_button_f1": {
+          "ATTACK": {
+            "f1": 0.0,
+            "target_positives": 2.0,
+            "predicted_positives": 0
+          },
+          "MOVE_LEFT": {
+            "f1": 0.9032258064516129,
+            "target_positives": 32.0,
+            "predicted_positives": 30
+          },
+          "MOVE_RIGHT": {
+            "f1": 0.7142857142857143,
+            "target_positives": 6.0,
+            "predicted_positives": 8
+          },
+          "MOVE_FORWARD": {
+            "f1": 0.0,
+            "target_positives": 0.0,
+            "predicted_positives": 0
+          },
+          "MOVE_BACKWARD": {
+            "f1": 0.9113924050632911,
+            "target_positives": 38.0,
+            "predicted_positives": 41
+          },
+          "TURN_LEFT": {
+            "f1": 1.0,
+            "target_positives": 12.0,
+            "predicted_positives": 12
+          },
+          "TURN_RIGHT": {
+            "f1": 1.0,
+            "target_positives": 18.0,
+            "predicted_positives": 18
+          }
+        },
+        "all_buttons_released_fraction": 0.0
+      },
+      "action": {
+        "exact_teacher_agreement": 0.6875,
+        "button_teacher_agreement": 0.9434523809523809,
+        "positive_button_f1": {
+          "ATTACK": {
+            "f1": 0.0,
+            "target_positives": 2.0,
+            "predicted_positives": 0
+          },
+          "MOVE_LEFT": {
+            "f1": 0.9032258064516129,
+            "target_positives": 32.0,
+            "predicted_positives": 30
+          },
+          "MOVE_RIGHT": {
+            "f1": 0.7142857142857143,
+            "target_positives": 6.0,
+            "predicted_positives": 8
+          },
+          "MOVE_FORWARD": {
+            "f1": 0.0,
+            "target_positives": 0.0,
+            "predicted_positives": 0
+          },
+          "MOVE_BACKWARD": {
+            "f1": 0.9113924050632911,
+            "target_positives": 38.0,
+            "predicted_positives": 41
+          },
+          "TURN_LEFT": {
+            "f1": 1.0,
+            "target_positives": 12.0,
+            "predicted_positives": 12
+          },
+          "TURN_RIGHT": {
+            "f1": 1.0,
+            "target_positives": 18.0,
+            "predicted_positives": 18
+          }
+        },
+        "all_buttons_released_fraction": 0.0
+      }
+    },
+    "novel_instruction_test": {
+      "examples": 48,
+      "raw_action": {
+        "exact_teacher_agreement": 0.5416666666666666,
+        "button_teacher_agreement": 0.9136904761904762,
+        "positive_button_f1": {
+          "ATTACK": {
+            "f1": 0.2857142857142857,
+            "target_positives": 2.0,
+            "predicted_positives": 5
+          },
+          "MOVE_LEFT": {
+            "f1": 0.8070175438596491,
+            "target_positives": 32.0,
+            "predicted_positives": 25
+          },
+          "MOVE_RIGHT": {
+            "f1": 0.5714285714285714,
+            "target_positives": 6.0,
+            "predicted_positives": 8
+          },
+          "MOVE_FORWARD": {
+            "f1": 0.0,
+            "target_positives": 0.0,
+            "predicted_positives": 0
+          },
+          "MOVE_BACKWARD": {
+            "f1": 0.9135802469135802,
+            "target_positives": 38.0,
+            "predicted_positives": 43
+          },
+          "TURN_LEFT": {
+            "f1": 1.0,
+            "target_positives": 12.0,
+            "predicted_positives": 12
+          },
+          "TURN_RIGHT": {
+            "f1": 1.0,
+            "target_positives": 18.0,
+            "predicted_positives": 18
+          }
+        },
+        "all_buttons_released_fraction": 0.0
+      },
+      "action": {
+        "exact_teacher_agreement": 0.5625,
+        "button_teacher_agreement": 0.9196428571428571,
+        "positive_button_f1": {
+          "ATTACK": {
+            "f1": 0.4,
+            "target_positives": 2.0,
+            "predicted_positives": 3
+          },
+          "MOVE_LEFT": {
+            "f1": 0.8070175438596491,
+            "target_positives": 32.0,
+            "predicted_positives": 25
+          },
+          "MOVE_RIGHT": {
+            "f1": 0.5714285714285714,
+            "target_positives": 6.0,
+            "predicted_positives": 8
+          },
+          "MOVE_FORWARD": {
+            "f1": 0.0,
+            "target_positives": 0.0,
+            "predicted_positives": 0
+          },
+          "MOVE_BACKWARD": {
+            "f1": 0.9135802469135802,
+            "target_positives": 38.0,
+            "predicted_positives": 43
+          },
+          "TURN_LEFT": {
+            "f1": 1.0,
+            "target_positives": 12.0,
+            "predicted_positives": 12
+          },
+          "TURN_RIGHT": {
+            "f1": 1.0,
+            "target_positives": 18.0,
+            "predicted_positives": 18
+          }
+        },
+        "all_buttons_released_fraction": 0.0
+      }
+    }
+  },
+  "probes": [
+    {
+      "id": "center_aggressive",
+      "instruction": "Attack enemies on sight.",
+      "observation": {
+        "variables": {
+          "HEALTH": 100,
+          "SELECTED_WEAPON_AMMO": 10,
+          "SELECTED_WEAPON": 2,
+          "DEAD": 0,
+          "POSITION_X": 0,
+          "POSITION_Y": 0
+        },
+        "screen_width": 640,
+        "damage_since_observation": 0,
+        "visible_objects": [
+          {
+            "id": 1,
+            "name": "Enemy",
+            "category": "Monster",
+            "box": [
+              300,
+              100,
+              40,
+              80
+            ],
+            "position": [
+              350,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "scores": {
+        "ATTACK": 0.37136458168520015,
+        "MOVE_LEFT": 0.42620217717196224,
+        "MOVE_RIGHT": 0.06954174450582809,
+        "MOVE_FORWARD": 0.010169657753872614,
+        "MOVE_BACKWARD": 0.6970936525958563,
+        "TURN_LEFT": 0.015784561073809773,
+        "TURN_RIGHT": 0.03246681447537214
+      },
+      "action": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 11.793612036854029,
+      "input_tokens": 243,
+      "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+    },
+    {
+      "id": "center_evasive",
+      "instruction": "Do not shoot. Evade the enemies.",
+      "observation": {
+        "variables": {
+          "HEALTH": 100,
+          "SELECTED_WEAPON_AMMO": 10,
+          "SELECTED_WEAPON": 2,
+          "DEAD": 0,
+          "POSITION_X": 0,
+          "POSITION_Y": 0
+        },
+        "screen_width": 640,
+        "damage_since_observation": 0,
+        "visible_objects": [
+          {
+            "id": 1,
+            "name": "Enemy",
+            "category": "Monster",
+            "box": [
+              300,
+              100,
+              40,
+              80
+            ],
+            "position": [
+              350,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "scores": {
+        "ATTACK": 1.3925466113719648e-06,
+        "MOVE_LEFT": 0.916708077443256,
+        "MOVE_RIGHT": 0.057071397225397696,
+        "MOVE_FORWARD": 0.005708033919113487,
+        "MOVE_BACKWARD": 0.9841546388118627,
+        "TURN_LEFT": 0.03949040464878066,
+        "TURN_RIGHT": 0.04672495862609242
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 11.762203881517053,
+      "input_tokens": 246,
+      "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+    },
+    {
+      "id": "center_cautious",
+      "instruction": "Shoot at enemies, but retreat when health falls below 40.",
+      "observation": {
+        "variables": {
+          "HEALTH": 100,
+          "SELECTED_WEAPON_AMMO": 10,
+          "SELECTED_WEAPON": 2,
+          "DEAD": 0,
+          "POSITION_X": 0,
+          "POSITION_Y": 0
+        },
+        "screen_width": 640,
+        "damage_since_observation": 0,
+        "visible_objects": [
+          {
+            "id": 1,
+            "name": "Enemy",
+            "category": "Monster",
+            "box": [
+              300,
+              100,
+              40,
+              80
+            ],
+            "position": [
+              350,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "scores": {
+        "ATTACK": 0.30404167496654744,
+        "MOVE_LEFT": 0.6416469441542848,
+        "MOVE_RIGHT": 0.029479408274788184,
+        "MOVE_FORWARD": 0.004905405705722035,
+        "MOVE_BACKWARD": 0.8577681049901036,
+        "TURN_LEFT": 0.006265533775839072,
+        "TURN_RIGHT": 0.007460643463940165
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 11.887237895280123,
+      "input_tokens": 250,
+      "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+    },
+    {
+      "id": "no_fire_paraphrase_0",
+      "instruction": "Keep your finger off the trigger and dodge the monsters.",
+      "observation": {
+        "variables": {
+          "HEALTH": 100,
+          "SELECTED_WEAPON_AMMO": 10,
+          "SELECTED_WEAPON": 2,
+          "DEAD": 0,
+          "POSITION_X": 0,
+          "POSITION_Y": 0
+        },
+        "screen_width": 640,
+        "damage_since_observation": 0,
+        "visible_objects": [
+          {
+            "id": 1,
+            "name": "Enemy",
+            "category": "Monster",
+            "box": [
+              300,
+              100,
+              40,
+              80
+            ],
+            "position": [
+              350,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "scores": {
+        "ATTACK": 0.012722708199923246,
+        "MOVE_LEFT": 0.8334601905326321,
+        "MOVE_RIGHT": 0.02870707815815,
+        "MOVE_FORWARD": 0.012100385813544712,
+        "MOVE_BACKWARD": 0.7576150858583124,
+        "TURN_LEFT": 0.02319762673254162,
+        "TURN_RIGHT": 0.10818895456207035
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 11.902596801519394,
+      "input_tokens": 249,
+      "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+    },
+    {
+      "id": "no_fire_paraphrase_1",
+      "instruction": "Avoid enemies without using your weapon.",
+      "observation": {
+        "variables": {
+          "HEALTH": 100,
+          "SELECTED_WEAPON_AMMO": 10,
+          "SELECTED_WEAPON": 2,
+          "DEAD": 0,
+          "POSITION_X": 0,
+          "POSITION_Y": 0
+        },
+        "screen_width": 640,
+        "damage_since_observation": 0,
+        "visible_objects": [
+          {
+            "id": 1,
+            "name": "Enemy",
+            "category": "Monster",
+            "box": [
+              300,
+              100,
+              40,
+              80
+            ],
+            "position": [
+              350,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "scores": {
+        "ATTACK": 0.0009927261432440737,
+        "MOVE_LEFT": 0.7910150389518693,
+        "MOVE_RIGHT": 0.16438227757581464,
+        "MOVE_FORWARD": 0.056236345704483756,
+        "MOVE_BACKWARD": 0.8822250804291385,
+        "TURN_LEFT": 0.04232459138108511,
+        "TURN_RIGHT": 0.10447732313023693
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 11.724392184987664,
+      "input_tokens": 245,
+      "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+    },
+    {
+      "id": "cautious_health_39",
+      "instruction": "Shoot at enemies, but retreat when health falls below 40.",
+      "observation": {
+        "variables": {
+          "HEALTH": 39,
+          "SELECTED_WEAPON_AMMO": 10,
+          "SELECTED_WEAPON": 2,
+          "DEAD": 0,
+          "POSITION_X": 0,
+          "POSITION_Y": 0
+        },
+        "screen_width": 640,
+        "damage_since_observation": 0,
+        "visible_objects": [
+          {
+            "id": 1,
+            "name": "Enemy",
+            "category": "Monster",
+            "box": [
+              300,
+              100,
+              40,
+              80
+            ],
+            "position": [
+              350,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "scores": {
+        "ATTACK": 0.17881244568319504,
+        "MOVE_LEFT": 0.6051575357466797,
+        "MOVE_RIGHT": 0.03904829272622638,
+        "MOVE_FORWARD": 0.004485794577039704,
+        "MOVE_BACKWARD": 0.8479677583778257,
+        "TURN_LEFT": 0.004520818046171076,
+        "TURN_RIGHT": 0.013955710398273338
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 12.007724028080702,
+      "input_tokens": 250,
+      "model_state_text": "Health: 39 out of 100, wounded. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+    },
+    {
+      "id": "cautious_health_40",
+      "instruction": "Shoot at enemies, but retreat when health falls below 40.",
+      "observation": {
+        "variables": {
+          "HEALTH": 40,
+          "SELECTED_WEAPON_AMMO": 10,
+          "SELECTED_WEAPON": 2,
+          "DEAD": 0,
+          "POSITION_X": 0,
+          "POSITION_Y": 0
+        },
+        "screen_width": 640,
+        "damage_since_observation": 0,
+        "visible_objects": [
+          {
+            "id": 1,
+            "name": "Enemy",
+            "category": "Monster",
+            "box": [
+              300,
+              100,
+              40,
+              80
+            ],
+            "position": [
+              350,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "scores": {
+        "ATTACK": 0.24131055571193966,
+        "MOVE_LEFT": 0.5869372410819588,
+        "MOVE_RIGHT": 0.030386749926760413,
+        "MOVE_FORWARD": 0.004231587478161331,
+        "MOVE_BACKWARD": 0.8420855424580784,
+        "TURN_LEFT": 0.004573864277626818,
+        "TURN_RIGHT": 0.008219693061967886
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 11.73607399687171,
+      "input_tokens": 250,
+      "model_state_text": "Health: 40 out of 100, healthy. Ammunition: 10. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+    },
+    {
+      "id": "enemy_left",
+      "instruction": "Attack enemies on sight.",
+      "observation": {
+        "variables": {
+          "HEALTH": 100,
+          "SELECTED_WEAPON_AMMO": 10,
+          "SELECTED_WEAPON": 2,
+          "DEAD": 0,
+          "POSITION_X": 0,
+          "POSITION_Y": 0
+        },
+        "screen_width": 640,
+        "damage_since_observation": 0,
+        "visible_objects": [
+          {
+            "id": 1,
+            "name": "Enemy",
+            "category": "Monster",
+            "box": [
+              140.0,
+              100,
+              40,
+              80
+            ],
+            "position": [
+              350,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "scores": {
+        "ATTACK": 0.04620574903531951,
+        "MOVE_LEFT": 0.13523208079351787,
+        "MOVE_RIGHT": 0.45750025922573506,
+        "MOVE_FORWARD": 0.06430005451227752,
+        "MOVE_BACKWARD": 0.49466725544108103,
+        "TURN_LEFT": 0.949482330277519,
+        "TURN_RIGHT": 0.10284407916229499
+      },
+      "action": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "raw_action": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "classification_ms": 11.616549920290709,
+      "input_tokens": 241,
+      "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the left of the player's aim, at medium range."
+    },
+    {
+      "id": "enemy_right",
+      "instruction": "Attack enemies on sight.",
+      "observation": {
+        "variables": {
+          "HEALTH": 100,
+          "SELECTED_WEAPON_AMMO": 10,
+          "SELECTED_WEAPON": 2,
+          "DEAD": 0,
+          "POSITION_X": 0,
+          "POSITION_Y": 0
+        },
+        "screen_width": 640,
+        "damage_since_observation": 0,
+        "visible_objects": [
+          {
+            "id": 1,
+            "name": "Enemy",
+            "category": "Monster",
+            "box": [
+              460.0,
+              100,
+              40,
+              80
+            ],
+            "position": [
+              350,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "scores": {
+        "ATTACK": 0.11818140091045343,
+        "MOVE_LEFT": 0.6969905400906166,
+        "MOVE_RIGHT": 0.07906798791391603,
+        "MOVE_FORWARD": 0.07963873882758324,
+        "MOVE_BACKWARD": 0.7065955179610504,
+        "TURN_LEFT": 0.01013041166358438,
+        "TURN_RIGHT": 0.8539127529517043
+      },
+      "action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "raw_action": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "classification_ms": 11.664108838886023,
+      "input_tokens": 241,
+      "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. The nearest visible enemy is to the right of the player's aim, at medium range."
+    },
+    {
+      "id": "no_ammo",
+      "instruction": "Attack enemies on sight.",
+      "observation": {
+        "variables": {
+          "HEALTH": 100,
+          "SELECTED_WEAPON_AMMO": 0,
+          "SELECTED_WEAPON": 2,
+          "DEAD": 0,
+          "POSITION_X": 0,
+          "POSITION_Y": 0
+        },
+        "screen_width": 640,
+        "damage_since_observation": 0,
+        "visible_objects": [
+          {
+            "id": 1,
+            "name": "Enemy",
+            "category": "Monster",
+            "box": [
+              300,
+              100,
+              40,
+              80
+            ],
+            "position": [
+              350,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "scores": {
+        "ATTACK": 0.3184851509651125,
+        "MOVE_LEFT": 0.47275954347941057,
+        "MOVE_RIGHT": 0.0757213720753314,
+        "MOVE_FORWARD": 0.013376603227377451,
+        "MOVE_BACKWARD": 0.7481683456121876,
+        "TURN_LEFT": 0.01934510391458952,
+        "TURN_RIGHT": 0.035678550877730524
+      },
+      "action": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "classification_ms": 11.764006922021508,
+      "input_tokens": 243,
+      "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 0. The nearest visible enemy is directly ahead, lined up with the player's aim, at medium range."
+    },
+    {
+      "id": "no_enemy",
+      "instruction": "Attack enemies on sight.",
+      "observation": {
+        "variables": {
+          "HEALTH": 100,
+          "SELECTED_WEAPON_AMMO": 10,
+          "SELECTED_WEAPON": 2,
+          "DEAD": 0,
+          "POSITION_X": 0,
+          "POSITION_Y": 0
+        },
+        "screen_width": 640,
+        "damage_since_observation": 0,
+        "visible_objects": []
+      },
+      "scores": {
+        "ATTACK": 0.03846619201832428,
+        "MOVE_LEFT": 0.022243667583876928,
+        "MOVE_RIGHT": 0.16238003666671086,
+        "MOVE_FORWARD": 0.0953494648991095,
+        "MOVE_BACKWARD": 0.17036992412790877,
+        "TURN_LEFT": 0.0030753698500482337,
+        "TURN_RIGHT": 0.4999119043359336
+      },
+      "action": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_action": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "classification_ms": 11.712079169228673,
+      "input_tokens": 227,
+      "model_state_text": "Health: 100 out of 100, healthy. Ammunition: 10. No enemy is visible."
+    }
+  ],
+  "behavior": {
+    "checks": {
+      "fires_at_aligned_enemy_when_aggressive": false,
+      "does_not_fire_when_evasive": true,
+      "evades_with_movement": true,
+      "no_fire_paraphrase_0": true,
+      "no_fire_paraphrase_1": true,
+      "cautious_stops_firing_below_40": true,
+      "cautious_fires_at_40": false,
+      "cautious_retreats_below_40": true,
+      "turns_left_for_enemy_on_left": true,
+      "turns_right_for_enemy_on_right": true,
+      "raw_no_fire_without_ammo": true,
+      "raw_no_fire_without_enemy": true
+    },
+    "passed": 10,
+    "total": 12,
+    "attack_instruction_score_delta": 0.3713631891385888,
+    "scope": "Targeted smoke checks, not a broad generalization benchmark; evaluated before legal masking."
+  },
+  "evaluation_encoder_forwards": 527,
+  "expected_evaluation_encoder_forwards": 527,
+  "gameplay": [
+    {
+      "scenario": "defend_the_center",
+      "seed": 7,
+      "requested_seconds": 20,
+      "observation_interval_game_seconds": 0.05714285714285714,
+      "screenshot_interval_game_seconds": 1,
+      "tics_per_action": 2,
+      "policy": "GLiNERPolicy",
+      "policy_device": "cuda",
+      "policy_dtype": "float16",
+      "untrained_action_head": false,
+      "state_format": "natural-language-v1",
+      "training_scope": "GLiNER2.5 head adapted, encoder frozen on 12000 teacher-labelled Doom examples",
+      "instruction": "Attack enemies on sight.",
+      "realtime": false,
+      "vizdoom_version": "1.3.0",
+      "episodes": 1,
+      "completed_episodes": 0,
+      "deaths": 0,
+      "kills": 9,
+      "observations": 351,
+      "decisions": 350,
+      "interrupted": false,
+      "video": null,
+      "video_fps": null,
+      "video_clock": null,
+      "video_capture_limit_fps": 35,
+      "stats_overlay": false,
+      "headless": true,
+      "render_weapon": true,
+      "preview_enabled": false,
+      "wall_seconds": 6.504,
+      "game_seconds": 20.0,
+      "decisions_per_wall_second": 53.811427785104755,
+      "mean_decision_ms": 12.20912722138954,
+      "attack_button_decisions": 75,
+      "raw_attack_above_half_decisions": 75,
+      "ammo_consumed_observed": 16.0,
+      "damage_taken_observed": 50.0,
+      "final_health": 50.0,
+      "noop_decisions": 0,
+      "model_action_decode_mismatches": 0,
+      "state_log_sha256": "a6dbe3c298c7e809e13276cbdf20239a330f955db88bc9a0fc51120fd273646d",
+      "mode": "aggressive",
+      "encoder_forwards": 350
+    },
+    {
+      "scenario": "defend_the_center",
+      "seed": 7,
+      "requested_seconds": 20,
+      "observation_interval_game_seconds": 0.05714285714285714,
+      "screenshot_interval_game_seconds": 1,
+      "tics_per_action": 2,
+      "policy": "GLiNERPolicy",
+      "policy_device": "cuda",
+      "policy_dtype": "float16",
+      "untrained_action_head": false,
+      "state_format": "natural-language-v1",
+      "training_scope": "GLiNER2.5 head adapted, encoder frozen on 12000 teacher-labelled Doom examples",
+      "instruction": "Do not shoot. Evade the enemies.",
+      "realtime": false,
+      "vizdoom_version": "1.3.0",
+      "episodes": 1,
+      "completed_episodes": 0,
+      "deaths": 0,
+      "kills": 0,
+      "observations": 351,
+      "decisions": 350,
+      "interrupted": false,
+      "video": null,
+      "video_fps": null,
+      "video_clock": null,
+      "video_capture_limit_fps": 35,
+      "stats_overlay": false,
+      "headless": true,
+      "render_weapon": true,
+      "preview_enabled": false,
+      "wall_seconds": 7.512,
+      "game_seconds": 20.0,
+      "decisions_per_wall_second": 46.593985391785985,
+      "mean_decision_ms": 12.582146965100296,
+      "attack_button_decisions": 0,
+      "raw_attack_above_half_decisions": 0,
+      "ammo_consumed_observed": 0,
+      "damage_taken_observed": 10.0,
+      "final_health": 90.0,
+      "noop_decisions": 0,
+      "model_action_decode_mismatches": 0,
+      "state_log_sha256": "51840dd901b281b0cc400945b96b34bfd52d97b83d22c55b43a821d32a7dd6d0",
+      "mode": "evasive",
+      "encoder_forwards": 350
+    },
+    {
+      "scenario": "defend_the_center",
+      "seed": 7,
+      "requested_seconds": 20,
+      "observation_interval_game_seconds": 0.05714285714285714,
+      "screenshot_interval_game_seconds": 1,
+      "tics_per_action": 2,
+      "policy": "GLiNERPolicy",
+      "policy_device": "cuda",
+      "policy_dtype": "float16",
+      "untrained_action_head": false,
+      "state_format": "natural-language-v1",
+      "training_scope": "GLiNER2.5 head adapted, encoder frozen on 12000 teacher-labelled Doom examples",
+      "instruction": "Shoot at enemies, but retreat when health falls below 40.",
+      "realtime": false,
+      "vizdoom_version": "1.3.0",
+      "episodes": 2,
+      "completed_episodes": 1,
+      "deaths": 1,
+      "kills": 0,
+      "observations": 351,
+      "decisions": 350,
+      "interrupted": false,
+      "video": null,
+      "video_fps": null,
+      "video_clock": null,
+      "video_capture_limit_fps": 35,
+      "stats_overlay": false,
+      "headless": true,
+      "render_weapon": true,
+      "preview_enabled": false,
+      "wall_seconds": 6.343,
+      "game_seconds": 20.0,
+      "decisions_per_wall_second": 55.181970156659084,
+      "mean_decision_ms": 12.535415985621512,
+      "attack_button_decisions": 0,
+      "raw_attack_above_half_decisions": 0,
+      "ammo_consumed_observed": 0,
+      "damage_taken_observed": 90.0,
+      "final_health": 100.0,
+      "noop_decisions": 0,
+      "model_action_decode_mismatches": 0,
+      "state_log_sha256": "17e5955d48dc6e509e5d9153e18ed8cd089bc68e04e1d53a7a84faf234e940a6",
+      "mode": "cautious",
+      "encoder_forwards": 350
+    },
+    {
+      "scenario": "defend_the_center",
+      "seed": 19,
+      "requested_seconds": 20,
+      "observation_interval_game_seconds": 0.05714285714285714,
+      "screenshot_interval_game_seconds": 1,
+      "tics_per_action": 2,
+      "policy": "GLiNERPolicy",
+      "policy_device": "cuda",
+      "policy_dtype": "float16",
+      "untrained_action_head": false,
+      "state_format": "natural-language-v1",
+      "training_scope": "GLiNER2.5 head adapted, encoder frozen on 12000 teacher-labelled Doom examples",
+      "instruction": "Attack enemies on sight.",
+      "realtime": false,
+      "vizdoom_version": "1.3.0",
+      "episodes": 1,
+      "completed_episodes": 0,
+      "deaths": 0,
+      "kills": 0,
+      "observations": 351,
+      "decisions": 350,
+      "interrupted": false,
+      "video": null,
+      "video_fps": null,
+      "video_clock": null,
+      "video_capture_limit_fps": 35,
+      "stats_overlay": false,
+      "headless": true,
+      "render_weapon": true,
+      "preview_enabled": false,
+      "wall_seconds": 6.455,
+      "game_seconds": 20.0,
+      "decisions_per_wall_second": 54.2177271301731,
+      "mean_decision_ms": 12.780882585793734,
+      "attack_button_decisions": 0,
+      "raw_attack_above_half_decisions": 0,
+      "ammo_consumed_observed": 0,
+      "damage_taken_observed": 0,
+      "final_health": 100.0,
+      "noop_decisions": 0,
+      "model_action_decode_mismatches": 0,
+      "state_log_sha256": "730e67d7e3eef993a6391666aa6d4bbbb43dcbbb0df7410773fe72aa3dc68b8b",
+      "mode": "aggressive",
+      "encoder_forwards": 350
+    },
+    {
+      "scenario": "defend_the_center",
+      "seed": 19,
+      "requested_seconds": 20,
+      "observation_interval_game_seconds": 0.05714285714285714,
+      "screenshot_interval_game_seconds": 1,
+      "tics_per_action": 2,
+      "policy": "GLiNERPolicy",
+      "policy_device": "cuda",
+      "policy_dtype": "float16",
+      "untrained_action_head": false,
+      "state_format": "natural-language-v1",
+      "training_scope": "GLiNER2.5 head adapted, encoder frozen on 12000 teacher-labelled Doom examples",
+      "instruction": "Do not shoot. Evade the enemies.",
+      "realtime": false,
+      "vizdoom_version": "1.3.0",
+      "episodes": 3,
+      "completed_episodes": 2,
+      "deaths": 2,
+      "kills": 0,
+      "observations": 351,
+      "decisions": 350,
+      "interrupted": false,
+      "video": null,
+      "video_fps": null,
+      "video_clock": null,
+      "video_capture_limit_fps": 35,
+      "stats_overlay": false,
+      "headless": true,
+      "render_weapon": true,
+      "preview_enabled": false,
+      "wall_seconds": 6.259,
+      "game_seconds": 20.0,
+      "decisions_per_wall_second": 55.920154849752244,
+      "mean_decision_ms": 12.700028249860875,
+      "attack_button_decisions": 0,
+      "raw_attack_above_half_decisions": 0,
+      "ammo_consumed_observed": 0,
+      "damage_taken_observed": 188.0,
+      "final_health": 82.0,
+      "noop_decisions": 0,
+      "model_action_decode_mismatches": 0,
+      "state_log_sha256": "9db93d2faebe62e303125469530f3695cedb3f2acbd106eb01012468ff2c56ae",
+      "mode": "evasive",
+      "encoder_forwards": 350
+    },
+    {
+      "scenario": "defend_the_center",
+      "seed": 19,
+      "requested_seconds": 20,
+      "observation_interval_game_seconds": 0.05714285714285714,
+      "screenshot_interval_game_seconds": 1,
+      "tics_per_action": 2,
+      "policy": "GLiNERPolicy",
+      "policy_device": "cuda",
+      "policy_dtype": "float16",
+      "untrained_action_head": false,
+      "state_format": "natural-language-v1",
+      "training_scope": "GLiNER2.5 head adapted, encoder frozen on 12000 teacher-labelled Doom examples",
+      "instruction": "Shoot at enemies, but retreat when health falls below 40.",
+      "realtime": false,
+      "vizdoom_version": "1.3.0",
+      "episodes": 3,
+      "completed_episodes": 2,
+      "deaths": 2,
+      "kills": 0,
+      "observations": 351,
+      "decisions": 350,
+      "interrupted": false,
+      "video": null,
+      "video_fps": null,
+      "video_clock": null,
+      "video_capture_limit_fps": 35,
+      "stats_overlay": false,
+      "headless": true,
+      "render_weapon": true,
+      "preview_enabled": false,
+      "wall_seconds": 7.265,
+      "game_seconds": 20.0,
+      "decisions_per_wall_second": 48.17908426253407,
+      "mean_decision_ms": 12.806528898488198,
+      "attack_button_decisions": 0,
+      "raw_attack_above_half_decisions": 0,
+      "ammo_consumed_observed": 0,
+      "damage_taken_observed": 188.0,
+      "final_health": 82.0,
+      "noop_decisions": 0,
+      "model_action_decode_mismatches": 0,
+      "state_log_sha256": "3adfb50fcfed1583cea685a94dbb97b924eaab9203c831a3bd41232ceeb0e686",
+      "mode": "cautious",
+      "encoder_forwards": 350
+    }
+  ]
+}

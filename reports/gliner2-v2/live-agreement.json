@@ -1,0 +1,36 @@
+{
+  "gliner2-show-attack": {
+    "mode": "aggressive",
+    "decisions": 1050,
+    "raw_vector_equals_teacher": 931,
+    "disagreeing_buttons": {
+      "MOVE_LEFT (model pressed it)": 119,
+      "MOVE_RIGHT (teacher pressed it)": 119
+    }
+  },
+  "gliner2-show-evade": {
+    "mode": "evasive",
+    "decisions": 1050,
+    "raw_vector_equals_teacher": 908,
+    "disagreeing_buttons": {
+      "MOVE_LEFT (model pressed it)": 142,
+      "MOVE_RIGHT (teacher pressed it)": 142
+    }
+  },
+  "gliner2-show-cautious": {
+    "mode": "cautious",
+    "decisions": 1050,
+    "raw_vector_equals_teacher": 847,
+    "disagreeing_buttons": {
+      "MOVE_LEFT (model pressed it)": 203,
+      "MOVE_RIGHT (teacher pressed it)": 203
+    },
+    "below_40_health_with_enemy_visible": {
+      "decisions": 156,
+      "with_ammo": 0,
+      "attack_pressed": 0,
+      "move_backward_pressed": 156,
+      "note": "In this run health fell below 40 only after the ammo ran out, so these decisions do not isolate the 40-health rule; check_conditionals.py tests it with ammo loaded."
+    }
+  }
+}

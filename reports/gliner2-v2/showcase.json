@@ -1,0 +1,74 @@
+{
+  "title": "GLiNER2.5 plays Doom",
+  "output": "gliner2-plays-doom.mp4",
+  "chapters": [
+    {
+      "start_seconds": 0.0,
+      "end_seconds": 7.0,
+      "title": "How it works"
+    },
+    {
+      "start_seconds": 7.0,
+      "end_seconds": 11.0,
+      "title": "ATTACK: Attack enemies on sight."
+    },
+    {
+      "start_seconds": 11.0,
+      "end_seconds": 71.0,
+      "title": "ATTACK gameplay"
+    },
+    {
+      "start_seconds": 71.0,
+      "end_seconds": 75.0,
+      "title": "EVADE: Do not shoot. Evade the enemies."
+    },
+    {
+      "start_seconds": 75.0,
+      "end_seconds": 135.0,
+      "title": "EVADE gameplay"
+    },
+    {
+      "start_seconds": 135.0,
+      "end_seconds": 139.0,
+      "title": "CAUTIOUS: Shoot at enemies, but retreat when health falls below 40."
+    },
+    {
+      "start_seconds": 139.0,
+      "end_seconds": 199.0,
+      "title": "CAUTIOUS gameplay"
+    },
+    {
+      "start_seconds": 199.0,
+      "end_seconds": 207.0,
+      "title": "Results"
+    }
+  ],
+  "runs": [
+    {
+      "run": "gliner2-show-attack",
+      "instruction": "Attack enemies on sight.",
+      "kills": 20,
+      "deaths": 1,
+      "game_seconds": 60.0,
+      "mean_decision_ms": 17.456467281805264
+    },
+    {
+      "run": "gliner2-show-evade",
+      "instruction": "Do not shoot. Evade the enemies.",
+      "kills": 0,
+      "deaths": 1,
+      "game_seconds": 60.0,
+      "mean_decision_ms": 15.545390237654958
+    },
+    {
+      "run": "gliner2-show-cautious",
+      "instruction": "Shoot at enemies, but retreat when health falls below 40.",
+      "kills": 17,
+      "deaths": 1,
+      "game_seconds": 60.0,
+      "mean_decision_ms": 14.194677732219654
+    }
+  ],
+  "report": "report.json",
+  "conditionals": "conditionals-base-full.json"
+}

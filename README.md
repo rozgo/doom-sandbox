@@ -9,7 +9,7 @@ journal per experiment, with the recorded runs and every measured result.
 | Experiment | Input | Training | Journal | Write-up |
 | --- | --- | --- | --- | --- |
 | ModernBERT policy | Instruction + structured state text | 596K-parameter head on a frozen encoder | [Journal](https://rozgo.github.io/doom-sandbox/modernbert/) | This page |
-| GLiNER2.5 comparison | Same state text | Zero-shot, then small heads | [Journal](https://rozgo.github.io/doom-sandbox/gliner2/) | [Results](experiments/gliner2/RESULTS.md) · [setup](experiments/gliner2/README.md) |
+| GLiNER2.5 | Same state text | Zero-shot, then fully fine-tuned on 12,000 teacher examples | [Journal](https://rozgo.github.io/doom-sandbox/gliner2/) | [Results](experiments/gliner2/RESULTS.md) · [setup](experiments/gliner2/README.md) |
 | EmbeddingGemma 2 | Instruction + **pixels**: view and HUD crops | None: cosine similarity to text prompts | [Journal](https://rozgo.github.io/doom-sandbox/embeddinggemma2/) | [EmbeddingGemma 2 plays Doom zero-shot](experiments/embeddinggemma2/README.md) · [video](media/embeddinggemma2-plays-doom.mp4) |
 
 The journals are built from `site/journals/` with `uv run --group site python scripts/build_journals.py`

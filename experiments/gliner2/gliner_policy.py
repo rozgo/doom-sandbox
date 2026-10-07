@@ -1,4 +1,4 @@
-"""GLiNER2.5 button scores with an optional adapted head; no gameplay rules."""
+"""GLiNER2.5 button scores with optional adapted head or fine-tuned weights; no gameplay rules."""
 
 import json
 from pathlib import Path
@@ -53,13 +53,26 @@ def describe_state(observation: dict) -> str:
     return text + f"The nearest visible enemy is {side}, at {fields['range']} range."
 
 
+def input_text(instruction: str, state_text: str) -> str:
+    """The exact text scored at play time; training uses the same function."""
+    return f"Player instruction: {instruction}\nGame state: {state_text}"
+
+
 class GLiNERPolicy:
     name = "GLiNER2.5"
     state_format = "natural-language-v1"
     training_scope = "pretrained GLiNER2.5; zero Doom-specific training"
     untrained_head = False
+    pipeline_labels = (
+        "STATE TEXT + INSTRUCTION",
+        "GLiNER2.5 ENCODER",
+        "7 LABEL SCORES",
+        "VALID BUTTON VECTOR",
+    )
 
-    def __init__(self, checkpoint: str, *, device="mps", dtype="float16", head=None):
+    def __init__(
+        self, checkpoint: str, *, device="mps", dtype="float16", head=None, weights=None
+    ):
         self.checkpoint, self.device, self.dtype = checkpoint, device, dtype
         self.revision = MODEL_REVISIONS[checkpoint]
         snapshot = snapshot_download(
@@ -104,6 +117,42 @@ class GLiNERPolicy:
                 f"frozen GLiNER2.5 encoder; classifier head adapted on "
                 f"{self.doom_training_examples} Doom examples"
             )
+        if weights is not None:
+            from safetensors.torch import load_file
+
+            weights = Path(weights)
+            metadata = json.loads((weights / "metadata.json").read_text())
+            if (
+                metadata["base_model"] != checkpoint
+                or metadata["revision"] != self.revision
+            ):
+                raise ValueError(
+                    "Fine-tuned weights do not match the pinned base checkpoint"
+                )
+            if metadata["schema"] != self.schema.build():
+                raise ValueError("Fine-tuned weights do not match the action schema")
+            state = load_file(weights / "model.safetensors")
+            target = (
+                self.classifier.model
+                if metadata["scope"] == "full"
+                else self.classifier.model.classifier
+            )
+            target.load_state_dict(
+                {k: v.to(torch.float32) for k, v in state.items()}, strict=True
+            )
+            self.classifier.to(device=device, dtype=getattr(torch, dtype))
+            self.doom_training_examples = metadata["training_examples"]
+            self.training_scope = (
+                f"GLiNER2.5 {'fully fine-tuned' if metadata['scope'] == 'full' else 'head adapted, encoder frozen'} "
+                f"on {self.doom_training_examples:,} teacher-labelled Doom examples"
+            )
+        size = checkpoint.split("gliner2.5-")[1].split("-")[0].capitalize()
+        self.display_name = f"GLiNER2.5 {size}"
+        self.mode_label = (
+            "ZERO-SHOT / NO DOOM TRAINING"
+            if not self.doom_training_examples
+            else f"TRAINED ON {self.doom_training_examples:,} TEACHER EXAMPLES"
+        )
         self.encoder_forward_calls = 0
         self._hook = self.classifier.model.encoder.register_forward_pre_hook(
             self._count_forward, with_kwargs=True
@@ -116,9 +165,7 @@ class GLiNERPolicy:
     @torch.inference_mode()
     def __call__(self, instruction: str, observation: dict) -> dict[str, float]:
         self.last_state_text = describe_state(observation)
-        self.last_input_text = (
-            f"Player instruction: {instruction}\nGame state: {self.last_state_text}"
-        )
+        self.last_input_text = input_text(instruction, self.last_state_text)
         scores = self.classifier.score(
             self.last_input_text, self.schema, config=self.config
         )

@@ -19,6 +19,8 @@ def main():
         "--model", choices=("small", "base", "modernbert"), required=True
     )
     parser.add_argument("--head", type=Path)
+    parser.add_argument("--weights", type=Path)
+    parser.add_argument("--device", choices=("mps", "cuda", "cpu"), default="mps")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     if args.output.exists():
@@ -27,11 +29,18 @@ def main():
     if args.model == "modernbert":
         from doom_bert.model import ModernBertPolicy
 
-        policy = ModernBertPolicy(str(ROOT / "models/controlled-demo"))
+        policy = ModernBertPolicy(
+            str(ROOT / "models/controlled-demo"), device=args.device
+        )
     else:
         from gliner_policy import GLiNERPolicy
 
-        policy = GLiNERPolicy(f"fastino/gliner2.5-{args.model}-v1", head=args.head)
+        policy = GLiNERPolicy(
+            f"fastino/gliner2.5-{args.model}-v1",
+            device=args.device,
+            head=args.head,
+            weights=args.weights,
+        )
     cases = []
     for instruction in INSTRUCTIONS:
         for hp in (20, 39, 40, 80):
@@ -56,6 +65,7 @@ def main():
     report = {
         "model": args.model,
         "adapted_head": str(args.head) if args.head else None,
+        "fine_tuned_weights": str(args.weights) if args.weights else None,
         "cases": cases,
         "attack_checks_passed": sum(c["correct_raw_attack"] for c in cases),
         "attack_checks_total": len(cases),

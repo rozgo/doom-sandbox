@@ -242,27 +242,34 @@ def main():
     parser.add_argument(
         "--model", choices=("small", "base", "modernbert"), required=True
     )
-    parser.add_argument("--device", choices=("mps", "cpu"), default="mps")
-    parser.add_argument("--dtype", choices=("float16", "float32"), default="float16")
+    parser.add_argument("--device", choices=("mps", "cuda", "cpu"), default="mps")
+    parser.add_argument(
+        "--dtype", choices=("float16", "bfloat16", "float32"), default="float16"
+    )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument(
         "--head", type=Path, help="Optional adapted GLiNER head directory"
+    )
+    parser.add_argument(
+        "--weights", type=Path, help="Optional fine-tuned GLiNER weights (finetune.py)"
     )
     parser.add_argument("--game-seconds", type=int, default=20)
     parser.add_argument("--seeds", nargs="+", type=int, default=[7, 19])
     args = parser.parse_args()
     if args.game_seconds < 0:
         parser.error("--game-seconds must be non-negative")
-    if args.head and args.model == "modernbert":
-        parser.error("--head applies only to GLiNER")
+    if (args.head or args.weights) and args.model == "modernbert":
+        parser.error("--head and --weights apply only to GLiNER")
     args.output.mkdir(parents=True, exist_ok=False)
     torch.manual_seed(7)
     torch.set_num_threads(4)
     if args.model == "modernbert":
         from doom_bert.model import ModernBertPolicy
 
-        checkpoint = str(ROOT / "models/controlled-demo")
-        policy = ModernBertPolicy(checkpoint, device=args.device, dtype=args.dtype)
+        checkpoint = "models/controlled-demo"
+        policy = ModernBertPolicy(
+            str(ROOT / checkpoint), device=args.device, dtype=args.dtype
+        )
         policy.encoder_forward_calls = 0
 
         def count_forward(module, inputs, output):
@@ -274,7 +281,11 @@ def main():
 
         checkpoint = f"fastino/gliner2.5-{args.model}-v1"
         policy = GLiNERPolicy(
-            checkpoint, device=args.device, dtype=args.dtype, head=args.head
+            checkpoint,
+            device=args.device,
+            dtype=args.dtype,
+            head=args.head,
+            weights=args.weights,
         )
     report = {
         "created_at": datetime.now(UTC).isoformat(),
@@ -284,9 +295,13 @@ def main():
         "dtype": args.dtype,
         "platform": platform.platform(),
         "python": platform.python_version(),
-        "hardware": subprocess.check_output(
+        "hardware": torch.cuda.get_device_name(0)
+        if args.device == "cuda"
+        else subprocess.check_output(
             ["sysctl", "-n", "machdep.cpu.brand_string"], text=True
-        ).strip(),
+        ).strip()
+        if platform.system() == "Darwin"
+        else platform.processor(),
         "versions": {
             p: importlib.metadata.version(p)
             for p in ("torch", "transformers", "vizdoom")
@@ -296,6 +311,8 @@ def main():
         if args.model == "modernbert"
         else policy.doom_training_examples,
         "adapted_head": str(args.head) if args.head else None,
+        "fine_tuned_weights": str(args.weights) if args.weights else None,
+        "training_scope": policy.training_scope,
         "batch_size": 1,
         "warmup_calls": 10,
         "classification_timing_scope": "input serialization + tokenization + encoder + scores to CPU + identical legal action decoding; warmup excluded",

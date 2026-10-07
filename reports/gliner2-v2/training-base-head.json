@@ -1,0 +1,169 @@
+{
+  "base_model": "fastino/gliner2.5-base-v1",
+  "revision": "78cea040597df251eedefa9d7ee2a756af39fe64",
+  "schema": {
+    "json_structures": [],
+    "classifications": [
+      {
+        "task": "buttons",
+        "labels": [
+          "ATTACK",
+          "MOVE_LEFT",
+          "MOVE_RIGHT",
+          "MOVE_FORWARD",
+          "MOVE_BACKWARD",
+          "TURN_LEFT",
+          "TURN_RIGHT"
+        ],
+        "true_label": [
+          "N/A"
+        ],
+        "multi_label": true,
+        "cls_threshold": 0.5,
+        "class_act": "sigmoid",
+        "prompt": "Choose the game-control buttons to press now, given the player's instruction and current game state. Select actions that carry out the instruction. Several buttons can be pressed together, or none.",
+        "label_descriptions": {
+          "ATTACK": "Fire the equipped weapon at a target in front of the player.",
+          "MOVE_LEFT": "Strafe sideways to the player's left without changing aim.",
+          "MOVE_RIGHT": "Strafe sideways to the player's right without changing aim.",
+          "MOVE_FORWARD": "Walk forward in the direction the player is facing.",
+          "MOVE_BACKWARD": "Walk backward, away from what the player is facing.",
+          "TURN_LEFT": "Rotate the player's view and aim toward the left.",
+          "TURN_RIGHT": "Rotate the player's view and aim toward the right."
+        }
+      }
+    ],
+    "entities": {},
+    "relations": [],
+    "json_descriptions": {},
+    "entity_descriptions": {}
+  },
+  "scope": "head",
+  "training_examples": 12000,
+  "dataset": "data/gliner2-teacher-v2.jsonl",
+  "dataset_sha256": "82e435c09302626d24f865c0768b314ae2c5920a20766d794058fc7b46e32a47",
+  "trainable_parameters": 1182721,
+  "total_parameters": 193581591,
+  "epochs": 3.0,
+  "steps": 1125,
+  "batch_size": 32,
+  "gradient_accumulation_micro_batches": 1,
+  "optimizer": "AdamW, weight decay 0.01, 6% linear warm-up then linear decay, gradient clip 1.0",
+  "learning_rates": {
+    "head": 0.0005
+  },
+  "loss": "BCEWithLogitsLoss, unweighted",
+  "precision": "bfloat16 autocast on CUDA; weights saved as float16",
+  "selected_step": 1125,
+  "selection": "Best validation exact agreement, then validation loss; validation states are held-out combinations",
+  "train_seconds": 108.93682961701415,
+  "wall_seconds": 120.87988776294515,
+  "device": "NVIDIA GeForce RTX 4090",
+  "torch": "2.14.0+cu130",
+  "metrics": {
+    "validation": {
+      "examples": 1200,
+      "exact_teacher_agreement": 0.7708333134651184,
+      "button_teacher_agreement": 0.9635714292526245,
+      "loss": 0.1795749068260193
+    },
+    "original_validation_48": {
+      "examples": 48,
+      "exact_teacher_agreement": 0.6875,
+      "button_teacher_agreement": 0.9523809552192688,
+      "loss": 0.1753343790769577
+    }
+  },
+  "history": [
+    {
+      "step": 0,
+      "validation": {
+        "examples": 1200,
+        "exact_teacher_agreement": 0.0,
+        "button_teacher_agreement": 0.5820237994194031,
+        "loss": 0.9816462993621826
+      }
+    },
+    {
+      "step": 150,
+      "train_loss": 0.4714863896369934,
+      "validation": {
+        "examples": 1200,
+        "exact_teacher_agreement": 0.0,
+        "button_teacher_agreement": 0.7845237851142883,
+        "loss": 0.5008677840232849
+      }
+    },
+    {
+      "step": 300,
+      "train_loss": 0.3051914572715759,
+      "validation": {
+        "examples": 1200,
+        "exact_teacher_agreement": 0.2849999964237213,
+        "button_teacher_agreement": 0.8517857193946838,
+        "loss": 0.37470272183418274
+      }
+    },
+    {
+      "step": 450,
+      "train_loss": 0.2474316954612732,
+      "validation": {
+        "examples": 1200,
+        "exact_teacher_agreement": 0.5616666674613953,
+        "button_teacher_agreement": 0.9307143092155457,
+        "loss": 0.26782771944999695
+      }
+    },
+    {
+      "step": 600,
+      "train_loss": 0.27083003520965576,
+      "validation": {
+        "examples": 1200,
+        "exact_teacher_agreement": 0.6700000166893005,
+        "button_teacher_agreement": 0.9386904835700989,
+        "loss": 0.2393941581249237
+      }
+    },
+    {
+      "step": 750,
+      "train_loss": 0.19550038874149323,
+      "validation": {
+        "examples": 1200,
+        "exact_teacher_agreement": 0.7074999809265137,
+        "button_teacher_agreement": 0.9555952548980713,
+        "loss": 0.19967889785766602
+      }
+    },
+    {
+      "step": 900,
+      "train_loss": 0.17893221974372864,
+      "validation": {
+        "examples": 1200,
+        "exact_teacher_agreement": 0.7616666555404663,
+        "button_teacher_agreement": 0.9626190662384033,
+        "loss": 0.18695443868637085
+      }
+    },
+    {
+      "step": 1050,
+      "train_loss": 0.14959554374217987,
+      "validation": {
+        "examples": 1200,
+        "exact_teacher_agreement": 0.7141666412353516,
+        "button_teacher_agreement": 0.9522619247436523,
+        "loss": 0.18735219538211823
+      }
+    },
+    {
+      "step": 1125,
+      "train_loss": 0.14064691960811615,
+      "validation": {
+        "examples": 1200,
+        "exact_teacher_agreement": 0.7708333134651184,
+        "button_teacher_agreement": 0.9635714292526245,
+        "loss": 0.1795749068260193
+      }
+    }
+  ],
+  "learning_rates_note": "Peak learning rates (finetune.py defaults used by run_v2.sh). The originally written field held the final, fully decayed values (0.0)."
+}

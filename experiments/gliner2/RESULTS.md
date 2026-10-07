@@ -2,6 +2,35 @@
 
 [Read the journal](https://rozgo.github.io/doom-sandbox/gliner2/): the same results as an illustrated engineering journal.
 
+## Second attempt (October 6): fine-tuned on an RTX 4090
+
+The first attempt below fell short because its training data only ever said
+health 10, 30 or 100, covered 62 states, and left the encoder frozen. The second
+attempt generated 12,000 teacher-labelled examples with continuous health and ammo
+(`teacher_data.py`; original test and validation state combinations, the new test
+phrasings and one probe phrasing held out) and fine-tuned the whole model through
+GLiNER's own scoring path (`finetune.py`). Everything ran on one RTX 4090 with
+`run_v2.sh`. [Showcase video](../../media/gliner2-plays-doom.mp4).
+
+| Pipeline | Trained | Test states | New phrasings | Conditional probes | Deaths, 6 games | Per decision |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| ModernBERT, 372 examples | head | 81.2% | 56.2% | 6 / 8 | 1 | 9.6 ms |
+| Small / Base, zero-shot | — | 2.1% / 4.2% | 2.1% / 4.2% | 4 / 8 | 12 / 5 | 12.6 / 12.1 ms |
+| Small / Base, 12,000 examples | head only | 50.0% / 68.8% | 50.0% / 56.2% | 4 / 8, 5 / 8 | 3 / 5 | 12.6 / 12.3 ms |
+| **Small, 12,000 examples** | **all 73.9M, 111 s** | **100%** | **97.9%** | **8 / 8** | **0** | 12.8 ms |
+| **Base, 12,000 examples** | **all 193.6M, 232 s** | **100%** | **100%** | **8 / 8** | **0** | 12.5 ms |
+
+More data alone was not enough: with the encoder frozen, the same 12,000 examples
+left both sizes well short. Fine-tuning the encoder took both to 100% on the
+held-out states and passed every behaviour check and conditional probe. In
+complete 60-second showcase runs, fine-tuned Base scored 20 kills and 1 death
+attacking, no shots and 1 death evading, and 17 kills and 1 death on the cautious
+instruction; across those 3,150 live decisions its raw button vector matched the
+teacher's 2,686 times, and every disagreement was the sideways strafe direction.
+ModernBERT was not retrained on the new data. Reports: `reports/gliner2-v2/`.
+
+## First attempt (September 19)
+
 GLiNER2.5 Base can drive basic attack/evade behavior with **zero Doom-specific
 training**. It is a credible subject for a zero-shot demonstration, but this
 experiment does **not** establish an upgrade over the trained ModernBERT policy.

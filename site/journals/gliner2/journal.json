@@ -1,32 +1,32 @@
 {
  "title": "GLiNER2.5 Doom Journal",
- "heading": "Can a zero-shot classifier play Doom without Doom training?",
- "eyebrow": "Engineering journal · September 19, 2026 · ViZDoom, GLiNER2.5, ModernBERT, Apple Metal",
- "lede": "GLiNER2.5 classifies text against labels it is given at run time, so it can score Doom actions it was never trained on. We gave its Small and Base models the same game observations as the trained ModernBERT policy, first with no Doom examples, then with only their classification head adapted on 32 to 372. 10,500 live decisions later, the answer was yes, partly, and not better than ModernBERT.",
- "description": "GLiNER2.5 Small and Base score Doom actions zero-shot and with small trained heads, measured against the trained ModernBERT policy on the same observations.",
+ "heading": "Teaching GLiNER2.5 to play Doom: zero-shot first, then fine-tuned",
+ "eyebrow": "Engineering journal · September 19 and October 6, 2026 · ViZDoom, GLiNER2.5, ModernBERT, RTX 4090",
+ "lede": "GLiNER2.5 scores text against labels it is given at run time, so it can rate Doom's seven buttons with no Doom training. The first attempt, zero-shot and with small adapted heads, fell short of the trained ModernBERT policy. The second fixed the training data and fine-tuned the whole model on an RTX 4090 in under four minutes. It then matched the scripted teacher on every held-out test state and new phrasing, passed all eight conditional probes, and played six evaluation games without dying.",
+ "description": "GLiNER2.5 scores Doom's buttons from an instruction and the game state as text: zero-shot it fell short, fine-tuned on 12,000 teacher-labelled examples it matches the teacher on every held-out test.",
  "hero": {
-  "kind": "image",
-  "media": "results",
-  "alt": "Three bar panels comparing five pipelines: decisions per second, agreement with the teacher on held-out states, and on new phrasings",
-  "caption": "Five pipelines on the same observations, drawn from reports/gliner2-experiment/summary.json. Agreement is the exact seven-button vector against the scripted teacher; low agreement is not the same as being unable to play."
+  "media": "showcase",
+  "caption": "The 3 min 27 s showcase, recorded on an RTX 4090 and played back at normal game speed: GLiNER2.5 Base after full fine-tuning, in complete 60-second runs. Attack: 20 kills, 1 death. Evade: no shots, 1 death. Cautious (“retreat when health falls below 40”): 17 kills, 1 death. The dashboard shows the model's own seven sigmoid scores on every decision; a decoder only blocks impossible button combinations."
  },
  "metrics": [
-  {"value": "0.976 → 0.022", "label": "Base, zero-shot: ATTACK score when “attack” becomes “do not shoot”, same state"},
-  {"value": "53.5 vs 31.3", "label": "decisions/s: ModernBERT vs zero-shot GLiNER2.5 Base, headless"},
-  {"value": "70.8%", "label": "Small with 128 examples on new phrasings, vs 56.3% for ModernBERT"},
-  {"value": "6 / 8", "label": "conditional firing probes ModernBERT got right; GLiNER at most 4 / 8"},
-  {"value": "10,500", "label": "live decisions, each one full encoder pass"}
+  {"value": "100%", "label": "held-out test states and new phrasings, fine-tuned Base (first attempt: 75% and 71% at best)"},
+  {"value": "8 / 8", "label": "explicit conditional probes, “fire only at 40+ health” (first attempt: at most 4 / 8)"},
+  {"value": "0 deaths", "label": "in six 20-second evaluation games, both fine-tuned sizes"},
+  {"value": "232 s", "label": "to fine-tune all 193.6M parameters of Base on 12,000 examples, RTX 4090"},
+  {"value": "12.5 ms", "label": "per decision, the full encoder every time; 54 decisions/s headless"}
  ],
- "scope": "<strong>Where this stands.</strong> A small exploratory comparison on one Mac. All five pipelines read the same observations, each in its own text format, and decide through the same legal-action decoder. Training here means adapting only GLiNER's existing classification layers for a fixed 600 steps, not an optimized benchmark. The scripted teacher supplied labels offline; nothing at play time reads it. Every number on this page comes from <code>reports/gliner2-experiment/</code>.",
- "footer": "<p>Source, setup and reports: <a href=\"https://github.com/rozgo/doom-sandbox\">rozgo/doom-sandbox</a>, <code>experiments/gliner2/</code>, <code>reports/gliner2-experiment/</code> (with a SHA-256 manifest and the raw predictions and game logs). Models: GLiNER2.5 Small and Base from fastino, ModernBERT-base from Answer.AI. Engine: ViZDoom with Freedoom assets. No video was recorded for this experiment.</p>",
+ "scope": "<strong>Where this stands.</strong> Both attempts imitate a scripted teacher from the game state described as text. GLiNER never sees pixels and adds no rules of its own; a decoder only blocks impossible button combinations. The second attempt trained on 12,000 teacher-labelled examples, while the ModernBERT reference kept its original 372-example head and was not retrained on them. Test states, test phrasings and one probe phrasing were never trained on. The RTX 4090 was shared with another inference service, so timings are indicative. Every number on this page comes from <code>reports/gliner2-experiment/</code> (first attempt) or <code>reports/gliner2-v2/</code> (second).",
+ "footer": "<p>Source, data and reports: <a href=\"https://github.com/rozgo/doom-sandbox\">rozgo/doom-sandbox</a>, <code>experiments/gliner2/</code> (second attempt: <code>run_v2.sh</code>, <code>teacher_data.py</code>, <code>finetune.py</code>), <code>data/gliner2-teacher-v2.jsonl</code>, <code>reports/gliner2-experiment/</code> and <code>reports/gliner2-v2/</code>, each with raw predictions, game logs and a SHA-256 manifest. Models: GLiNER2.5 Small and Base by Fastino AI (Apache-2.0); ModernBERT-base by Answer.AI (Apache-2.0). Fine-tuned weights are not stored; <code>finetune.py</code> rebuilds them in minutes. Engine: ViZDoom with Freedoom assets.</p>",
  "card": {
-  "kicker": "Zero-shot vs small heads · GLiNER2.5",
-  "line": "GLiNER2.5 attacks and evades with no Doom training, but the trained ModernBERT stays faster and more reliable; a 128-example head helps Small most.",
-  "tags": ["zero-shot classification", "few-shot heads", "comparison"],
-  "poster": "media/journals/gliner2-card.png"
+  "kicker": "Fine-tuned · GLiNER2.5 · RTX 4090",
+  "line": "Zero-shot it fell short; fine-tuned on 12,000 teacher-labelled examples in four minutes, it matches the teacher on every held-out test, with every score on screen.",
+  "tags": ["zero-shot classification", "fine-tuning", "instruction following", "video"],
+  "poster": "media/gliner2-plays-doom.png"
  },
  "media": {
-  "results": {"src": "media/journals/gliner2-card.png", "max_width": 1800}
+  "showcase": {"src": "media/gliner2-plays-doom.mp4", "crf": 27, "max_width": 1440, "poster_t": 173},
+  "results": {"src": "media/journals/gliner2-results.png", "max_width": 1800},
+  "second": {"src": "media/journals/gliner2-v2-results.png", "max_width": 1800}
  },
  "theme": {
   "scheme": "light",

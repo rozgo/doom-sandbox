@@ -315,6 +315,7 @@ dev = [
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "ruff", specifier = ">=0.16.7" },
 ]
+site = [{ name = "imageio-ffmpeg", specifier = ">=0.6.0" }]
 
 [[package]]
 name = "doom-gliner2-experiment"

@@ -1,10 +1,29 @@
 # GLiNER2.5 Doom experiment
 
 Compare schema-conditioned GLiNER2.5 classification with the existing trained
-ModernBERT policy. No video is produced. The experiment measures actual model
+ModernBERT policy. The first attempt produced no video; the second attempt (below) does. The experiment measures actual model
 scores, targeted behavior checks, and short ViZDoom rollouts.
 
-## Reproduce
+## Second attempt: fine-tuning on a CUDA GPU
+
+Run from `experiments/gliner2` on a machine with an NVIDIA GPU (the reported run
+used one RTX 4090):
+
+```sh
+uv sync
+./run_v2.sh data      # data/gliner2-teacher-v2.jsonl: 12,000 + 1,200 teacher-labelled examples
+./run_v2.sh train     # Small and Base, full fine-tuning and head-only ablations
+./run_v2.sh eval      # all seven pipelines, conditional probes, six games each
+./run_v2.sh videos base base-full && ./run_v2.sh edit base-full
+uv run python archive_v2.py && uv run python live_agreement.py   # reports/gliner2-v2
+```
+
+`finetune.py` trains through the same calls as `Classifier.score` (checked to give
+identical logits), selects on held-out validation states, and saves weights that
+`compare.py --weights`, `check_conditionals.py --weights` and `play_gliner.py`
+load. Weights are not committed. Results: [RESULTS.md](RESULTS.md).
+
+## Reproduce (first attempt)
 
 Run from the repository root. GLiNER2 2.0.0 requires Transformers 4; ModernBERT
 uses the existing Transformers 5 environment. The nested uv project has its own
