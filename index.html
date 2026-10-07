@@ -1,5 +1,62 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Doom Sandbox Journals</title><meta http-equiv="refresh" content="0; url=modernbert/">
-<style>body{margin:0;background:#f3f2ee;color:#16171b;font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:grid;place-items:center;min-height:100vh}a{color:#9b2c1d}</style>
-</head><body><p><a href="modernbert/">Doom Sandbox journal</a></p></body></html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Doom Sandbox</title>
+  <meta name="description" content="Language and embedding models playing Doom in ViZDoom: a ModernBERT classifier with a trained head, a zero-shot GLiNER2.5 comparison, and EmbeddingGemma 2 playing from pixels with no training. Each has an engineering journal.">
+  <meta name="theme-color" content="#160c0a">
+  <link rel="stylesheet" href="hub.css?v=9bbfb70f94f8">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Doom Sandbox · engineering journals · 2026</p>
+    <h1>Language and embedding models playing Doom</h1>
+    <p class="lede">Three experiments in ViZDoom, from a text classifier reading the game state to a multimodal embedding
+      model reading the screen with no training at all. The game waits for every decision, so each model plays at its
+      own speed. Each journal tells what was built, what failed and what was measured, with the recorded runs, and says
+      which parts are learned, which are zero-shot and which are fixed rules.</p>
+  </div>
+</header>
+<main class="wrap">
+  <div class="grid">
+    <a class="card" href="embeddinggemma2/" style="--card-accent: #a596ff; --card-band: linear-gradient(120deg, #0d0b13 0%, #1a1626 50%, #2a2145 100%);">
+      <div class="poster"><img src="hub_media/embeddinggemma2.webp" alt="" loading="lazy"></div>
+      <div class="body">
+        <p class="kicker">Zero-shot · EmbeddingGemma 2 · RTX 4090</p>
+        <h2>EmbeddingGemma 2, zero-shot from pixels</h2>
+        <p class="line">Screen crops and cosine similarity to text prompts, no training: 37 kills and 2 deaths attacking, no deaths evading, with every reading on screen.</p>
+        <p class="tags"><span>multimodal embeddings</span><span>zero-shot</span><span>pixels</span><span>cosine similarity</span></p>
+        <p class="go">Read the journal &rarr;</p>
+      </div>
+    </a>
+    <a class="card" href="modernbert/" style="--card-accent: #73caff; --card-band: linear-gradient(120deg, #0b0c0e 0%, #15181d 50%, #13283a 100%);">
+      <div class="poster"><img src="hub_media/modernbert.webp" alt="" loading="lazy"></div>
+      <div class="body">
+        <p class="kicker">Trained head · ModernBERT · Apple Metal</p>
+        <h2>ModernBERT policy</h2>
+        <p class="line">A frozen ModernBERT reads an instruction and the game state as text; a head trained in 3.6 s makes it attack or evade, at about 44 decisions per second.</p>
+        <p class="tags"><span>text classifier</span><span>instruction following</span><span>imitation labels</span></p>
+        <p class="go">Read the journal &rarr;</p>
+      </div>
+    </a>
+    <a class="card" href="gliner2/" style="--card-accent: #0b8f7a; --card-band: linear-gradient(120deg, #0d2b27 0%, #0b4a41 45%, #0b7a68 85%, #0b8f7a 100%);">
+      <div class="poster"><img src="hub_media/gliner2.webp" alt="" loading="lazy"></div>
+      <div class="body">
+        <p class="kicker">Zero-shot vs small heads · GLiNER2.5</p>
+        <h2>GLiNER2.5 comparison</h2>
+        <p class="line">GLiNER2.5 attacks and evades with no Doom training, but the trained ModernBERT stays faster and more reliable; a 128-example head helps Small most.</p>
+        <p class="tags"><span>zero-shot classification</span><span>few-shot heads</span><span>comparison</span></p>
+        <p class="go">Read the journal &rarr;</p>
+      </div>
+    </a>
+  </div>
+</main>
+<footer class="wrap">
+  <p>Source, reports and recordings: <a href="https://github.com/rozgo/doom-sandbox">rozgo/doom-sandbox</a>.
+    Videos are recordings of the actual runs. Engine: ViZDoom with Freedoom assets; models keep their own licences,
+    listed in each journal.</p>
+</footer>
+</body>
+</html>
