@@ -9,6 +9,9 @@ decide → advance one tic** loop (the `doom_bert` package):
 | GLiNER2.5 comparison | Same state text | Zero-shot, then small heads | [Results](experiments/gliner2/RESULTS.md) · [setup](experiments/gliner2/README.md) |
 | EmbeddingGemma 2 | Instruction + **pixels**: view and HUD crops | None: cosine similarity to text prompts | [EmbeddingGemma 2 plays Doom zero-shot](experiments/embeddinggemma2/README.md) · [video](media/embeddinggemma2-plays-doom.mp4) |
 
+Each experiment also has an illustrated engineering journal under `site/journals/`, built with
+`uv run --group site python scripts/build_journals.py` ([how the journals work](site/journals/README.md)).
+
 The rest of this page covers the ModernBERT policy: a random baseline and a
 ModernBERT policy adapter accelerated by Apple Metal. Instructions and structured
 state enter the model; button probabilities come out. Pixels are used only for

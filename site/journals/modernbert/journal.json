@@ -1,0 +1,61 @@
+{
+ "title": "ModernBERT Doom Journal",
+ "heading": "A text classifier that plays Doom from instructions and game state",
+ "eyebrow": "Engineering journal · September 16, 2026 · ViZDoom, ModernBERT, PyTorch, Apple Metal",
+ "lede": "ViZDoom waits while a ModernBERT classifier reads an instruction and a short text description of the game, then presses the buttons it scores highest. Only a small head on top of the frozen encoder is trained, in 3.6 seconds; the full 149.6M-parameter model runs on every decision. The same checkpoint attacks or evades depending on the instruction alone.",
+ "description": "A frozen ModernBERT encoder with a small trained head reads an instruction and the game state as text and drives ViZDoom at about 44 decisions per second on an Apple M3 Max.",
+ "hero": {
+  "media": "film",
+  "caption": "The 51-second edit at measured wall-clock speed, resampled to 30 fps: the trained classifier attacks, then, from the same starting state with only the instruction changed (0:29), evades. Separate seeded runs; the dashboard shows each decision's seven button scores."
+ },
+ "metrics": [
+  {"value": "16 / 1", "label": "kills / deaths in 60 game seconds, “Attack enemies on sight.”"},
+  {"value": "0.979 → 0.026", "label": "ATTACK score for the same state when only the instruction changes"},
+  {"value": "43.7/s", "label": "decisions per second, whole loop with dashboard and video recording"},
+  {"value": "13.9 ms", "label": "per classification: text, tokenizing, full encoder, decoding"},
+  {"value": "3.6 s", "label": "to train the 595,975-parameter head; the encoder stays frozen"}
+ ],
+ "scope": "<strong>Where this stands.</strong> A controlled demonstration. The classifier reads game state from the engine, turned into a small fixed vocabulary of text (health, ammo, the nearest enemy's side and range); it never sees pixels. Its labels come from a scripted teacher, it knows six phrasings of three behaviours, and a decoder only blocks impossible button combinations. It does not establish general Doom skill or open-ended language understanding. Every number on this page comes from the reports and summaries in the repository.",
+ "footer": "<p>Source, reports and recordings: <a href=\"https://github.com/rozgo/doom-sandbox\">rozgo/doom-sandbox</a>, <code>src/doom_bert/</code>, <code>models/controlled-demo/</code>, <code>reports/</code>. Engine and scenarios: ViZDoom with Freedoom assets. Model: <a href=\"https://huggingface.co/answerdotai/ModernBERT-base\">answerdotai/ModernBERT-base</a> (Apache-2.0). Videos are recordings of the actual runs; playback speed is stated under each.</p>",
+ "card": {
+  "kicker": "Trained head · ModernBERT · Apple Metal",
+  "line": "A frozen ModernBERT reads an instruction and the game state as text; a head trained in 3.6 s makes it attack or evade, at about 44 decisions per second.",
+  "tags": ["text classifier", "instruction following", "imitation labels"],
+  "poster": "media/modernbert-44-decisions-per-second.png"
+ },
+ "media": {
+  "film": {"src": "media/modernbert-44-decisions-per-second.mp4", "crf": 26, "max_width": 1440, "poster_t": 14},
+  "random": {"src": "media/first-demo.mp4", "crf": 28, "poster_t": 20},
+  "charcoal": {"src": "media/modernbert-charcoal-demo.mp4", "start": 20, "duration": 30, "crf": 27, "max_width": 1440, "poster_t": 8}
+ },
+ "theme": {
+  "scheme": "dark",
+  "theme_color": "#111316",
+  "tokens": {
+   "bg": "#111316",
+   "text": "#edf0f5",
+   "muted": "#98a2b2",
+   "card": "#1b1e23",
+   "line": "#2c3139",
+   "link": "#73caff",
+   "chip": "#23272e",
+   "soft": "#15232e",
+   "bad": "#ff8a7a",
+   "bad-soft": "#2c1a18",
+   "accent": "#73caff",
+   "accent-2": "#f3bd72",
+   "accent-3": "#98a2b2",
+   "on-accent": "#0b0d10",
+   "hero": "linear-gradient(120deg, #0b0c0e 0%, #15181d 50%, #13283a 100%)",
+   "hero-text": "#edf0f5",
+   "film": "#08090b",
+   "metric": "rgba(255, 255, 255, .06)",
+   "toc": "rgba(17, 19, 22, .92)",
+   "tile-1": "linear-gradient(135deg, #1d4f73, #13283a)",
+   "tile-2": "linear-gradient(135deg, #2a2f37, #1b1e23)",
+   "tile-3": "linear-gradient(135deg, #9a6a1e, #5a3d10)",
+   "tile-4": "linear-gradient(135deg, #343a43, #22262c)",
+   "tile-text": "#f3f5f7"
+  }
+ }
+}

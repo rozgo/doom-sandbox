@@ -1,0 +1,61 @@
+{
+ "title": "GLiNER2.5 Doom Journal",
+ "heading": "Can a zero-shot classifier play Doom without Doom training?",
+ "eyebrow": "Engineering journal · September 19, 2026 · ViZDoom, GLiNER2.5, ModernBERT, Apple Metal",
+ "lede": "GLiNER2.5 classifies text against labels it is given at run time, so it can score Doom actions it was never trained on. We gave its Small and Base models the same game observations as the trained ModernBERT policy, first with no Doom examples, then with only their classification head adapted on 32 to 372. 10,500 live decisions later, the answer was yes, partly, and not better than ModernBERT.",
+ "description": "GLiNER2.5 Small and Base score Doom actions zero-shot and with small trained heads, measured against the trained ModernBERT policy on the same observations.",
+ "hero": {
+  "kind": "image",
+  "media": "results",
+  "alt": "Three bar panels comparing five pipelines: decisions per second, agreement with the teacher on held-out states, and on new phrasings",
+  "caption": "Five pipelines on the same observations, drawn from reports/gliner2-experiment/summary.json. Agreement is the exact seven-button vector against the scripted teacher; low agreement is not the same as being unable to play."
+ },
+ "metrics": [
+  {"value": "0.976 → 0.022", "label": "Base, zero-shot: ATTACK score when “attack” becomes “do not shoot”, same state"},
+  {"value": "53.5 vs 31.3", "label": "decisions/s: ModernBERT vs zero-shot GLiNER2.5 Base, headless"},
+  {"value": "70.8%", "label": "Small with 128 examples on new phrasings, vs 56.3% for ModernBERT"},
+  {"value": "6 / 8", "label": "conditional firing probes ModernBERT got right; GLiNER at most 4 / 8"},
+  {"value": "10,500", "label": "live decisions, each one full encoder pass"}
+ ],
+ "scope": "<strong>Where this stands.</strong> A small exploratory comparison on one Mac. All five pipelines read the same observations, each in its own text format, and decide through the same legal-action decoder. Training here means adapting only GLiNER's existing classification layers for a fixed 600 steps, not an optimized benchmark. The scripted teacher supplied labels offline; nothing at play time reads it. Every number on this page comes from <code>reports/gliner2-experiment/</code>.",
+ "footer": "<p>Source, setup and reports: <a href=\"https://github.com/rozgo/doom-sandbox\">rozgo/doom-sandbox</a>, <code>experiments/gliner2/</code>, <code>reports/gliner2-experiment/</code> (with a SHA-256 manifest and the raw predictions and game logs). Models: GLiNER2.5 Small and Base from fastino, ModernBERT-base from Answer.AI. Engine: ViZDoom with Freedoom assets. No video was recorded for this experiment.</p>",
+ "card": {
+  "kicker": "Zero-shot vs small heads · GLiNER2.5",
+  "line": "GLiNER2.5 attacks and evades with no Doom training, but the trained ModernBERT stays faster and more reliable; a 128-example head helps Small most.",
+  "tags": ["zero-shot classification", "few-shot heads", "comparison"],
+  "poster": "media/journals/gliner2-card.png"
+ },
+ "media": {
+  "results": {"src": "media/journals/gliner2-card.png", "max_width": 1800}
+ },
+ "theme": {
+  "scheme": "light",
+  "theme_color": "#0b5a4e",
+  "tokens": {
+   "bg": "#f4f1ea",
+   "text": "#1c1a16",
+   "muted": "#67625a",
+   "card": "#ffffff",
+   "line": "#e3ddd2",
+   "link": "#0b7a68",
+   "chip": "#ebe6db",
+   "soft": "#e1efe9",
+   "bad": "#b8452d",
+   "bad-soft": "#f7e6e0",
+   "accent": "#0b8f7a",
+   "accent-2": "#c0492f",
+   "accent-3": "#8a7f6e",
+   "on-accent": "#ffffff",
+   "hero": "linear-gradient(120deg, #0d2b27 0%, #0b4a41 45%, #0b7a68 85%, #0b8f7a 100%)",
+   "hero-text": "#f2fbf8",
+   "film": "#14130f",
+   "metric": "rgba(255, 255, 255, .14)",
+   "toc": "rgba(244, 241, 234, .94)",
+   "tile-1": "linear-gradient(135deg, #0b8f7a, #08665a)",
+   "tile-2": "linear-gradient(135deg, #5b5448, #3a352c)",
+   "tile-3": "linear-gradient(135deg, #c0492f, #8a3220)",
+   "tile-4": "linear-gradient(135deg, #7a7060, #4f483d)",
+   "tile-text": "#ffffff"
+  }
+ }
+}

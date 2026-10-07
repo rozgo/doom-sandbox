@@ -40,3 +40,6 @@ dev = [
     "pytest>=9.1.1",
     "ruff>=0.16.7",
 ]
+site = [
+    "imageio-ffmpeg>=0.6.0",
+]

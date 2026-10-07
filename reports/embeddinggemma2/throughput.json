@@ -1,0 +1,276 @@
+{
+  "model": "google/embeddinggemma-2",
+  "device": "NVIDIA GeForce RTX 4090",
+  "dtype": "bfloat16",
+  "torch": "2.14.1+cu130",
+  "machine": "x86_64",
+  "seconds_per_cell": 4.0,
+  "image": "640x480 Doom frame",
+  "method": "sentence-transformers encode, CPU preprocessing included; null = out of memory",
+  "rows": [
+    {
+      "input": "short text",
+      "text_tokens": 8,
+      "batch": 1,
+      "per_second": 36.1
+    },
+    {
+      "input": "short text",
+      "text_tokens": 8,
+      "batch": 64,
+      "per_second": 2122.3
+    },
+    {
+      "input": "short text",
+      "text_tokens": 8,
+      "batch": 256,
+      "per_second": 6690.7
+    },
+    {
+      "input": "short text",
+      "text_tokens": 8,
+      "batch": 1024,
+      "per_second": 10178.5
+    },
+    {
+      "input": "passage",
+      "text_tokens": 130,
+      "batch": 1,
+      "per_second": 36.0
+    },
+    {
+      "input": "passage",
+      "text_tokens": 130,
+      "batch": 64,
+      "per_second": 1003.8
+    },
+    {
+      "input": "passage",
+      "text_tokens": 130,
+      "batch": 256,
+      "per_second": 759.7
+    },
+    {
+      "input": "passage",
+      "text_tokens": 130,
+      "batch": 1024,
+      "per_second": null
+    },
+    {
+      "input": "image",
+      "vision_tokens": 70,
+      "batch": 1,
+      "per_second": 20.6
+    },
+    {
+      "input": "image",
+      "vision_tokens": 70,
+      "batch": 8,
+      "per_second": 112.9
+    },
+    {
+      "input": "image",
+      "vision_tokens": 70,
+      "batch": 19,
+      "per_second": 133.8
+    },
+    {
+      "input": "image",
+      "vision_tokens": 70,
+      "batch": 64,
+      "per_second": 132.1
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 70,
+      "batch": 1,
+      "per_second": 20.6
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 70,
+      "batch": 8,
+      "per_second": 112.1
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 70,
+      "batch": 19,
+      "per_second": 136.3
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 70,
+      "batch": 64,
+      "per_second": 130.9
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 70,
+      "batch": 1,
+      "per_second": 20.7
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 70,
+      "batch": 8,
+      "per_second": 104.2
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 70,
+      "batch": 19,
+      "per_second": 125.4
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 70,
+      "batch": 64,
+      "per_second": 116.3
+    },
+    {
+      "input": "image",
+      "vision_tokens": 140,
+      "batch": 1,
+      "per_second": 18.4
+    },
+    {
+      "input": "image",
+      "vision_tokens": 140,
+      "batch": 8,
+      "per_second": 71.4
+    },
+    {
+      "input": "image",
+      "vision_tokens": 140,
+      "batch": 19,
+      "per_second": 70.4
+    },
+    {
+      "input": "image",
+      "vision_tokens": 140,
+      "batch": 64,
+      "per_second": 65.7
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 140,
+      "batch": 1,
+      "per_second": 20.6
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 140,
+      "batch": 8,
+      "per_second": 73.4
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 140,
+      "batch": 19,
+      "per_second": 70.8
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 140,
+      "batch": 64,
+      "per_second": 66.4
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 140,
+      "batch": 1,
+      "per_second": 19.8
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 140,
+      "batch": 8,
+      "per_second": 72.8
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 140,
+      "batch": 19,
+      "per_second": 67.6
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 140,
+      "batch": 64,
+      "per_second": 61.8
+    },
+    {
+      "input": "image",
+      "vision_tokens": 280,
+      "batch": 1,
+      "per_second": 17.7
+    },
+    {
+      "input": "image",
+      "vision_tokens": 280,
+      "batch": 8,
+      "per_second": 33.3
+    },
+    {
+      "input": "image",
+      "vision_tokens": 280,
+      "batch": 19,
+      "per_second": 32.0
+    },
+    {
+      "input": "image",
+      "vision_tokens": 280,
+      "batch": 64,
+      "per_second": 33.4
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 280,
+      "batch": 1,
+      "per_second": 17.6
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 280,
+      "batch": 8,
+      "per_second": 32.5
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 280,
+      "batch": 19,
+      "per_second": 31.9
+    },
+    {
+      "input": "image + short text",
+      "vision_tokens": 280,
+      "batch": 64,
+      "per_second": 32.5
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 280,
+      "batch": 1,
+      "per_second": 19.4
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 280,
+      "batch": 8,
+      "per_second": 33.5
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 280,
+      "batch": 19,
+      "per_second": 31.7
+    },
+    {
+      "input": "image + passage",
+      "vision_tokens": 280,
+      "batch": 64,
+      "per_second": 31.2
+    }
+  ]
+}

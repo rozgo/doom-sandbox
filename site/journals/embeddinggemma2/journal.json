@@ -1,0 +1,61 @@
+{
+ "title": "EmbeddingGemma 2 Doom Journal",
+ "heading": "A multimodal embedding model plays Doom from pixels, with no training",
+ "eyebrow": "Engineering journal · October 6, 2026 · ViZDoom, EmbeddingGemma 2, sentence-transformers, RTX 4090",
+ "lede": "EmbeddingGemma 2 was released on October 6 and embeds text, images, audio and video into one 768-dimensional space. The same day, it played Doom zero-shot: every decision cuts the frame into 19 crops, embeds them, and compares each with fixed text prompts by cosine similarity. A small fixed rule set turns those matches into buttons. Nothing is trained, and the policy never reads the game state.",
+ "description": "EmbeddingGemma 2 plays Doom from screen crops and cosine similarity to text prompts, with no training: 37 kills and 2 deaths attacking, no deaths evading, on an RTX 4090.",
+ "hero": {
+  "media": "showcase",
+  "caption": "The 2 min 23 s showcase, recorded on an RTX 4090 and played back at normal game speed (the recorded runs made about 3 decisions per wall-clock second with the dashboard on). Each frame shows the 17 window crops coloured by their cosine margin, the bearing marker, the HEALTH and AMMO crops with their best-matching prompts, the instruction's mode cosines and the buttons pressed. An eye marks image inputs, # marks text."
+ },
+ "metrics": [
+  {"value": "37 / 2", "label": "kills / deaths in 60 game seconds, “Attack enemies on sight.”"},
+  {"value": "0 deaths", "label": "in 60 game seconds, “Do not shoot. Evade the enemies.”, no shots fired"},
+  {"value": "0", "label": "training steps, labels or fitted thresholds"},
+  {"value": "89%", "label": "of fire decisions had a monster under the crosshair, 150 logged frames"},
+  {"value": "~70/s", "label": "image embeddings per second on the RTX 4090 at 140 vision tokens"}
+ ],
+ "scope": "<strong>Where this stands.</strong> A same-day zero-shot proof of concept. EmbeddingGemma 2 is used frozen and unchanged; perception is cosine similarity between crop embeddings and fixed text prompts; a teacher-shaped rule set picks the buttons. The prompts, the crop band and the rules were designed for this one scenario while looking at its frames, and each game result is a single 60-second run on one seed. The policy reads pixels only; the game state appears on the dashboard for checking. Every number on this page comes from <code>reports/embeddinggemma2/</code> or the experiment's README.",
+ "footer": "<p>Source, reports and recordings: <a href=\"https://github.com/rozgo/doom-sandbox\">rozgo/doom-sandbox</a>, <code>experiments/embeddinggemma2/</code>, <code>reports/embeddinggemma2/</code>. Model: <a href=\"https://huggingface.co/google/embeddinggemma-2\">google/embeddinggemma-2</a> (Apache-2.0), run through transformers 5.19.0 and sentence-transformers 6.1.0. Engine: ViZDoom with Freedoom assets. Videos are recordings of the actual runs; playback speed is stated under each.</p>",
+ "card": {
+  "kicker": "Zero-shot · EmbeddingGemma 2 · RTX 4090",
+  "line": "Screen crops and cosine similarity to text prompts, no training: 37 kills and 2 deaths attacking, no deaths evading, with every reading on screen.",
+  "tags": ["multimodal embeddings", "zero-shot", "pixels", "cosine similarity"],
+  "poster": "media/embeddinggemma2-plays-doom.png"
+ },
+ "media": {
+  "showcase": {"src": "media/embeddinggemma2-plays-doom.mp4", "crf": 27, "max_width": 1440, "poster_t": 40},
+  "flash": {"src": "media/journals/eg2-muzzle-flash.png", "max_width": 1400},
+  "negation": {"src": "media/journals/eg2-negation-presence-attack.mp4", "start": 0, "duration": 20, "crf": 28, "max_width": 1440, "poster_t": 4}
+ },
+ "theme": {
+  "scheme": "dark",
+  "theme_color": "#100e17",
+  "tokens": {
+   "bg": "#100e17",
+   "text": "#ecebf3",
+   "muted": "#a29fb5",
+   "card": "#1a1724",
+   "line": "#2c2838",
+   "link": "#a596ff",
+   "chip": "#241f31",
+   "soft": "#1b1830",
+   "bad": "#ff8a8a",
+   "bad-soft": "#2c1820",
+   "accent": "#a596ff",
+   "accent-2": "#7fdc9a",
+   "accent-3": "#f3bd72",
+   "on-accent": "#0e0c14",
+   "hero": "linear-gradient(120deg, #0d0b13 0%, #1a1626 50%, #2a2145 100%)",
+   "hero-text": "#f0eff7",
+   "film": "#08070c",
+   "metric": "rgba(255, 255, 255, .06)",
+   "toc": "rgba(16, 14, 23, .92)",
+   "tile-1": "linear-gradient(135deg, #4b3f8f, #2a2145)",
+   "tile-2": "linear-gradient(135deg, #1f5a3a, #14301f)",
+   "tile-3": "linear-gradient(135deg, #8a5d1c, #4d340f)",
+   "tile-4": "linear-gradient(135deg, #2f2a3c, #1e1a28)",
+   "tile-text": "#f4f3f8"
+  }
+ }
+}

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Doom Sandbox</title>
+  <meta name="description" content="Language and embedding models playing Doom in ViZDoom: a ModernBERT classifier with a trained head, a zero-shot GLiNER2.5 comparison, and EmbeddingGemma 2 playing from pixels with no training. Each has an engineering journal.">
+  <meta name="theme-color" content="#160c0a">
+  <link rel="stylesheet" href="hub.css?v={{css_version}}">
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Doom Sandbox · engineering journals · 2026</p>
+    <h1>Language and embedding models playing Doom</h1>
+    <p class="lede">Three experiments in ViZDoom, from a text classifier reading the game state to a multimodal embedding
+      model reading the screen with no training at all. The game waits for every decision, so each model plays at its
+      own speed. Each journal tells what was built, what failed and what was measured, with the recorded runs, and says
+      which parts are learned, which are zero-shot and which are fixed rules.</p>
+  </div>
+</header>
+<main class="wrap">
+  <div class="grid">
+{{cards}}
+  </div>
+</main>
+<footer class="wrap">
+  <p>Source, reports and recordings: <a href="https://github.com/rozgo/doom-sandbox">rozgo/doom-sandbox</a>.
+    Videos are recordings of the actual runs. Engine: ViZDoom with Freedoom assets; models keep their own licences,
+    listed in each journal.</p>
+</footer>
+</body>
+</html>

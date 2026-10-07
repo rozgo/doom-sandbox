@@ -1,0 +1,7 @@
+{
+ "projects": [
+  {"id": "embeddinggemma2", "title": "EmbeddingGemma 2, zero-shot from pixels"},
+  {"id": "modernbert", "title": "ModernBERT policy"},
+  {"id": "gliner2", "title": "GLiNER2.5 comparison"}
+ ]
+}

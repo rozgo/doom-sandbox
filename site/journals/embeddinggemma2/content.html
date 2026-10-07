@@ -1,0 +1,183 @@
+  <section id="release">
+    <h2>1 · Released this morning</h2>
+    <p class="when">October 6 · getting a day-old model running locally</p>
+    <div class="prose">
+      <p>EmbeddingGemma 2 has 740M parameters in three parts: a 270M text backbone, a 170M vision encoder and a 300M audio
+        encoder, all mapping into one 768-dimensional space that can be truncated to 512, 256 or 128 dimensions. Text,
+        images, video frames and audio can even be interleaved into a single input. The repository was not gated, and
+        transformers 5.19.0, the first release that knows the <code>embedding_gemma2</code> architecture, came out the
+        same day.</p>
+      <p>On an Apple M3 Max it worked on the first try. The model card warns that float16 overflows its activations, so
+        the Mac runs float32 and the RTX 4090 bfloat16. Metal float32 matched the CPU reference to a cosine of 1.00000,
+        and bfloat16 to 0.99996.</p>
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>First retrieval checks, known answers, Metal float32</th><th class="num">Result</th></tr>
+      <tr><td>Text query → document, including Spanish and German queries</td><td class="num">8/8, also at 128 d</td></tr>
+      <tr><td>Caption → photo, among 27 stock photos</td><td class="num">27/27</td></tr>
+      <tr><td>Spoken sentence → its paraphrase, including Spanish audio</td><td class="num">8/8</td></tr>
+      <tr><td>Spoken descriptions (“A zebra.”) → the right photo, among 27</td><td class="num">6/6</td></tr>
+      <tr><td>Video → its label</td><td class="num">4/5</td></tr>
+      <tr><td>Text → the right two-image interleaved pair</td><td class="num">9/9</td></tr>
+    </table></div>
+    <div class="failure"><strong>No sense of direction in video.</strong> A ball moving left to right and one moving right to
+      left scored the same against both captions (0.739 vs 0.735). Time order did not register.</div>
+  </section>
+
+  <section id="zero-shot">
+    <h2>2 · No training</h2>
+    <p class="when">October 6 · cosine similarity to prompts decides everything</p>
+    <div class="prose">
+      <p>The first plan was the ModernBERT recipe: freeze the encoder and train a small head. The brief changed it to no
+        training at all. Every decision must come from comparing embeddings with text prompts.</p>
+      <p>Embedding a whole frame does not work: mean-pooling averages away where things are, and asking whether the
+        monster is left, centre, right or absent was right 26% of the time, below the 38% that always guessing the most
+        common answer gets. Crops fix this. The view is cut into pieces and each piece is embedded on its own; the
+        status bar's HEALTH and AMMO boxes become their own images, compared with prompts such as “HEALTH 40%” and
+        “AMMO 12”.</p>
+    </div>
+    <div class="result-strip">
+      <div class="tile"><div class="big">100<small>%</small></div><div class="what">AMMO read exactly from its crop</div><div class="vs">150 logged frames, 43 of them empty</div></div>
+      <div class="tile"><div class="big">0.5</div><div class="what">points of mean HEALTH error</div><div class="vs">HEALTH crop vs 21 prompts</div></div>
+      <div class="tile"><div class="big">9<small> / 9</small></div><div class="what">instructions mapped to the right mode</div><div class="vs">three phrasings never written into the prompts</div></div>
+    </div>
+    <div class="prose"><p>These readings come from the Apple-silicon probe against logged game state
+      (<code>zero-shot-probe-mps-negation-presence.json</code>). The instruction is matched once per run, text to text,
+      against three short behaviour descriptions.</p></div>
+  </section>
+
+  <section id="contrast">
+    <h2>3 · Contrast, not negation</h2>
+    <p class="when">October 6 · what a monster prompt should be compared with</p>
+    <div class="prose">
+      <p>A single prompt's cosine means little on its own; a crop is always somewhat similar to “a monster”. The decision
+        needs a contrast: a positive set of prompts against a negative set, each averaged into one prototype, with the
+        sign of the difference deciding. The natural negative, “is not a monster”, barely works. Embedding models place a
+        phrase and its negation close together, and “is a monster” against “is not a monster” separated monster crops from
+        empty ones with an AUC of only 0.62. Contrasting with what is actually in the scene (“an empty brown stone wall”,
+        “a grey tiled floor”, “a dark night sky”) reached 0.96. Ensembles of three or four prompts beat single prompts in
+        every set we tried.</p>
+    </div>
+    <div class="failure"><strong>One fused embedding cannot choose a command.</strong> Interleaving the instruction, the
+      game state as text (“health 60%, ammo 14”) and the view into one input, then picking the closest of five command
+      prompts, collapsed: every variant chose the same command for all 300 test situations, 15.7% against a 45.7%
+      majority baseline. The shared text dominates the embedding; frame-to-frame differences barely move it. One
+      question per crop, each against its own contrast, is what works.</div>
+    <div class="spec-cards">
+      <div class="card"><h4>👁 The crops (image)</h4><ul>
+        <li>17 overlapping 128-px windows, 32 px apart, across the band where monsters stand (y 120–245)</li>
+        <li>The HEALTH and the AMMO boxes of the status bar</li>
+        <li>All 19 embedded in one batch per decision</li>
+      </ul></div>
+      <div class="card"><h4># The prompts (text)</h4><ul>
+        <li>“a monster”, “a pink demon”, “a zombie soldier” vs wall, floor and sky</li>
+        <li>“HEALTH 0%” … “HEALTH 100%” and “AMMO 0” … “AMMO 50”</li>
+        <li>Three behaviour descriptions for the instruction</li>
+      </ul></div>
+      <div class="card"><h4>The decisions</h4><ul>
+        <li>A monster is visible if any window's margin is above zero</li>
+        <li>The best window, refined by a parabola through its neighbours, gives the bearing</li>
+        <li>Fixed rules: turn toward it, fire within ±0.12 of the crosshair, back off when hurt</li>
+      </ul></div>
+    </div>
+    <div class="lesson"><strong>No fitted thresholds.</strong> Every decision is the sign of a cosine difference or an
+      argmax across crops. The crop band came from the logged monster boxes: their tops cluster near y 191 and their
+      bottoms near y 233.</div>
+  </section>
+
+  <section id="gun">
+    <h2>4 · Firing at its own gun</h2>
+    <p class="when">October 6 · the first runs on the RTX 4090</p>
+    <div class="prose">
+      <p>The first 60-second attack run on the GPU, which still decided presence with the “not a monster” contrast, scored
+        12 kills and 7 deaths. No monster was in view for 868 of its 1,050 decisions, yet the policy saw one in 860 of
+        them and held ATTACK 96% of the time. Each shot raises the pistol, and its muzzle flash reaches into the centre
+        crops, where it matches “a monster”: firing kept the policy firing, and monsters walked up from the sides.</p>
+    </div>
+    <figure><img src="media/flash.webp" alt="Two frames of an empty room with the pistol raised and a bright muzzle flash in the centre" loading="lazy">
+      <figcaption>Game seconds 4 and 12 of that run: an empty room by the game's own state, and ATTACK pressed in both.
+        The recoiling pistol and its flash sit in the middle of the crop band.</figcaption></figure>
+    <figure class="film"><video src="media/negation.mp4" poster="media/negation_poster.webp" controls muted playsinline preload="metadata"></video>
+      <figcaption>The first 20 seconds of that run at normal game speed, on the generic dashboard; it locks onto the
+        centre and keeps shooting.</figcaption></figure>
+    <div class="prose">
+      <p>Two changes fixed it. The weapon is no longer rendered (<code>set_render_weapon(False)</code>), a display setting
+        that gives the policy no extra information. And presence now comes from the scene contrast itself: a monster is
+        visible when some window is closer to the monster prompts than to wall, floor and sky.</p>
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>Perception on the same 150 logged frames, RTX 4090</th><th class="num">“Not a monster” rule</th><th class="num">Scene rule</th></tr>
+      <tr><td>Monster visible or not, correct (always answering yes: 75.3%)</td><td class="num">75.3%</td><td class="num">80.7%</td></tr>
+      <tr><td>Empty views correctly rejected</td><td class="num">2.7%</td><td class="num">94.6%</td></tr>
+      <tr class="hl"><td>Fire decisions with a monster under the crosshair</td><td class="num">52.6%</td><td class="num">89.3%</td></tr>
+      <tr><td>Bearing error to the closest monster, median</td><td class="num">0.026</td><td class="num">0.025</td></tr>
+    </table></div>
+    <div class="prose"><p>Both probes read AMMO exactly in 99.3% of frames, with a mean HEALTH error of 1.0. The scene rule
+      misses about a quarter of the frames that contain a monster; the policy then turns
+      to search, which usually brings the monster back into view. The next 60-second attack run scored 37 kills and 2
+      deaths.</p></div>
+  </section>
+
+  <section id="evade">
+    <h2>5 · Evade is its own policy</h2>
+    <p class="when">October 6 · new contrasts on the same crops</p>
+    <div class="prose">
+      <p>With the scene rule, an evade policy that was simply the attack rules with firing turned off died 5 times in 60
+        seconds: when it saw nothing it turned to search, and monsters reached it in the meantime. Evade became its own
+        policy, with its own contrasts on the same window crops.</p>
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>Contrast</th><th>Positive prompts</th><th>Negative prompts</th><th>Decides</th></tr>
+      <tr><td>danger</td><td>“a monster right in front of you, up close”, …</td><td>“a small monster far away”, …</td><td>close: face it, back off, strafe away</td></tr>
+      <tr><td>escape</td><td>“an empty open floor”, “a clear path …”, …</td><td>the monster prompts</td><td>far: turn toward open space</td></tr>
+    </table></div>
+    <div class="prose"><p>It never fires, keeps circling backwards while it scans, and the dashboard shows the danger
+      reading and an escape marker. The showcase's evade run survived all 60 seconds without a shot.</p></div>
+    <div class="result-strip">
+      <div class="tile"><div class="big">37<small> / 2</small></div><div class="what">attack: kills / deaths</div><div class="vs">60 game seconds, seed 7</div></div>
+      <div class="tile"><div class="big">0<small> deaths</small></div><div class="what">evade, its own policy</div><div class="vs">attack rules without firing: 5 deaths</div></div>
+      <div class="tile"><div class="big">16<small> / 1</small></div><div class="what">the trained ModernBERT, for reference</div><div class="vs">reads game state as text, not pixels</div></div>
+    </div>
+    <div class="note-box"><strong>Cautious adds nothing here.</strong> A cautious run (“retreat when health falls below 40”)
+      matched an attack run exactly, 37 kills and 2 deaths: with this seed its 40-health rule never changed a decision.</div>
+  </section>
+
+  <section id="speed">
+    <h2>6 · How many embeddings per second</h2>
+    <p class="when">October 6 · RTX 4090, bfloat16, through sentence-transformers</p>
+    <div class="table-wrap"><table>
+      <tr><th>Input</th><th class="num">One at a time</th><th class="num">Batched</th></tr>
+      <tr><td>Short text, 8 tokens</td><td class="num">36/s</td><td class="num">10,179/s at 1,024</td></tr>
+      <tr><td>Passage, 130 tokens</td><td class="num">36/s</td><td class="num">1,004/s at 64</td></tr>
+      <tr><td>Image, 70 vision tokens</td><td class="num">21/s</td><td class="num">134/s at 19</td></tr>
+      <tr class="hl"><td>Image, 140 vision tokens (the Doom crops)</td><td class="num">18/s</td><td class="num">71/s at 8</td></tr>
+      <tr><td>Image, 280 vision tokens (the model default)</td><td class="num">18/s</td><td class="num">33/s at 64</td></tr>
+      <tr><td>Image + short text, 140 vision tokens</td><td class="num">21/s</td><td class="num">73/s at 8</td></tr>
+    </table></div>
+    <div class="prose">
+      <p>Images cost far more than text: each vision token is built from nine image patches, so a 140-token crop sends
+        about 1,260 patches through the vision encoder. Adding text to an image costs almost nothing. With 19 crops per
+        decision at about 70 images per second, the policy decides about three and a half times per second before the
+        dashboard and recording. Rates include CPU preprocessing; nothing was compiled or tuned
+        (<code>throughput.json</code>).</p>
+    </div>
+  </section>
+
+  <section id="limits">
+    <h2>7 · What this does not show</h2>
+    <p class="when">The boundaries of a same-day proof of concept</p>
+    <div class="prose">
+      <p>Nothing was trained, but the prompts, the crop band and the rules were designed for one scenario while looking
+        at its frames, and each result is one 60-second run on one seed. The rules decide the strategy; the embedding
+        model supplies perception and reads the instruction. Strategy, distance and numbers beyond the HUD's own digits
+        are not tested, and neither is any other map.</p>
+    </div>
+    <ol class="next-steps">
+      <li><strong>Lower image detail</strong>At 70 vision tokens the encoder runs about twice as fast; whether perception
+        holds up is untested.</li>
+      <li><strong>More seeds and scenarios</strong>Repeat the attack and evade runs across seeds and other ViZDoom maps
+        before reading anything into small differences.</li>
+      <li><strong>Compare</strong>The text-only approaches are in the <a href="../modernbert/">ModernBERT</a> and
+        <a href="../gliner2/">GLiNER2.5</a> journals.</li>
+    </ol>
+  </section>
