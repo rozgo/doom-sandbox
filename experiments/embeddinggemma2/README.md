@@ -9,7 +9,7 @@ No head is trained, no threshold is fitted, and the policy reads no game state.
 
 [![EmbeddingGemma 2 plays Doom with live cosine readings](../../media/embeddinggemma2-plays-doom.png)](../../media/embeddinggemma2-plays-doom.mp4)
 
-[Showcase video (MP4, 2:23)](../../media/embeddinggemma2-plays-doom.mp4): how it works, a
+**[Read the journal](https://rozgo.github.io/doom-sandbox/embeddinggemma2/)** for the full story. [Showcase video (MP4, 2:23)](../../media/embeddinggemma2-plays-doom.mp4): how it works, a
 full 60-second attack run and a full 60-second evade run with every cosine reading
 on screen, then results. Recorded on an RTX 4090 and played back at normal game
 speed. [Chapters and sources](../../reports/embeddinggemma2/showcase.json).

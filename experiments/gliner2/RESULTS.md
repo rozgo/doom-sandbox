@@ -1,5 +1,7 @@
 # GLiNER2.5 versus ModernBERT in Doom
 
+[Read the journal](https://rozgo.github.io/doom-sandbox/gliner2/): the same results as an illustrated engineering journal.
+
 GLiNER2.5 Base can drive basic attack/evade behavior with **zero Doom-specific
 training**. It is a credible subject for a zero-shot demonstration, but this
 experiment does **not** establish an upgrade over the trained ModernBERT policy.
