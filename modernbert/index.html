@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ModernBERT Doom Journal</title>
+  <meta name="description" content="A frozen ModernBERT encoder with a small trained head reads an instruction and the game state as text and drives ViZDoom at about 44 decisions per second on an Apple M3 Max.">
+  <meta name="theme-color" content="#111316">
+  <link rel="stylesheet" href="journal.css?v=9f6d9a056439">
+  <style>:root { color-scheme: dark; --bg: #111316; --text: #edf0f5; --muted: #98a2b2; --card: #1b1e23; --line: #2c3139; --link: #73caff; --chip: #23272e; --soft: #15232e; --bad: #ff8a7a; --bad-soft: #2c1a18; --accent: #73caff; --accent-2: #f3bd72; --accent-3: #98a2b2; --on-accent: #0b0d10; --hero: linear-gradient(120deg, #0b0c0e 0%, #15181d 50%, #13283a 100%); --hero-text: #edf0f5; --film: #08090b; --metric: rgba(255, 255, 255, .06); --toc: rgba(17, 19, 22, .92); --tile-1: linear-gradient(135deg, #1d4f73, #13283a); --tile-2: linear-gradient(135deg, #2a2f37, #1b1e23); --tile-3: linear-gradient(135deg, #9a6a1e, #5a3d10); --tile-4: linear-gradient(135deg, #343a43, #22262c); --tile-text: #f3f5f7; }</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <a class="home-link" href="../">&larr; Doom Sandbox</a>
+    <p class="eyebrow">Engineering journal · September 16, 2026 · ViZDoom, ModernBERT, PyTorch, Apple Metal</p>
+    <h1>A text classifier that plays Doom from instructions and game state</h1>
+    <p class="lede">ViZDoom waits while a ModernBERT classifier reads an instruction and a short text description of the game, then presses the buttons it scores highest. Only a small head on top of the frozen encoder is trained, in 3.6 seconds; the full 149.6M-parameter model runs on every decision. The same checkpoint attacks or evades depending on the instruction alone.</p>
+    <figure class="hero-film">
+      <video src="media/film.mp4" poster="media/film_poster.webp" controls muted playsinline preload="metadata"></video>
+      <figcaption>The 51-second edit at measured wall-clock speed, resampled to 30 fps: the trained classifier attacks, then, from the same starting state with only the instruction changed (0:29), evades. Separate seeded runs; the dashboard shows each decision's seven button scores.</figcaption>
+    </figure>
+    <div class="metrics"><div class="metric"><div class="value">16 / 1</div><div class="label">kills / deaths in 60 game seconds, “Attack enemies on sight.”</div></div><div class="metric"><div class="value">0.979 → 0.026</div><div class="label">ATTACK score for the same state when only the instruction changes</div></div><div class="metric"><div class="value">43.7/s</div><div class="label">decisions per second, whole loop with dashboard and video recording</div></div><div class="metric"><div class="value">13.9 ms</div><div class="label">per classification: text, tokenizing, full encoder, decoding</div></div><div class="metric"><div class="value">3.6 s</div><div class="label">to train the 595,975-parameter head; the encoder stays frozen</div></div></div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Chapters">
+  <div class="wrap"><a href="#loop">1 A loop that waits for the model</a><a href="#metal">2 ModernBERT on Apple Metal</a><a href="#training">3 Training only the head</a><a href="#instructions">4 Same state, opposite instruction</a><a href="#limits">5 What this does not show</a></div>
+</nav>
+
+<main class="wrap">
+  <div class="scope"><strong>Where this stands.</strong> A controlled demonstration. The classifier reads game state from the engine, turned into a small fixed vocabulary of text (health, ammo, the nearest enemy's side and range); it never sees pixels. Its labels come from a scripted teacher, it knows six phrasings of three behaviours, and a decoder only blocks impossible button combinations. It does not establish general Doom skill or open-ended language understanding. Every number on this page comes from the reports and summaries in the repository.</div>
+  <section id="loop">
+    <h2>1 · A loop that waits for the model</h2>
+    <p class="when">September 16, 00:45 · the runner, the random baseline and the recording</p>
+    <div class="prose">
+      <p>The first piece was the game loop. ViZDoom normally runs in real time, so a slow policy acts on frames that are
+        already out of date. Here the engine waits: observe, decide, advance one tic, repeat. Every decision sees a fresh
+        state, there is no queue of stale actions, and the game runs exactly as fast as the policy allows. Video can
+        still be replayed at normal game speed, or at the measured wall-clock speed to show how fast the policy really is.</p>
+      <p>The scenario is <code>defend_the_center</code>: the player stands in a round room while demons and chainsaw
+        marines walk in from the walls. Before any model, a random policy pressing one legal button combination per game
+        second set the baseline.</p>
+    </div>
+    <div class="spec-cards">
+      <div class="card"><h4>The game</h4><ul>
+        <li>ViZDoom <code>defend_the_center</code>, 640×480, 35 tics per second</li>
+        <li>Seven buttons for model play: attack, strafe left/right, forward/back, turn left/right</li>
+        <li>Opposite directions and firing without ammo are masked as illegal</li>
+      </ul></div>
+      <div class="card"><h4>The policy's input</h4><ul>
+        <li>An instruction, e.g. “Attack enemies on sight.”</li>
+        <li>The game state as text, read from the engine: no pixels</li>
+        <li>Out: seven sigmoid scores; the best legal combination is pressed</li>
+      </ul></div>
+      <div class="card"><h4>The record</h4><ul>
+        <li>Every decision's observation, scores, buttons and timing in <code>states.jsonl</code></li>
+        <li>A screenshot each game second and an H.264 replay</li>
+        <li>A summary with kills, deaths, decisions per second and decision latency</li>
+      </ul></div>
+    </div>
+    <figure class="film"><video src="media/random.mp4" poster="media/random_poster.webp" controls muted playsinline preload="metadata"></video>
+      <figcaption>The random baseline, one decision per game second, seed 7: 10 kills, 5 deaths and 61 observations in 60
+        game seconds. Played back at normal game speed.</figcaption></figure>
+  </section>
+
+  <section id="metal">
+    <h2>2 · ModernBERT on Apple Metal</h2>
+    <p class="when">September 16, 00:45–01:08 · speed first, with an untrained head</p>
+    <div class="prose">
+      <p>Before training anything, we measured whether a 149.6M-parameter encoder could keep up with the game. The
+        timing covers the whole decision: building the text, tokenizing, the full encoder forward pass, moving scores
+        back to the CPU and decoding the buttons. Model loading and warm-up are excluded.</p>
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>ModernBERT-base on an M3 Max, batch one</th><th class="num">Per decision</th></tr>
+      <tr><td>CPU, float32</td><td class="num">43.3 ms</td></tr>
+      <tr class="hl"><td>Metal (MPS), float16</td><td class="num">13.3 ms</td></tr>
+      <tr><td>Metal (MPS), bfloat16</td><td class="num">34.2 ms</td></tr>
+    </table></div>
+    <div class="prose">
+      <p>Float16 became the default. With hardware video encoding on, the whole game loop completed 175 decisions in 3.72
+        seconds, 47 decisions per second including the first call.</p>
+    </div>
+    <div class="note-box"><strong>Speed, not skill.</strong> These runs used an untrained action head. They show what the
+      hardware can do, not how well the model plays.</div>
+    <h3>A dashboard that does not slow the model</h3>
+    <div class="prose">
+      <p>A charcoal dashboard puts the game on the left and the instrumentation on the right: rolling latency, decisions
+        per second, all seven button scores against a 0.5 marker, the legal combinations and why a button was suppressed.
+        Drawing and encoding run in a background worker that keeps only the newest frame, so the model never waits for
+        video. The first recording, still with the untrained head, made 2,100 decisions in 60 game seconds and took 86.5
+        seconds of wall time: 30.8 ms per decision and 24.3 decisions per second with the window and video on.</p>
+    </div>
+    <figure class="film"><video src="media/charcoal.mp4" poster="media/charcoal_poster.webp" controls muted playsinline preload="metadata"></video>
+      <figcaption>Thirty seconds of the untrained-head dashboard run, at measured wall-clock speed. The game ran slower
+        than Doom's native 35 tics per second here; the on-screen clocks keep that difference visible.</figcaption></figure>
+    <div class="lesson"><strong>Keep three numbers apart.</strong> Decisions per second (the whole loop, including drawing
+      and recording), milliseconds per classification (the model's part of each decision) and the video's frame rate are
+      different measurements. Every later video states which one it shows.</div>
+  </section>
+
+  <section id="training">
+    <h2>3 · Training only the head</h2>
+    <p class="when">September 16, 01:24 · a controlled vocabulary and a 3.6-second training run</p>
+    <div class="prose">
+      <p>For the trained checkpoint, the game state is described with a small fixed vocabulary. Code reads the nearest
+        visible monster's position from the engine and bins it, along with health and ammo, into text such as:</p>
+      <p><code>health=healthy ammo=loaded nearest_enemy=center range=medium</code></p>
+      <p>These are perception features, not commands: the text never names a button. A scripted teacher with three
+        behaviours (aggressive, cautious, evasive) labelled 468 examples, two known phrasings per behaviour. Whole state
+        combinations were split between training (62 combinations, 372 examples), validation (8, 48) and test (8, 48), so
+        no tested state was seen in training under any instruction.</p>
+      <p>Only the head was trained: 595,975 of the model's 149,610,247 parameters. The encoder's outputs were cached
+        during training only; during play, every decision runs the full encoder. Training took 3.6 seconds of wall time,
+        and the selected checkpoint is step 150 of 1,200, chosen on validation.</p>
+    </div>
+    <div class="result-strip">
+      <div class="tile"><div class="big">81.25<small>%</small></div><div class="what">exact seven-button vectors on held-out states</div><div class="vs">48 test examples</div></div>
+      <div class="tile"><div class="big">97.02<small>%</small></div><div class="what">individual buttons correct on held-out states</div><div class="vs">48 × 7 decisions</div></div>
+      <div class="tile"><div class="big">0.757<small> vs 0.003</small></div><div class="what">ATTACK for one held-out aligned, wounded state</div><div class="vs">aggressive vs evasive instruction</div></div>
+    </div>
+    <div class="note-box"><strong>A small test.</strong> The test set has only two positive ATTACK examples and none for
+      MOVE_FORWARD. The saved float16 checkpoint was reloaded and checked with 48 complete encoder passes before any
+      gameplay.</div>
+  </section>
+
+  <section id="instructions">
+    <h2>4 · Same state, opposite instruction</h2>
+    <p class="when">September 16, 01:28–12:55 · attack and evade from one checkpoint</p>
+    <div class="prose">
+      <p>The checkpoint then played with the dashboard and the video recorder on, deciding every two game tics. From an
+        identical starting state, changing only the instruction moved the ATTACK score from 0.979 to 0.026. In the evade
+        run, ammo stayed at 26 and ATTACK never rose above 0.036: the model's own scores, not a rule in the decoder,
+        kept it from firing.</p>
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>Instruction</th><th class="num">Game time</th><th class="num">Playback</th><th class="num">Decisions/s</th><th class="num">Per decision</th><th>Result</th></tr>
+      <tr class="hl"><td>Attack enemies on sight.</td><td class="num">60 s</td><td class="num">24.0 s</td><td class="num">43.7</td><td class="num">13.9 ms</td><td>16 kills, 1 death</td></tr>
+      <tr><td>Do not shoot. Evade the enemies.</td><td class="num">30 s</td><td class="num">12.1 s</td><td class="num">43.3</td><td class="num">13.9 ms</td><td>no shots, no deaths</td></tr>
+    </table></div>
+    <div class="prose">
+      <p>Two tics per decision need 17.5 decisions per second to keep up with the game's native speed; the model ran at
+        more than twice that, so the films above play faster than real time. They were joined into the 51-second edit at
+        the top of this page.</p>
+    </div>
+  </section>
+
+  <section id="limits">
+    <h2>5 · What this does not show</h2>
+    <p class="when">The boundaries of a controlled demonstration</p>
+    <div class="prose">
+      <p>The model reads a hand-built description of the game, not the screen, and the description comes from the
+        engine's own object positions. It was trained on six phrasings of three behaviours and a finite set of states.
+        It follows instructions it was taught, in situations described in its vocabulary. That is enough to show a text
+        classifier steering a game in real time, and not enough to claim it understands Doom or arbitrary language.</p>
+    </div>
+    <ol class="next-steps">
+      <li><strong>Compare with zero-shot models</strong>GLiNER2.5 took the same observations without Doom training; see
+        the <a href="../gliner2/">GLiNER2.5 journal</a>.</li>
+      <li><strong>Read the screen instead of the state</strong>EmbeddingGemma 2 later played from pixels with no
+        training at all; see the <a href="../embeddinggemma2/">EmbeddingGemma 2 journal</a>.</li>
+    </ol>
+  </section>
+
+</main>
+
+<footer class="wrap"><p>Source, reports and recordings: <a href="https://github.com/rozgo/doom-sandbox">rozgo/doom-sandbox</a>, <code>src/doom_bert/</code>, <code>models/controlled-demo/</code>, <code>reports/</code>. Engine and scenarios: ViZDoom with Freedoom assets. Model: <a href="https://huggingface.co/answerdotai/ModernBERT-base">answerdotai/ModernBERT-base</a> (Apache-2.0). Videos are recordings of the actual runs; playback speed is stated under each.</p></footer>
+</body>
+</html>
