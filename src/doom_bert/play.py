@@ -61,7 +61,9 @@ def legal_actions(buttons: list[str], variables: dict[str, float]) -> list[list[
     return actions
 
 
-def create_game(scenario: str, *, headless: bool, seed: int) -> vzd.DoomGame:
+def create_game(
+    scenario: str, *, headless: bool, seed: int, render_weapon: bool = True
+) -> vzd.DoomGame:
     game = vzd.DoomGame()
     game.load_config(str(Path(vzd.scenarios_path) / f"{scenario}.cfg"))
     game.set_mode(vzd.Mode.PLAYER)
@@ -71,6 +73,9 @@ def create_game(scenario: str, *, headless: bool, seed: int) -> vzd.DoomGame:
     game.set_screen_format(vzd.ScreenFormat.RGB24)
     game.set_render_hud(True)
     game.set_render_crosshair(True)
+    # Pixel policies can hide the first-person weapon, whose recoil and flash
+    # cross the view; the HUD and game state are unchanged.
+    game.set_render_weapon(render_weapon)
     game.set_labels_buffer_enabled(True)
     game.set_available_game_variables(list(VARIABLES))
     game.set_sound_enabled(False)
@@ -143,6 +148,7 @@ def play(
     policy: Callable[[str, dict], dict[str, float]] | None = None,
     stats: bool = False,
     video_clock: str = "game",
+    render_weapon: bool = True,
 ) -> dict:
     if seconds <= 0:
         raise ValueError("seconds must be positive")
@@ -154,7 +160,9 @@ def play(
     output.mkdir(parents=True, exist_ok=False)
     (output / "frames").mkdir()
     rng = random.Random(seed)
-    game = create_game(scenario, headless=headless or stats, seed=seed)
+    game = create_game(
+        scenario, headless=headless or stats, seed=seed, render_weapon=render_weapon
+    )
     if policy is not None:
         game.set_available_buttons([getattr(vzd.Button, button) for button in BUTTONS])
     summary = {
@@ -186,6 +194,7 @@ def play(
         "video_capture_limit_fps": 30 if video_clock == "wall" else TICS_PER_SECOND,
         "stats_overlay": stats,
         "headless": headless,
+        "render_weapon": render_weapon,
         "preview_enabled": stats and not headless,
     }
     (output / "config.json").write_text(json.dumps(summary, indent=2) + "\n")
@@ -204,7 +213,13 @@ def play(
     started = time.monotonic()
     try:
         game.init()
-        if stats:
+        if stats and hasattr(policy, "make_overlay"):
+            overlay = policy.make_overlay(
+                instruction=instruction, video_clock=video_clock
+            )
+            if not headless:
+                preview = LivePreview()
+        elif stats:
             overlay = StatsOverlay(
                 policy_name=getattr(policy, "display_name", "ModernBERT")
                 if policy is not None

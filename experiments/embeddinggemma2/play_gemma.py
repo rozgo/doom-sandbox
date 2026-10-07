@@ -9,7 +9,7 @@ import argparse
 from datetime import UTC, datetime
 from pathlib import Path
 
-from gemma_doom import EmbeddingGemmaPolicy
+from gemma_doom import WINDOW_STRIDE, WINDOW_WIDTH, EmbeddingGemmaPolicy
 
 from doom_bert.play import SCENARIOS, play
 
@@ -35,10 +35,21 @@ def main() -> None:
     parser.add_argument("--device", default="auto")
     parser.add_argument("--dtype", default="auto", choices=("auto", "float32", "bfloat16"))
     parser.add_argument("--vision-tokens", type=int, default=140, choices=[70, 140, 280, 560, 1120])
+    parser.add_argument("--window-width", type=int, default=WINDOW_WIDTH)
+    parser.add_argument("--window-stride", type=int, default=WINDOW_STRIDE)
+    parser.add_argument(
+        "--show-weapon", action="store_true", help="Render the pistol (its recoil and flash cross the view)"
+    )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
-    policy = EmbeddingGemmaPolicy(device=args.device, dtype=args.dtype, vision_tokens=args.vision_tokens)
+    policy = EmbeddingGemmaPolicy(
+        device=args.device,
+        dtype=args.dtype,
+        vision_tokens=args.vision_tokens,
+        window_width=args.window_width,
+        window_stride=args.window_stride,
+    )
     behaviour, sims = policy.perception.behaviour(args.instruction)
     print(
         f"EmbeddingGemma 2: {policy.device} / {policy.dtype}; instruction -> {behaviour} "
@@ -58,6 +69,7 @@ def main() -> None:
         policy=policy,
         stats=not args.no_stats,
         video_clock=args.video_clock,
+        render_weapon=args.show_weapon,
     )
 
 

@@ -5,12 +5,10 @@ them all in one batch, and compares each with fixed text prompts. Each side of a
 contrast is the normalized mean of its prompt embeddings, and every decision is
 either a sign (margin > 0) or an argmax across crops; no threshold is fitted.
 
-- Presence: the band where monsters stand, above the player's pistol, is cut
-  into left / front / right thirds. An enemy is visible when some third is closer to the monster prompts
-  than to their negations ("a monster" vs "not a monster").
-- Bearing: overlapping windows slide across the same band. The window that most
-  prefers the monster prompts over the scene prompts (walls, floor, sky) gives
-  the enemy's horizontal position; a parabola through that window and its two
+- Monsters: overlapping windows slide across the band where monsters stand.
+  Each window's margin is cos(monster prompts) - cos(scene prompts: wall, floor,
+  sky). An enemy is visible when some margin is positive. The best window gives
+  its horizontal position; a parabola through that window and its two
   neighbours refines the peak between window centres, fine enough to aim.
 - Status: the HEALTH and AMMO boxes of the status bar are matched against
   "HEALTH 40%" and "AMMO 12" prompts.
@@ -35,13 +33,19 @@ STATUS_BAR_Y = 403  # 640x480 render: Doom's 32-row status bar scaled by 2.4
 BAND_TOP, BAND_BOTTOM = 120, 245
 HEALTH_BOX = (92, STATUS_BAR_Y, 210, 480)
 AMMO_BOX = (0, STATUS_BAR_Y, 92, 480)
-THIRDS = {"left": (0, 213), "front": (213, 427), "right": (427, 640)}
 WINDOW_WIDTH, WINDOW_STRIDE = 128, 32
 AIM_WINDOW = 0.12  # |bearing| the scripted teacher treats as lined up (~38 px)
 
 MONSTER_PROMPTS = ("a monster", "a pink demon", "a zombie soldier")
-NEGATION_PROMPTS = ("not a monster", "no monster", "no enemies")
 SCENE_PROMPTS = ("an empty brown stone wall", "a grey tiled floor", "a dark night sky")
+# Evade is its own policy with its own contrasts on the same window crops.
+CLOSE_PROMPTS = (
+    "a monster right in front of you, up close",
+    "a big monster attacking you",
+    "a monster filling the view",
+)
+FAR_PROMPTS = ("a small monster far away", "a distant monster across the room", "a tiny figure in the distance")
+OPEN_PROMPTS = ("an empty open floor", "a clear path with nothing in the way", "open empty space")
 HEALTH_LEVELS = tuple(range(0, 101, 5))
 AMMO_LEVELS = tuple(range(0, 51))
 BEHAVIOURS = {
@@ -49,7 +53,7 @@ BEHAVIOURS = {
     "cautious": "fight, but retreat and stop shooting when health is low",
     "evasive": "pacifist: never shoot, run away from enemies",
 }
-RETREAT_HEALTH = {"aggressive": 20, "cautious": 40, "evasive": 101}
+RETREAT_HEALTH = {"aggressive": 20, "cautious": 40}
 
 
 def window_starts(width: int = WINDOW_WIDTH, stride: int = WINDOW_STRIDE) -> list[int]:
@@ -84,14 +88,13 @@ def load_encoder(device: str, dtype: str, vision_tokens: int = 140):
     return model
 
 
-def crops(screen: np.ndarray | Image.Image, width: int = WINDOW_WIDTH) -> dict:
+def crops(screen: np.ndarray | Image.Image, width: int = WINDOW_WIDTH, stride: int = WINDOW_STRIDE) -> dict:
     frame = screen if isinstance(screen, Image.Image) else Image.fromarray(screen)
     frame = frame.convert("RGB")
     if frame.size != (640, 480):
         raise ValueError(f"Expected a 640x480 frame, got {frame.size}")
     return {
-        "thirds": [frame.crop((a, BAND_TOP, z, BAND_BOTTOM)) for a, z in THIRDS.values()],
-        "windows": [frame.crop((s, BAND_TOP, s + width, BAND_BOTTOM)) for s in window_starts(width)],
+        "windows": [frame.crop((s, BAND_TOP, s + width, BAND_BOTTOM)) for s in window_starts(width, stride)],
         "health": frame.crop(HEALTH_BOX),
         "ammo": frame.crop(AMMO_BOX),
     }
@@ -100,14 +103,16 @@ def crops(screen: np.ndarray | Image.Image, width: int = WINDOW_WIDTH) -> dict:
 class Perception:
     """Embeds every crop on each call; prompt embeddings are fixed class labels."""
 
-    def __init__(self, model, window_width: int = WINDOW_WIDTH):
+    def __init__(self, model, window_width: int = WINDOW_WIDTH, window_stride: int = WINDOW_STRIDE):
         self.model = model
-        self.window_width = window_width
-        starts = np.array(window_starts(window_width))
+        self.window_width, self.window_stride = window_width, window_stride
+        starts = np.array(window_starts(window_width, window_stride))
         self.window_bearings = (starts + window_width / 2 - 320) / 320
-        monster = self.prototype(MONSTER_PROMPTS)
-        self.present_axis = monster - self.prototype(NEGATION_PROMPTS)
-        self.where_axis = monster - self.prototype(SCENE_PROMPTS)
+        self.monster_prototype = self.prototype(MONSTER_PROMPTS)
+        self.scene_prototype = self.prototype(SCENE_PROMPTS)
+        self.close_prototype = self.prototype(CLOSE_PROMPTS)
+        self.far_prototype = self.prototype(FAR_PROMPTS)
+        self.open_prototype = self.prototype(OPEN_PROMPTS)
         self.health = self.text(f"HEALTH {n}%" for n in HEALTH_LEVELS)
         self.ammo = self.text(f"AMMO {n}" for n in AMMO_LEVELS)
         self.behaviour_names = list(BEHAVIOURS)
@@ -122,23 +127,37 @@ class Perception:
 
     @torch.inference_mode()
     def __call__(self, screen) -> dict:
-        parts = crops(screen, self.window_width)
-        images = [*parts["thirds"], *parts["windows"], parts["health"], parts["ammo"]]
+        parts = crops(screen, self.window_width, self.window_stride)
+        images = [*parts["windows"], parts["health"], parts["ammo"]]
         emb = self.model.encode(images, convert_to_tensor=True, batch_size=len(images)).float()
-        n_windows = len(parts["windows"])
-        thirds, windows = emb[:3], emb[3 : 3 + n_windows]
-        health, ammo = emb[3 + n_windows], emb[4 + n_windows]
-        # Embeddings are unit length, so each dot product is a cosine difference.
-        present = (thirds @ self.present_axis).cpu().numpy()
-        where = (windows @ self.where_axis).cpu().numpy()
-        visible = bool(present.max() > 0)
+        windows, health, ammo = emb[:-2], emb[-2], emb[-1]
+        # Embeddings are unit length, so every dot product is a cosine similarity.
+        monster = (windows @ self.monster_prototype).cpu().numpy()
+        scene = (windows @ self.scene_prototype).cpu().numpy()
+        where = monster - scene
+        visible = bool(where.max() > 0)
+        best = int(where.argmax())
+        # Evade contrasts: is the nearest-looking threat close, and which way is open?
+        close = float(windows[best] @ self.close_prototype)
+        far = float(windows[best] @ self.far_prototype)
+        escape = (windows @ self.open_prototype).cpu().numpy() - monster
+        health_cos = (health @ self.health.T).cpu().numpy()
+        ammo_cos = (ammo @ self.ammo.T).cpu().numpy()
         return {
-            "present": present,
             "where": where,
+            "monster_cos": monster,
+            "scene_cos": scene,
             "visible": visible,
             "bearing": self.peak(where) if visible else None,
-            "health": HEALTH_LEVELS[int((health @ self.health.T).argmax())],
-            "ammo": AMMO_LEVELS[int((ammo @ self.ammo.T).argmax())],
+            "close_cos": close,
+            "far_cos": far,
+            "danger": close - far if visible else None,
+            "escape": escape,
+            "escape_bearing": self.peak(escape),
+            "health": HEALTH_LEVELS[int(health_cos.argmax())],
+            "ammo": AMMO_LEVELS[int(ammo_cos.argmax())],
+            "health_top": top_matches(health_cos, [f"HEALTH {n}%" for n in HEALTH_LEVELS]),
+            "ammo_top": top_matches(ammo_cos, [f"AMMO {n}" for n in AMMO_LEVELS]),
             "crops": len(images),
         }
 
@@ -160,10 +179,34 @@ class Perception:
         return self.behaviour_names[int(sims.argmax())], sims
 
 
+def top_matches(cosines: np.ndarray, prompts: list[str], k: int = 3) -> list[tuple[str, float]]:
+    return [(prompts[i], round(float(cosines[i]), 4)) for i in np.argsort(-cosines)[:k]]
+
+
 def control(seen: dict, behaviour: str) -> tuple[set[str], list[str]]:
-    """Teacher-shaped rules over perceived values only; no game state is read."""
+    """Fixed rules over perceived values only; no game state is read."""
+    return evade(seen) if behaviour == "evasive" else fight(seen, behaviour)
+
+
+def evade(seen: dict) -> tuple[set[str], list[str]]:
+    """Never fire. Back away from close threats, head for open space, keep moving."""
     if seen["bearing"] is None:
-        return {"TURN_RIGHT"}, ["No monster in any third: turn to search."]
+        return {"TURN_RIGHT", "MOVE_BACKWARD", "MOVE_LEFT"}, ["Nothing in view: circle backwards and scan."]
+    bearing, escape = seen["bearing"], seen["escape_bearing"]
+    away = "MOVE_LEFT" if bearing >= 0 else "MOVE_RIGHT"
+    if seen["danger"] > 0:
+        pressed = {"MOVE_BACKWARD", away}
+        if abs(bearing) > AIM_WINDOW:
+            pressed.add("TURN_RIGHT" if bearing > 0 else "TURN_LEFT")
+        return pressed, [f"Threat up close at {bearing:+.2f}: face it, back off, strafe away."]
+    pressed = {away, "MOVE_FORWARD" if abs(escape) <= AIM_WINDOW else ("TURN_RIGHT" if escape > 0 else "TURN_LEFT")}
+    return pressed, [f"Threat far at {bearing:+.2f}: head for open space at {escape:+.2f}."]
+
+
+def fight(seen: dict, behaviour: str) -> tuple[set[str], list[str]]:
+    """Teacher-shaped attack rules; cautious also retreats below 40 health."""
+    if seen["bearing"] is None:
+        return {"TURN_RIGHT"}, ["No window looks more like a monster than the scene: turn to search."]
     pressed, reasons = set(), []
     bearing = seen["bearing"]
     aligned = abs(bearing) <= AIM_WINDOW
@@ -175,8 +218,8 @@ def control(seen: dict, behaviour: str) -> tuple[set[str], list[str]]:
     if hurt or not has_ammo:
         pressed.add("MOVE_BACKWARD")
         pressed.add("MOVE_LEFT" if bearing >= 0 else "MOVE_RIGHT")
-        reasons.append("Back off and strafe: " + ("evasive mode." if behaviour == "evasive" else "hurt or no ammo."))
-    if behaviour != "evasive" and has_ammo and aligned and not hurt:
+        reasons.append("Back off and strafe: hurt or out of ammo.")
+    if has_ammo and aligned and not hurt:
         pressed.add("ATTACK")
         reasons.append("Monster under the crosshair: fire.")
     return pressed, reasons
@@ -199,12 +242,13 @@ class EmbeddingGemmaPolicy:
         dtype: str = "auto",
         vision_tokens: int = 140,
         window_width: int = WINDOW_WIDTH,
+        window_stride: int = WINDOW_STRIDE,
     ):
         self.device = select_device(device)
         self.dtype = default_dtype(self.device) if dtype == "auto" else dtype
         self.vision_tokens = vision_tokens
-        self.perception = Perception(load_encoder(self.device, self.dtype, vision_tokens), window_width)
-        self.behaviours: dict[str, str] = {}
+        self.perception = Perception(load_encoder(self.device, self.dtype, vision_tokens), window_width, window_stride)
+        self.behaviours: dict[str, tuple[str, dict[str, float]]] = {}
         self.last_state_text = None
         self.last_token_count = None
         self.last_details = None
@@ -212,8 +256,12 @@ class EmbeddingGemmaPolicy:
     def __call__(self, instruction: str, record: dict, *, screen: np.ndarray) -> dict[str, float]:
         # The instruction is constant for a run; it is embedded once, not per decision.
         if instruction not in self.behaviours:
-            self.behaviours[instruction] = self.perception.behaviour(instruction)[0]
-        behaviour = self.behaviours[instruction]
+            name, sims = self.perception.behaviour(instruction)
+            self.behaviours[instruction] = (
+                name,
+                dict(zip(self.perception.behaviour_names, sims.round(4).tolist(), strict=True)),
+            )
+        behaviour, behaviour_cos = self.behaviours[instruction]
         seen = self.perception(screen)
         pressed, reasons = control(seen, behaviour)
         target = "none" if seen["bearing"] is None else f"{seen['bearing']:+.2f}"
@@ -223,12 +271,32 @@ class EmbeddingGemmaPolicy:
             "bearing": seen["bearing"],
             "health": seen["health"],
             "ammo": seen["ammo"],
-            "present": np.round(seen["present"], 4).tolist(),
+            "behaviour_cos": behaviour_cos,
             "where": np.round(seen["where"], 4).tolist(),
+            "monster_cos": np.round(seen["monster_cos"], 4).tolist(),
+            "scene_cos": np.round(seen["scene_cos"], 4).tolist(),
+            "danger": None if seen["danger"] is None else round(seen["danger"], 4),
+            "close_cos": round(seen["close_cos"], 4),
+            "far_cos": round(seen["far_cos"], 4),
+            "escape_bearing": round(seen["escape_bearing"], 4),
+            "health_top": seen["health_top"],
+            "ammo_top": seen["ammo_top"],
             "crops": seen["crops"],
             "reasons": reasons,
         }
         return {button: 0.98 if button in pressed else 0.02 for button in BUTTONS}
+
+    def make_overlay(self, *, instruction: str, video_clock: str):
+        from gemma_overlay import GemmaOverlay
+
+        return GemmaOverlay(
+            instruction=instruction,
+            device=self.device,
+            dtype=self.dtype,
+            window_bearings=self.perception.window_bearings,
+            window_width=self.perception.window_width,
+            video_clock=video_clock,
+        )
 
     def synchronize(self) -> None:
         if self.device == "cuda":

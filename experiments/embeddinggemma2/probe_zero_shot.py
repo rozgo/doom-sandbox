@@ -19,6 +19,7 @@ from pathlib import Path
 import numpy as np
 from gemma_doom import (
     AIM_WINDOW,
+    WINDOW_STRIDE,
     WINDOW_WIDTH,
     Perception,
     control,
@@ -88,11 +89,15 @@ def main() -> None:
     parser.add_argument("--device", default="auto")
     parser.add_argument("--vision-tokens", type=int, default=140, choices=[70, 140, 280, 560, 1120])
     parser.add_argument("--window-width", type=int, default=WINDOW_WIDTH)
+    parser.add_argument("--window-stride", type=int, default=WINDOW_STRIDE)
     parser.add_argument("--output", type=Path, default=REPO / "runs/embeddinggemma2/zero-shot-probe.json")
+    parser.add_argument("--dump", type=Path, help="Save per-frame contrast margins and labels (.npz)")
     args = parser.parse_args()
 
     device = select_device(args.device)
-    perception = Perception(load_encoder(device, default_dtype(device), args.vision_tokens), args.window_width)
+    perception = Perception(
+        load_encoder(device, default_dtype(device), args.vision_tokens), args.window_width, args.window_stride
+    )
     frames = labelled_frames()
     random.Random(0).shuffle(frames)
     frames = frames[: args.frames]
@@ -137,6 +142,7 @@ def main() -> None:
         "device": device,
         "vision_tokens": args.vision_tokens,
         "window_width": args.window_width,
+        "window_stride": args.window_stride,
         "crops_per_decision": readings[0]["crops"],
         "frames": len(frames),
         "seconds_per_frame": seconds / len(frames),
@@ -160,6 +166,15 @@ def main() -> None:
         "behaviour_accuracy": float(np.mean([behaviour[i] == m for i, m in INSTRUCTIONS.items()])),
         "behaviour": behaviour,
     }
+    if args.dump:
+        np.savez(
+            args.dump,
+            where=np.stack([r["where"] for r in readings]),
+            has_monster=has,
+            nearest=nearest,
+            in_window=in_window,
+            window_bearings=perception.window_bearings,
+        )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2))

@@ -18,7 +18,7 @@ from collections import Counter
 from pathlib import Path
 
 import numpy as np
-from gemma_doom import BAND_BOTTOM, BAND_TOP, STATUS_BAR_Y, THIRDS, default_dtype, load_encoder, select_device
+from gemma_doom import BAND_BOTTOM, BAND_TOP, STATUS_BAR_Y, default_dtype, load_encoder, select_device
 from PIL import Image
 from probe_zero_shot import MONSTERS, labelled_frames
 
@@ -32,6 +32,7 @@ COMMANDS = {
     "back_away": "back away from the monster",
     "search": "no monster in sight: turn around to search",
 }
+THIRDS = {"left": (0, 213), "front": (213, 427), "right": (427, 640)}
 VARIANTS = ("image", "image + state text", "state text", "3 labelled images + state text")
 
 

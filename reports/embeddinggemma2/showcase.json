@@ -1,0 +1,57 @@
+{
+  "title": "EmbeddingGemma 2 plays Doom, zero-shot",
+  "output": "embeddinggemma2-plays-doom.mp4",
+  "chapters": [
+    {
+      "start_seconds": 0.0,
+      "end_seconds": 7.0,
+      "title": "How it works"
+    },
+    {
+      "start_seconds": 7.0,
+      "end_seconds": 11.0,
+      "title": "ATTACK: Attack enemies on sight."
+    },
+    {
+      "start_seconds": 11.0,
+      "end_seconds": 71.0,
+      "title": "ATTACK gameplay"
+    },
+    {
+      "start_seconds": 71.0,
+      "end_seconds": 75.0,
+      "title": "EVADE: Do not shoot. Evade the enemies."
+    },
+    {
+      "start_seconds": 75.0,
+      "end_seconds": 135.0,
+      "title": "EVADE gameplay"
+    },
+    {
+      "start_seconds": 135.0,
+      "end_seconds": 143.0,
+      "title": "Results"
+    }
+  ],
+  "runs": [
+    {
+      "run": "eg2-show-attack",
+      "behaviour": "aggressive",
+      "instruction": "Attack enemies on sight.",
+      "kills": 37,
+      "deaths": 2,
+      "game_seconds": 60.0,
+      "mean_decision_ms": 287.08583049609194
+    },
+    {
+      "run": "eg2-show-evade",
+      "behaviour": "evasive",
+      "instruction": "Do not shoot. Evade the enemies.",
+      "kills": 0,
+      "deaths": 0,
+      "game_seconds": 60.0,
+      "mean_decision_ms": 274.63514911986533
+    }
+  ],
+  "probe": "zero-shot-probe-gpu-v2.json"
+}

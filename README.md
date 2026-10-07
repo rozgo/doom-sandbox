@@ -7,7 +7,7 @@ decide → advance one tic** loop (the `doom_bert` package):
 | --- | --- | --- | --- |
 | ModernBERT policy | Instruction + structured state text | 596K-parameter head on a frozen encoder | This page |
 | GLiNER2.5 comparison | Same state text | Zero-shot, then small heads | [Results](experiments/gliner2/RESULTS.md) · [setup](experiments/gliner2/README.md) |
-| EmbeddingGemma 2 | Instruction + **pixels**: view and HUD crops | None: cosine similarity to text prompts | [EmbeddingGemma 2 plays Doom zero-shot](experiments/embeddinggemma2/README.md) |
+| EmbeddingGemma 2 | Instruction + **pixels**: view and HUD crops | None: cosine similarity to text prompts | [EmbeddingGemma 2 plays Doom zero-shot](experiments/embeddinggemma2/README.md) · [video](media/embeddinggemma2-plays-doom.mp4) |
 
 The rest of this page covers the ModernBERT policy: a random baseline and a
 ModernBERT policy adapter accelerated by Apple Metal. Instructions and structured
