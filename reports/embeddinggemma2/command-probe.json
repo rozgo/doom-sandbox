@@ -1,0 +1,69 @@
+{
+  "frames": 100,
+  "situations": 300,
+  "commands": {
+    "fire": "shoot the monster straight ahead",
+    "turn_left": "turn left toward the monster on the left",
+    "turn_right": "turn right toward the monster on the right",
+    "back_away": "back away from the monster",
+    "search": "no monster in sight: turn around to search"
+  },
+  "teacher_command_counts": {
+    "search": 63,
+    "back_away": 137,
+    "fire": 47,
+    "turn_right": 31,
+    "turn_left": 22
+  },
+  "majority_baseline": 0.45666666666666667,
+  "variants": {
+    "image": {
+      "accuracy": 0.15666666666666668,
+      "by_mode": {
+        "aggressive": 0.26,
+        "cautious": 0.21,
+        "evasive": 0.0
+      },
+      "predicted_counts": {
+        "fire": 300
+      },
+      "evasive_fires": 100
+    },
+    "image + state text": {
+      "accuracy": 0.15666666666666668,
+      "by_mode": {
+        "aggressive": 0.26,
+        "cautious": 0.21,
+        "evasive": 0.0
+      },
+      "predicted_counts": {
+        "fire": 300
+      },
+      "evasive_fires": 100
+    },
+    "state text": {
+      "accuracy": 0.15666666666666668,
+      "by_mode": {
+        "aggressive": 0.26,
+        "cautious": 0.21,
+        "evasive": 0.0
+      },
+      "predicted_counts": {
+        "fire": 300
+      },
+      "evasive_fires": 100
+    },
+    "3 labelled images + state text": {
+      "accuracy": 0.10333333333333333,
+      "by_mode": {
+        "aggressive": 0.16,
+        "cautious": 0.15,
+        "evasive": 0.0
+      },
+      "predicted_counts": {
+        "turn_right": 300
+      },
+      "evasive_fires": 0
+    }
+  }
+}

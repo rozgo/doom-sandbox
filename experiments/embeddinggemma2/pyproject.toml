@@ -1,0 +1,17 @@
+[project]
+name = "doom-embeddinggemma2-experiment"
+version = "0.1.0"
+description = "Zero-shot EmbeddingGemma 2 multimodal checks and Doom control"
+requires-python = ">=3.12"
+dependencies = [
+    "accelerate>=1.0",
+    "doom-bert",
+    "sentence-transformers==6.1.0",
+    "torch==2.14.1",
+    "torchvision==0.29.1",
+    "transformers==5.19.0",
+    "torchcodec==0.17.0",
+]
+
+[tool.uv.sources]
+doom-bert = { path = "../..", editable = true }

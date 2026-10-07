@@ -78,8 +78,17 @@ class StatsOverlay:
         untrained: bool,
         video_clock: str,
         training_scope: str | None = None,
+        mode_label: str | None = None,
+        pipeline: tuple[str, str, str, str] | None = None,
     ):
         self.policy_name = policy_name
+        self.mode_label = mode_label
+        self.pipeline = pipeline or (
+            "STRUCTURED STATE",
+            "ModernBERT / ENCODER",
+            "7 SIGMOID SCORES",
+            "VALID BUTTON VECTOR",
+        )
         self.device = "METAL / MPS" if device == "mps" else (device or "CPU").upper()
         self.dtype = (dtype or "PYTHON").upper()
         self.instruction = instruction
@@ -115,6 +124,8 @@ class StatsOverlay:
         )
         if self.policy_name == "RANDOM BASELINE":
             label = "RANDOM POLICY / NO MODEL"
+        elif self.mode_label:
+            label = self.mode_label
         elif self.training_scope:
             label = "TRAINED HEAD / CONTROLLED STATE DEMO"
         draw.text(
@@ -280,10 +291,12 @@ class StatsOverlay:
             fill=MUTED,
         )
         nodes = [
-            (24, 224, "STRUCTURED STATE"),
-            (254, 484, "ModernBERT / ENCODER"),
-            (514, 694, "7 SIGMOID SCORES"),
-            (724, 984, "VALID BUTTON VECTOR"),
+            (left, right, label)
+            for (left, right), label in zip(
+                ((24, 224), (254, 484), (514, 694), (724, 984)),
+                self.pipeline,
+                strict=True,
+            )
         ]
         for index, (left, right, label) in enumerate(nodes):
             draw.rounded_rectangle(

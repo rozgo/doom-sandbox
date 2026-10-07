@@ -1,13 +1,18 @@
-# Doom Bert
+# Doom Sandbox
 
-ViZDoom with an **uncapped observe → decide → advance one tic** loop, a random
-baseline, and a ModernBERT policy adapter accelerated by Apple Metal.
-Instructions and structured state enter the model; button probabilities come out.
-Pixels are used only for screenshots and video.
+Language and embedding models playing ViZDoom through one **uncapped observe →
+decide → advance one tic** loop (the `doom_bert` package):
 
-The [GLiNER2.5 comparison](experiments/gliner2/RESULTS.md) tests zero-shot action
-classification and small imitation-training runs against this ModernBERT policy
-on the same Mac. [Experiment setup and reproduction](experiments/gliner2/README.md).
+| Experiment | Input | Training | Write-up |
+| --- | --- | --- | --- |
+| ModernBERT policy | Instruction + structured state text | 596K-parameter head on a frozen encoder | This page |
+| GLiNER2.5 comparison | Same state text | Zero-shot, then small heads | [Results](experiments/gliner2/RESULTS.md) · [setup](experiments/gliner2/README.md) |
+| EmbeddingGemma 2 | Instruction + **pixels**: view and HUD crops | None: cosine similarity to text prompts | [EmbeddingGemma 2 plays Doom zero-shot](experiments/embeddinggemma2/README.md) |
+
+The rest of this page covers the ModernBERT policy: a random baseline and a
+ModernBERT policy adapter accelerated by Apple Metal. Instructions and structured
+state enter the model; button probabilities come out. Pixels are used only for
+screenshots and video.
 
 **A small trained checkpoint is included:** `models/controlled-demo`. It learns
 seven button scores from known instructions and a controlled description of live

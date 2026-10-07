@@ -206,13 +206,17 @@ def play(
         game.init()
         if stats:
             overlay = StatsOverlay(
-                policy_name="ModernBERT" if policy is not None else "RANDOM BASELINE",
+                policy_name=getattr(policy, "display_name", "ModernBERT")
+                if policy is not None
+                else "RANDOM BASELINE",
                 device=getattr(policy, "device", None),
                 dtype=getattr(policy, "dtype", None),
                 instruction=instruction,
                 untrained=bool(getattr(policy, "untrained_head", False)),
                 video_clock=video_clock,
                 training_scope=summary["training_scope"],
+                mode_label=getattr(policy, "mode_label", None),
+                pipeline=getattr(policy, "pipeline_labels", None),
             )
             if not headless:
                 preview = LivePreview()
@@ -323,7 +327,11 @@ def play(
                     if policy is None:
                         action = rng.choice(candidates)
                     else:
-                        scores = policy(instruction, record)
+                        scores = (
+                            policy(instruction, record, screen=state.screen_buffer)
+                            if getattr(policy, "uses_screen", False)
+                            else policy(instruction, record)
+                        )
                         action = decode_scores(scores, buttons, candidates)
                     inference_ms = (time.monotonic() - decision_started) * 1000
                     decision_seconds += inference_ms / 1000
@@ -370,6 +378,7 @@ def play(
                         else None,
                         "input_tokens": getattr(policy, "last_token_count", None),
                         "state_text": getattr(policy, "last_state_text", None),
+                        "policy_details": getattr(policy, "last_details", None),
                         **metric_values,
                     }
                 )
