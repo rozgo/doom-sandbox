@@ -22,7 +22,9 @@ import subprocess
 from pathlib import Path
 
 import imageio_ffmpeg
-from PIL import Image
+from PIL import Image, ImageDraw
+
+from doom_bert.overlay import font
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT/"site/journals"
@@ -139,6 +141,46 @@ def check_references(page, made, name):
         print(f"  {name}: built but unused: {unused}")
 
 
+SOCIAL = (1200, 630)  # Open Graph / Twitter large-card size
+
+
+def site():
+    return json.loads((SRC/"hub/hub.json").read_text())
+
+
+def social_image(src, out, background):
+    """Fit a poster into a 1200x630 JPEG (the format every link preview accepts), padding with the theme colour."""
+    image = Image.open(src).convert("RGB")
+    scale = min(SOCIAL[0]/image.width, SOCIAL[1]/image.height)
+    image = image.resize((round(image.width*scale), round(image.height*scale)), Image.Resampling.LANCZOS)
+    canvas = Image.new("RGB", SOCIAL, background)
+    canvas.paste(image, ((SOCIAL[0]-image.width)//2, (SOCIAL[1]-image.height)//2))
+    canvas.save(out, "JPEG", quality=86, optimize=True, progressive=True)
+
+
+def social_meta(url, title, description, image, alt, kind="article"):
+    """Open Graph and Twitter card tags; image URLs carry a content hash so previews refresh when it changes."""
+    version = hashlib.sha256(image.read_bytes()).hexdigest()[:12]
+    image_url = f"{url}{image.name}?v={version}"
+    tags = [f'<link rel="canonical" href="{url}">',
+            f'<meta property="og:type" content="{kind}">',
+            f'<meta property="og:site_name" content="{html.escape(site()["site_name"])}">',
+            f'<meta property="og:title" content="{title}">',
+            f'<meta property="og:description" content="{description}">',
+            f'<meta property="og:url" content="{url}">',
+            f'<meta property="og:image" content="{image_url}">',
+            '<meta property="og:image:type" content="image/jpeg">',
+            f'<meta property="og:image:width" content="{SOCIAL[0]}">',
+            f'<meta property="og:image:height" content="{SOCIAL[1]}">',
+            f'<meta property="og:image:alt" content="{html.escape(alt)}">',
+            '<meta name="twitter:card" content="summary_large_image">',
+            f'<meta name="twitter:title" content="{title}">',
+            f'<meta name="twitter:description" content="{description}">',
+            f'<meta name="twitter:image" content="{image_url}">',
+            f'<meta name="twitter:image:alt" content="{html.escape(alt)}">']
+    return "\n  ".join(tags)
+
+
 def build_journal(jid):
     folder_src = SRC/jid
     spec = json.loads((folder_src/"journal.json").read_text())
@@ -153,7 +195,11 @@ def build_journal(jid):
     page = (SRC/"template.html").read_text()
     metrics = "".join(f'<div class="metric"><div class="value">{m["value"]}</div><div class="label">{m["label"]}</div></div>'
                       for m in spec["metrics"])
-    fields = {"title": html.escape(spec["title"]), "description": html.escape(spec["description"]),
+    url = f'{site()["site_url"]}{jid}/'
+    social_image(source(spec["card"]["poster"]), out/"social.jpg", spec["theme"]["tokens"]["film"])
+    social = social_meta(url, html.escape(spec["title"]), html.escape(spec["description"]), out/"social.jpg",
+                         spec["heading"])
+    fields = {"social": social, "title": html.escape(spec["title"]), "description": html.escape(spec["description"]),
               "theme_color": spec["theme"]["theme_color"], "scheme": spec["theme"]["scheme"],
               "css_version": hashlib.sha256(css).hexdigest()[:12], "tokens": tokens(spec["theme"]),
               "eyebrow": spec["eyebrow"], "heading": spec["heading"], "lede": spec["lede"],
@@ -170,6 +216,32 @@ def build_journal(jid):
     size = sum(p.stat().st_size for p in out.rglob("*") if p.is_file())
     print(f"{jid}: {len(made)} media files, {size/1e6:.1f} MB")
     return spec
+
+
+def hub_social(spec, journals, out):
+    """Home-page preview: the site title over the experiments' posters, each with its accent colour."""
+    canvas = Image.new("RGB", SOCIAL, "#0f0b0a")
+    draw = ImageDraw.Draw(canvas)
+    for y in range(SOCIAL[1]):  # the hub hero's ember gradient, top to bottom
+        t = y / SOCIAL[1]
+        draw.line((0, y, SOCIAL[0], y), fill=tuple(round(a + (b - a) * t) for a, b in zip((15, 11, 10), (74, 26, 18), strict=True)))
+    draw.text((60, 52), spec["site_name"], font=font(64, bold=True), fill="#f6efe9")
+    draw.text((62, 134), spec["social_line"], font=font(28), fill="#e7d9cf")
+    count = len(spec["projects"])
+    gap, width = 28, (SOCIAL[0] - 120 - 28 * (count - 1)) // count
+    height = round(width * 9 / 16)
+    for i, entry in enumerate(spec["projects"]):
+        j = journals.get(entry["id"]) or json.loads((SRC/entry["id"]/"journal.json").read_text())
+        poster = Image.open(source(j["card"]["poster"])).convert("RGB")
+        scale = max(width / poster.width, height / poster.height)
+        poster = poster.resize((round(poster.width*scale), round(poster.height*scale)), Image.Resampling.LANCZOS)
+        left, top = (poster.width - width)//2, (poster.height - height)//2
+        x, y = 60 + i * (width + gap), 220
+        canvas.paste(poster.crop((left, top, left + width, top + height)), (x, y))
+        draw.rectangle((x, y + height, x + width, y + height + 6), fill=j["theme"]["tokens"]["accent"])
+        draw.text((x, y + height + 22), entry["short"], font=font(26, bold=True), fill="#f6efe9")
+        draw.text((x, y + height + 58), entry["detail"], font=font(20), fill="#d9c9be")
+    canvas.save(out, "JPEG", quality=86, optimize=True, progressive=True)
 
 
 def build_hub(journals):
@@ -199,6 +271,10 @@ def build_hub(journals):
       </div>
     </a>''')
     page = (SRC/"hub/index.html").read_text().replace("{{cards}}", "\n".join(cards))
+    hub_social(spec, journals, out/"social.jpg")
+    description = re.search(r'<meta name="description" content="([^"]*)"', page).group(1)
+    page = page.replace("{{social}}", social_meta(spec["site_url"], html.escape(spec["site_name"]), description,
+                                                  out/"social.jpg", spec["social_alt"], kind="website"))
     css = (SRC/"hub/hub.css").read_bytes()
     (out/"hub.css").write_bytes(css)
     page = page.replace("{{css_version}}", hashlib.sha256(css).hexdigest()[:12])

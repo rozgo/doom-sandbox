@@ -1,7 +1,26 @@
 {
+ "site_name": "Doom Sandbox",
+ "site_url": "https://rozgo.github.io/doom-sandbox/",
+ "social_line": "Language and embedding models playing Doom",
+ "social_alt": "Doom Sandbox: dashboards of EmbeddingGemma 2, ModernBERT and GLiNER2.5 playing Doom",
  "projects": [
-  {"id": "embeddinggemma2", "title": "EmbeddingGemma 2, zero-shot from pixels"},
-  {"id": "modernbert", "title": "ModernBERT policy"},
-  {"id": "gliner2", "title": "GLiNER2.5, zero-shot then fine-tuned"}
+  {
+   "id": "embeddinggemma2",
+   "title": "EmbeddingGemma 2, zero-shot from pixels",
+   "short": "EmbeddingGemma 2",
+   "detail": "zero-shot, reads the screen"
+  },
+  {
+   "id": "modernbert",
+   "title": "ModernBERT policy",
+   "short": "ModernBERT",
+   "detail": "trained head, state as text"
+  },
+  {
+   "id": "gliner2",
+   "title": "GLiNER2.5, zero-shot then fine-tuned",
+   "short": "GLiNER2.5",
+   "detail": "fine-tuned, state as text"
+  }
  ]
 }
