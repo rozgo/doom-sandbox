@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GLiNER2.5 Doom Journal</title>
+  <meta name="description" content="GLiNER2.5 Small and Base score Doom actions zero-shot and with small trained heads, measured against the trained ModernBERT policy on the same observations.">
+  <meta name="theme-color" content="#0b5a4e">
+  <link rel="stylesheet" href="journal.css?v=9f6d9a056439">
+  <style>:root { color-scheme: light; --bg: #f4f1ea; --text: #1c1a16; --muted: #67625a; --card: #ffffff; --line: #e3ddd2; --link: #0b7a68; --chip: #ebe6db; --soft: #e1efe9; --bad: #b8452d; --bad-soft: #f7e6e0; --accent: #0b8f7a; --accent-2: #c0492f; --accent-3: #8a7f6e; --on-accent: #ffffff; --hero: linear-gradient(120deg, #0d2b27 0%, #0b4a41 45%, #0b7a68 85%, #0b8f7a 100%); --hero-text: #f2fbf8; --film: #14130f; --metric: rgba(255, 255, 255, .14); --toc: rgba(244, 241, 234, .94); --tile-1: linear-gradient(135deg, #0b8f7a, #08665a); --tile-2: linear-gradient(135deg, #5b5448, #3a352c); --tile-3: linear-gradient(135deg, #c0492f, #8a3220); --tile-4: linear-gradient(135deg, #7a7060, #4f483d); --tile-text: #ffffff; }</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <a class="home-link" href="../">&larr; Doom Sandbox</a>
+    <p class="eyebrow">Engineering journal · September 19, 2026 · ViZDoom, GLiNER2.5, ModernBERT, Apple Metal</p>
+    <h1>Can a zero-shot classifier play Doom without Doom training?</h1>
+    <p class="lede">GLiNER2.5 classifies text against labels it is given at run time, so it can score Doom actions it was never trained on. We gave its Small and Base models the same game observations as the trained ModernBERT policy, first with no Doom examples, then with only their classification head adapted on 32 to 372. 10,500 live decisions later, the answer was yes, partly, and not better than ModernBERT.</p>
+    <figure class="hero-film">
+      <img src="media/results.webp" alt="Three bar panels comparing five pipelines: decisions per second, agreement with the teacher on held-out states, and on new phrasings">
+      <figcaption>Five pipelines on the same observations, drawn from reports/gliner2-experiment/summary.json. Agreement is the exact seven-button vector against the scripted teacher; low agreement is not the same as being unable to play.</figcaption>
+    </figure>
+    <div class="metrics"><div class="metric"><div class="value">0.976 → 0.022</div><div class="label">Base, zero-shot: ATTACK score when “attack” becomes “do not shoot”, same state</div></div><div class="metric"><div class="value">53.5 vs 31.3</div><div class="label">decisions/s: ModernBERT vs zero-shot GLiNER2.5 Base, headless</div></div><div class="metric"><div class="value">70.8%</div><div class="label">Small with 128 examples on new phrasings, vs 56.3% for ModernBERT</div></div><div class="metric"><div class="value">6 / 8</div><div class="label">conditional firing probes ModernBERT got right; GLiNER at most 4 / 8</div></div><div class="metric"><div class="value">10,500</div><div class="label">live decisions, each one full encoder pass</div></div></div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Chapters">
+  <div class="wrap"><a href="#question">1 The question</a><a href="#speed">2 Speed</a><a href="#behaviour">3 What it did in the game</a><a href="#training">4 A little training</a><a href="#conditional">5 Conditional instructions</a><a href="#verdict">6 Verdict</a></div>
+</nav>
+
+<main class="wrap">
+  <div class="scope"><strong>Where this stands.</strong> A small exploratory comparison on one Mac. All five pipelines read the same observations, each in its own text format, and decide through the same legal-action decoder. Training here means adapting only GLiNER's existing classification layers for a fixed 600 steps, not an optimized benchmark. The scripted teacher supplied labels offline; nothing at play time reads it. Every number on this page comes from <code>reports/gliner2-experiment/</code>.</div>
+  <section id="question">
+    <h2>1 · The question</h2>
+    <p class="when">September 19 · five pipelines, one set of observations</p>
+    <div class="prose">
+      <p>The ModernBERT policy needed 372 labelled Doom examples to learn its seven button scores. GLiNER2.5 is built to
+        classify text against labels supplied at run time, so it can be handed descriptions of Doom actions and asked
+        which apply, with no Doom training at all. Could it play? And if a little training helped, how little?</p>
+      <p>Each pipeline scored the same 516 evaluation pairs and played six 20-game-second headless runs: three
+        instructions (attack, evade, cautious) on two seeds, 2,100 live decisions per pipeline.</p>
+    </div>
+    <div class="spec-cards">
+      <div class="card"><h4>The pipelines</h4><ul>
+        <li>ModernBERT with its trained head (372 examples), the reference</li>
+        <li>GLiNER2.5 Small and Base, zero-shot</li>
+        <li>GLiNER2.5 Small and Base with their classification layers adapted on a few examples</li>
+      </ul></div>
+      <div class="card"><h4>The setup</h4><ul>
+        <li>Apple M3 Max, PyTorch 2.14, Metal (MPS) float16, batch one</li>
+        <li>Same observations and legal-action decoder for every pipeline</li>
+        <li>GLiNER inputs are 227–253 tokens with the action descriptions; ModernBERT's are 25–36</li>
+      </ul></div>
+      <div class="card"><h4>What counts</h4><ul>
+        <li>Speed: the whole classification, and the headless game loop</li>
+        <li>Agreement: the exact seven-button vector against the scripted teacher</li>
+        <li>Behaviour: kills, deaths, ammo and stillness in the live runs</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="speed">
+    <h2>2 · Speed</h2>
+    <p class="when">September 19 · complete pipelines, not equal-length kernels</p>
+    <div class="table-wrap"><table>
+      <tr><th>Pipeline</th><th class="num">Doom examples</th><th class="num">Per classification</th><th class="num">Headless loop</th></tr>
+      <tr class="hl"><td>ModernBERT</td><td class="num">372</td><td class="num">12.0 ms</td><td class="num">53.5 decisions/s</td></tr>
+      <tr><td>GLiNER2.5 Small</td><td class="num">0</td><td class="num">15.8 ms</td><td class="num">46.1 decisions/s</td></tr>
+      <tr><td>GLiNER2.5 Base</td><td class="num">0</td><td class="num">24.4 ms</td><td class="num">31.3 decisions/s</td></tr>
+      <tr><td>GLiNER2.5 Small, adapted head</td><td class="num">128</td><td class="num">14.6 ms</td><td class="num">42.8 decisions/s</td></tr>
+      <tr><td>GLiNER2.5 Base, adapted head</td><td class="num">32</td><td class="num">23.5 ms</td><td class="num">27.5 decisions/s</td></tr>
+    </table></div>
+    <div class="prose">
+      <p>Classification covers building the text, tokenizing, the complete encoder, moving scores to the CPU and decoding;
+        loading and ten warm-up calls are excluded. The headless loop includes the game, logs and screenshots, and is
+        total decisions over total wall time. All averages stayed above the 17.5 decisions per second that two tics per
+        decision need at native game speed, although one adapted-Base cautious run fell below it.</p>
+      <p>On the CPU (float32, four threads), Small averaged 36.6 ms and Base 74.9 ms. CPU and Metal scores differed by
+        at most 0.00062 and 0.00223, with identical first decisions, so the weaknesses below are not a float16 artefact.</p>
+    </div>
+    <div class="note-box"><strong>Not the video's number.</strong> The ModernBERT film's 44 decisions per second included
+      the dashboard and video encoder. It is not the baseline here; no video was recorded for this comparison.</div>
+  </section>
+
+  <section id="behaviour">
+    <h2>3 · What it did in the game</h2>
+    <p class="when">September 19 · zero-shot responsiveness, and its limits</p>
+    <div class="prose">
+      <p>On an identical healthy state with ammo and an enemy lined up, zero-shot Base's ATTACK score fell from 0.976
+        for “Attack enemies on sight.” to 0.022 for “Do not shoot. Evade the enemies.” Its evasion runs used no ammo, and it
+        reacted to where enemies were, although it chose right turns inconsistently.</p>
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>Kills / deaths, two seeds × 20 game seconds</th><th class="num">Attack</th><th class="num">Evade</th><th class="num">Cautious</th></tr>
+      <tr class="hl"><td>ModernBERT</td><td class="num">18 / 0</td><td class="num">0 / 0</td><td class="num">9 / 1</td></tr>
+      <tr><td>Small, zero-shot</td><td class="num">9 / 4</td><td class="num">0 / 4</td><td class="num">0 / 4</td></tr>
+      <tr><td>Base, zero-shot</td><td class="num">8 / 3</td><td class="num">0 / 1</td><td class="num">21 / 1</td></tr>
+      <tr><td>Small, 128 examples</td><td class="num">14 / 1</td><td class="num">0 / 0</td><td class="num">0 / 0</td></tr>
+      <tr><td>Base, 32 examples</td><td class="num">19 / 1</td><td class="num">0 / 0</td><td class="num">0 / 0</td></tr>
+    </table></div>
+    <div class="failure"><strong>Obedient by standing still.</strong> Zero-shot Small changed its firing scores with the
+      instruction, but its movement scores stayed too low: it stood still for every decision of both evasion runs and died
+      in each. A no-fire check alone would have hidden this.</div>
+    <div class="prose">
+      <p>Kills and deaths are not a full measure of skill, and these are short runs. Zero-shot Base scored more cautious
+        kills than ModernBERT, but that does not show reliable conditional behaviour; the probes in chapter 5 test that directly.</p>
+    </div>
+  </section>
+
+  <section id="training">
+    <h2>4 · A little training</h2>
+    <p class="when">September 19 · heads only, 32 to 372 examples</p>
+    <div class="prose">
+      <p>Both GLiNER sizes were tried with 32, 128 and 372 training examples, keeping the encoder frozen and adapting only
+        the existing classification layers, 600 steps each with the same settings. The smallest budget reaching the best
+        validation agreement went on to gameplay: 128 for Small and 32 for Base. The original whole-state splits were kept,
+        and the test sets chose nothing.</p>
+    </div>
+    <div class="table-wrap"><table>
+      <tr><th>Exact agreement with the teacher</th><th class="num">Held-out states, 48 pairs</th><th class="num">New phrasings, 48 pairs</th></tr>
+      <tr><td>ModernBERT</td><td class="num">81.25%</td><td class="num">56.25%</td></tr>
+      <tr><td>Small, zero-shot</td><td class="num">2.08%</td><td class="num">2.08%</td></tr>
+      <tr><td>Base, zero-shot</td><td class="num">4.17%</td><td class="num">4.17%</td></tr>
+      <tr class="hl"><td>Small, 128 examples</td><td class="num">75.00%</td><td class="num">70.83%</td></tr>
+      <tr><td>Base, 32 examples</td><td class="num">70.83%</td><td class="num">41.67%</td></tr>
+    </table></div>
+    <div class="prose">
+      <p>Head optimisation took 0.75–1.19 seconds per Small budget and 1.79–2.95 seconds per Base budget, plus 8.46 and
+        13.89 seconds of shared feature extraction. Both adapted heads moved and survived both evasion runs without
+        firing.</p>
+    </div>
+    <div class="failure"><strong>Cautious became silent.</strong> Both adapted heads never fired in their cautious runs,
+      even at full health.</div>
+    <div class="note-box"><strong>Small numbers.</strong> The held-out set has eight distinct states, two positive ATTACK
+      examples and no positive MOVE_FORWARD. Small's new-phrasing result is promising for this narrow test, not proof of
+      better general instruction understanding.</div>
+  </section>
+
+  <section id="conditional">
+    <h2>5 · Conditional instructions</h2>
+    <p class="when">September 19 · “fire only when health is at least 40”</p>
+    <div class="prose">
+      <p>“Shoot at enemies, but retreat when health falls below 40” never forbids firing while retreating. To remove that
+        ambiguity, a follow-up tested the explicit known phrasing “Fight, but stop shooting and retreat below 40 health”
+        and one new phrasing, at health 20, 39, 40 and 80, with no model or threshold changed.</p>
+    </div>
+    <div class="result-strip">
+      <div class="tile"><div class="big">6<small> / 8</small></div><div class="what">ModernBERT</div><div class="vs">all four known-phrasing cases; missed firing above 40 under the new phrasing</div></div>
+      <div class="tile"><div class="big">4<small> / 8</small></div><div class="what">Small and Base zero-shot, Small adapted</div><div class="vs">results changed substantially with wording</div></div>
+      <div class="tile"><div class="big">3<small> / 8</small></div><div class="what">Base adapted</div><div class="vs">32 training examples</div></div>
+    </div>
+    <div class="prose">
+      <p>The health categories already split at 40, so these probes test the vocabulary, not general numerical reasoning.
+        Neither approach establishes arbitrary instruction following.</p>
+    </div>
+  </section>
+
+  <section id="verdict">
+    <h2>6 · Verdict</h2>
+    <p class="when">What the comparison supports</p>
+    <div class="lesson"><strong>Zero-shot works, but is not an upgrade.</strong> GLiNER2.5 Base attacked and evaded with no
+      Doom training, which makes it a good subject for a zero-shot demonstration. ModernBERT stayed faster and more
+      reliable on the task it was trained for, and the evidence does not support a faster-or-better claim.</div>
+    <ol class="next-steps">
+      <li><strong>From text to pixels</strong>The same question, can a model play without Doom training, was later asked
+        of a multimodal embedding model reading the screen; see the <a href="../embeddinggemma2/">EmbeddingGemma 2
+        journal</a>.</li>
+      <li><strong>The trained reference</strong>How the ModernBERT policy was built and recorded is in the
+        <a href="../modernbert/">ModernBERT journal</a>.</li>
+    </ol>
+  </section>
+
+</main>
+
+<footer class="wrap"><p>Source, setup and reports: <a href="https://github.com/rozgo/doom-sandbox">rozgo/doom-sandbox</a>, <code>experiments/gliner2/</code>, <code>reports/gliner2-experiment/</code> (with a SHA-256 manifest and the raw predictions and game logs). Models: GLiNER2.5 Small and Base from fastino, ModernBERT-base from Answer.AI. Engine: ViZDoom with Freedoom assets. No video was recorded for this experiment.</p></footer>
+</body>
+</html>
