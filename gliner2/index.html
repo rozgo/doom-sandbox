@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GLiNER2.5 Doom Journal</title>
-  <meta name="description" content="GLiNER2.5 Small and Base score Doom actions zero-shot and with small trained heads, measured against the trained ModernBERT policy on the same observations.">
+  <meta name="description" content="GLiNER2.5 scores Doom&#x27;s buttons from an instruction and the game state as text: zero-shot it fell short, fine-tuned on 12,000 teacher-labelled examples it matches the teacher on every held-out test.">
   <meta name="theme-color" content="#0b5a4e">
   <link rel="stylesheet" href="journal.css?v=9f6d9a056439">
   <style>:root { color-scheme: light; --bg: #f4f1ea; --text: #1c1a16; --muted: #67625a; --card: #ffffff; --line: #e3ddd2; --link: #0b7a68; --chip: #ebe6db; --soft: #e1efe9; --bad: #b8452d; --bad-soft: #f7e6e0; --accent: #0b8f7a; --accent-2: #c0492f; --accent-3: #8a7f6e; --on-accent: #ffffff; --hero: linear-gradient(120deg, #0d2b27 0%, #0b4a41 45%, #0b7a68 85%, #0b8f7a 100%); --hero-text: #f2fbf8; --film: #14130f; --metric: rgba(255, 255, 255, .14); --toc: rgba(244, 241, 234, .94); --tile-1: linear-gradient(135deg, #0b8f7a, #08665a); --tile-2: linear-gradient(135deg, #5b5448, #3a352c); --tile-3: linear-gradient(135deg, #c0492f, #8a3220); --tile-4: linear-gradient(135deg, #7a7060, #4f483d); --tile-text: #ffffff; }</style>
@@ -13,23 +13,23 @@
 <header class="hero">
   <div class="wrap">
     <a class="home-link" href="../">&larr; Doom Sandbox</a>
-    <p class="eyebrow">Engineering journal · September 19, 2026 · ViZDoom, GLiNER2.5, ModernBERT, Apple Metal</p>
-    <h1>Can a zero-shot classifier play Doom without Doom training?</h1>
-    <p class="lede">GLiNER2.5 classifies text against labels it is given at run time, so it can score Doom actions it was never trained on. We gave its Small and Base models the same game observations as the trained ModernBERT policy, first with no Doom examples, then with only their classification head adapted on 32 to 372. 10,500 live decisions later, the answer was yes, partly, and not better than ModernBERT.</p>
+    <p class="eyebrow">Engineering journal · September 19 and October 6, 2026 · ViZDoom, GLiNER2.5, ModernBERT, RTX 4090</p>
+    <h1>Teaching GLiNER2.5 to play Doom: zero-shot first, then fine-tuned</h1>
+    <p class="lede">GLiNER2.5 scores text against labels it is given at run time, so it can rate Doom's seven buttons with no Doom training. The first attempt, zero-shot and with small adapted heads, fell short of the trained ModernBERT policy. The second fixed the training data and fine-tuned the whole model on an RTX 4090 in under four minutes. It then matched the scripted teacher on every held-out test state and new phrasing, passed all eight conditional probes, and played six evaluation games without dying.</p>
     <figure class="hero-film">
-      <img src="media/results.webp" alt="Three bar panels comparing five pipelines: decisions per second, agreement with the teacher on held-out states, and on new phrasings">
-      <figcaption>Five pipelines on the same observations, drawn from reports/gliner2-experiment/summary.json. Agreement is the exact seven-button vector against the scripted teacher; low agreement is not the same as being unable to play.</figcaption>
+      <video src="media/showcase.mp4" poster="media/showcase_poster.webp" controls muted playsinline preload="metadata"></video>
+      <figcaption>The 3 min 27 s showcase, recorded on an RTX 4090 and played back at normal game speed: GLiNER2.5 Base after full fine-tuning, in complete 60-second runs. Attack: 20 kills, 1 death. Evade: no shots, 1 death. Cautious (“retreat when health falls below 40”): 17 kills, 1 death. The dashboard shows the model's own seven sigmoid scores on every decision; a decoder only blocks impossible button combinations.</figcaption>
     </figure>
-    <div class="metrics"><div class="metric"><div class="value">0.976 → 0.022</div><div class="label">Base, zero-shot: ATTACK score when “attack” becomes “do not shoot”, same state</div></div><div class="metric"><div class="value">53.5 vs 31.3</div><div class="label">decisions/s: ModernBERT vs zero-shot GLiNER2.5 Base, headless</div></div><div class="metric"><div class="value">70.8%</div><div class="label">Small with 128 examples on new phrasings, vs 56.3% for ModernBERT</div></div><div class="metric"><div class="value">6 / 8</div><div class="label">conditional firing probes ModernBERT got right; GLiNER at most 4 / 8</div></div><div class="metric"><div class="value">10,500</div><div class="label">live decisions, each one full encoder pass</div></div></div>
+    <div class="metrics"><div class="metric"><div class="value">100%</div><div class="label">held-out test states and new phrasings, fine-tuned Base (first attempt: 75% and 71% at best)</div></div><div class="metric"><div class="value">8 / 8</div><div class="label">explicit conditional probes, “fire only at 40+ health” (first attempt: at most 4 / 8)</div></div><div class="metric"><div class="value">0 deaths</div><div class="label">in six 20-second evaluation games, both fine-tuned sizes</div></div><div class="metric"><div class="value">232 s</div><div class="label">to fine-tune all 193.6M parameters of Base on 12,000 examples, RTX 4090</div></div><div class="metric"><div class="value">12.5 ms</div><div class="label">per decision, the full encoder every time; 54 decisions/s headless</div></div></div>
   </div>
 </header>
 
 <nav class="toc" aria-label="Chapters">
-  <div class="wrap"><a href="#question">1 The question</a><a href="#speed">2 Speed</a><a href="#behaviour">3 What it did in the game</a><a href="#training">4 A little training</a><a href="#conditional">5 Conditional instructions</a><a href="#verdict">6 Verdict</a></div>
+  <div class="wrap"><a href="#question">1 The question</a><a href="#speed">2 Speed</a><a href="#behaviour">3 What it did in the game</a><a href="#training">4 A little training</a><a href="#conditional">5 Conditional instructions</a><a href="#verdict">6 First verdict</a><a href="#why">7 Why the first attempt fell short</a><a href="#data">8 Better data from the same teacher</a><a href="#finetune">9 Fine-tuning the whole model</a><a href="#playing">10 Playing it</a><a href="#verdict-2">11 Verdict</a></div>
 </nav>
 
 <main class="wrap">
-  <div class="scope"><strong>Where this stands.</strong> A small exploratory comparison on one Mac. All five pipelines read the same observations, each in its own text format, and decide through the same legal-action decoder. Training here means adapting only GLiNER's existing classification layers for a fixed 600 steps, not an optimized benchmark. The scripted teacher supplied labels offline; nothing at play time reads it. Every number on this page comes from <code>reports/gliner2-experiment/</code>.</div>
+  <div class="scope"><strong>Where this stands.</strong> Both attempts imitate a scripted teacher from the game state described as text. GLiNER never sees pixels and adds no rules of its own; a decoder only blocks impossible button combinations. The second attempt trained on 12,000 teacher-labelled examples, while the ModernBERT reference kept its original 372-example head and was not retrained on them. Test states, test phrasings and one probe phrasing were never trained on. The RTX 4090 was shared with another inference service, so timings are indicative. Every number on this page comes from <code>reports/gliner2-experiment/</code> (first attempt) or <code>reports/gliner2-v2/</code> (second).</div>
   <section id="question">
     <h2>1 · The question</h2>
     <p class="when">September 19 · five pipelines, one set of observations</p>
@@ -79,7 +79,7 @@
         at most 0.00062 and 0.00223, with identical first decisions, so the weaknesses below are not a float16 artefact.</p>
     </div>
     <div class="note-box"><strong>Not the video's number.</strong> The ModernBERT film's 44 decisions per second included
-      the dashboard and video encoder. It is not the baseline here; no video was recorded for this comparison.</div>
+      the dashboard and video encoder. It is not the baseline here; no video was recorded for this first comparison.</div>
   </section>
 
   <section id="behaviour">
@@ -156,22 +156,144 @@
   </section>
 
   <section id="verdict">
-    <h2>6 · Verdict</h2>
-    <p class="when">What the comparison supports</p>
-    <div class="lesson"><strong>Zero-shot works, but is not an upgrade.</strong> GLiNER2.5 Base attacked and evaded with no
-      Doom training, which makes it a good subject for a zero-shot demonstration. ModernBERT stayed faster and more
-      reliable on the task it was trained for, and the evidence does not support a faster-or-better claim.</div>
+    <h2>6 · First verdict</h2>
+    <p class="when">September 19 · what the first comparison supported</p>
+    <figure><img src="media/results.webp" alt="Three bar panels comparing the five first-attempt pipelines: decisions per second, agreement on held-out states and on new phrasings" loading="lazy">
+      <figcaption>The first attempt on an Apple M3 Max, drawn from <code>reports/gliner2-experiment/summary.json</code>.</figcaption></figure>
+    <div class="failure"><strong>Zero-shot works, but was not an upgrade.</strong> GLiNER2.5 Base attacked and evaded with
+      no Doom training, which makes it a good subject for a zero-shot demonstration. ModernBERT stayed faster and more
+      reliable on the task it was trained for, and adapted heads fell silent on conditional instructions. The evidence did
+      not support a faster-or-better claim. Two weeks later we tried again.</div>
+  </section>
+
+  <section id="why">
+    <h2>7 · Why the first attempt fell short</h2>
+    <p class="when">October 6 · reading the first attempt's data and training</p>
+    <div class="prose">
+      <p>Three things limited the first attempt, and none of them was GLiNER itself.</p>
+    </div>
+    <div class="spec-cards">
+      <div class="card"><h4>The data could not show the rule</h4><ul>
+        <li>The 468 controlled pairs only ever said health 10, 30 or 100</li>
+        <li>Nothing near 40, so “retreat below 40” had no boundary to learn</li>
+        <li>Ammunition was always 0 or 10</li>
+      </ul></div>
+      <div class="card"><h4>Too few situations</h4><ul>
+        <li>62 distinct training states, at most 372 examples</li>
+        <li>One fixed bearing and one distance per enemy category</li>
+        <li>Two phrasings per instruction</li>
+      </ul></div>
+      <div class="card"><h4>A frozen encoder</h4><ul>
+        <li>Only the small classification layers were adapted</li>
+        <li>The encoder's features were never trained to combine the instruction with the state</li>
+        <li>So “retreat below 40” had to be read off features that did not represent it</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="data">
+    <h2>8 · Better data from the same teacher</h2>
+    <p class="when">October 6 · 12,000 labelled examples, nothing hand-labelled</p>
+    <div class="prose">
+      <p>The scripted teacher can label any state, so the second attempt generated them
+        (<code>teacher_data.py</code>). Each sample draws a health value from 1 to 100, half of them near the 20 and 40
+        boundaries; ammunition from 0 to 50, empty a quarter of the time; and an enemy that is absent or to the left,
+        ahead or right, at a random bearing and distance within its range category. The teacher labels every state for
+        all three behaviours, and each label is paired with one of five or six training phrasings: 4,000 states, 12,000
+        examples, plus 1,200 for validation.</p>
+    </div>
+    <div class="lesson"><strong>Keep the tests honest.</strong> The original test and validation state combinations
+      (health and ammo categories, enemy side and range) never appear in training; validation draws only from the
+      validation combinations. The fixed new test phrasings and one explicit conditional probe phrasing are never
+      trained on, and the script refuses to run if one leaks in.</div>
+  </section>
+
+  <section id="finetune">
+    <h2>9 · Fine-tuning the whole model</h2>
+    <p class="when">October 6 · an RTX 4090, minutes per model</p>
+    <div class="prose">
+      <p>Training runs through GLiNER's own scoring path, the same calls as inference without inference mode, so the
+        model is trained on exactly the text and labels it scores at play time; a check confirmed the two paths give
+        identical logits. Three epochs, batch 32, AdamW, bfloat16; the checkpoint is chosen on the held-out validation
+        states. To separate the effect of better data from the effect of fine-tuning, the same data also trained only
+        the classification layers with the encoder frozen.</p>
+    </div>
+    <figure><img src="media/second.webp" alt="Three bar panels comparing seven pipelines on held-out states, new phrasings and conditional probes" loading="lazy">
+      <figcaption>All seven pipelines re-measured on the RTX 4090, float16, batch one
+        (<code>reports/gliner2-v2/summary.json</code>).</figcaption></figure>
+    <div class="table-wrap"><table>
+      <tr><th>Pipeline</th><th class="num">Trained</th><th class="num">Training</th><th class="num">Test states</th><th class="num">New phrasings</th><th class="num">Conditional</th><th class="num">Per decision</th></tr>
+      <tr><td>ModernBERT, 372 examples</td><td class="num">head</td><td class="num">3.6 s</td><td class="num">81.2%</td><td class="num">56.2%</td><td class="num">6 / 8</td><td class="num">9.6 ms</td></tr>
+      <tr><td>GLiNER2.5 Small, zero-shot</td><td class="num">—</td><td class="num">—</td><td class="num">2.1%</td><td class="num">2.1%</td><td class="num">4 / 8</td><td class="num">12.6 ms</td></tr>
+      <tr><td>GLiNER2.5 Base, zero-shot</td><td class="num">—</td><td class="num">—</td><td class="num">4.2%</td><td class="num">4.2%</td><td class="num">4 / 8</td><td class="num">12.1 ms</td></tr>
+      <tr><td>Small, 12,000 examples</td><td class="num">head, 0.3M</td><td class="num">63 s</td><td class="num">50.0%</td><td class="num">50.0%</td><td class="num">4 / 8</td><td class="num">12.6 ms</td></tr>
+      <tr><td>Base, 12,000 examples</td><td class="num">head, 1.2M</td><td class="num">109 s</td><td class="num">68.8%</td><td class="num">56.2%</td><td class="num">5 / 8</td><td class="num">12.3 ms</td></tr>
+      <tr class="hl"><td>Small, 12,000 examples</td><td class="num">all, 73.9M</td><td class="num">111 s</td><td class="num">100%</td><td class="num">97.9%</td><td class="num">8 / 8</td><td class="num">12.8 ms</td></tr>
+      <tr class="hl"><td>Base, 12,000 examples</td><td class="num">all, 193.6M</td><td class="num">232 s</td><td class="num">100%</td><td class="num">100%</td><td class="num">8 / 8</td><td class="num">12.5 ms</td></tr>
+    </table></div>
+    <div class="lesson"><strong>Fine-tuning, not just more data.</strong> With the encoder frozen, 12,000 examples still left
+      Small at 50% and Base at 69% on the held-out states, and neither passed the conditional probes. Updating the
+      encoder took both to 100%: the instruction and the state have to be combined inside the encoder, not after it.</div>
+    <div class="prose">
+      <p>Both fine-tuned models passed all 12 behaviour checks, and on the explicit conditional probes, “Fight, but stop
+        shooting and retreat below 40 health” and the never-trained “Fire only when your health is at least 40. If lower,
+        do not fire and move backward.”, they held fire and backed away at health 20 and 39 and fired at 40 and 80. Speed
+        is unchanged by fine-tuning: the same encoder runs on every decision, at about 54 decisions per second headless.
+        ModernBERT, with its 25–36-token inputs against GLiNER's 227–253, is a little faster.</p>
+    </div>
+  </section>
+
+  <section id="playing">
+    <h2>10 · Playing it</h2>
+    <p class="when">October 6 · six evaluation games, then three recorded minutes</p>
+    <div class="table-wrap"><table>
+      <tr><th>Kills / deaths, seeds 7 and 19 × 20 game seconds</th><th class="num">Attack</th><th class="num">Evade</th><th class="num">Cautious</th></tr>
+      <tr><td>ModernBERT</td><td class="num">18 / 0</td><td class="num">0 / 0</td><td class="num">9 / 1</td></tr>
+      <tr><td>Small, zero-shot</td><td class="num">9 / 4</td><td class="num">0 / 4</td><td class="num">0 / 4</td></tr>
+      <tr><td>Base, zero-shot</td><td class="num">8 / 3</td><td class="num">0 / 1</td><td class="num">21 / 1</td></tr>
+      <tr><td>Small, head only, 12,000 examples</td><td class="num">0 / 0</td><td class="num">0 / 3</td><td class="num">0 / 0</td></tr>
+      <tr><td>Base, head only, 12,000 examples</td><td class="num">9 / 0</td><td class="num">0 / 2</td><td class="num">0 / 3</td></tr>
+      <tr class="hl"><td>Small, fine-tuned</td><td class="num">20 / 0</td><td class="num">0 / 0</td><td class="num">19 / 0</td></tr>
+      <tr class="hl"><td>Base, fine-tuned</td><td class="num">20 / 0</td><td class="num">0 / 0</td><td class="num">19 / 0</td></tr>
+    </table></div>
+    <div class="prose">
+      <p>The two fine-tuned sizes played identical games: both reproduce the teacher's decisions in these states, so the
+        same actions led to the same outcomes. For the showcase, fine-tuned Base played a full 60 seconds per
+        instruction with the dashboard on: 20 kills and 1 death attacking, no shots and 1 death evading, 17 kills and 1
+        death on the cautious instruction. Over 3,150 live decisions its raw button vector matched the teacher's in
+        2,686; every disagreement was the direction of the sideways strafe while backing away, which the text cannot
+        always decide (an enemy “directly ahead” may be slightly left or right of the crosshair). Firing, turning and
+        moving forward or back always matched.</p>
+    </div>
+    <div class="note-box"><strong>What the cautious film does and does not show.</strong> In that run, health fell below
+      40 only after the ammunition had run out, so its retreat there is also explained by the empty weapon. The 40-health
+      rule itself is shown by the conditional probes above, which test it with ammunition loaded
+      (<code>live-agreement.json</code>, <code>conditional-base-full.json</code>).</div>
+  </section>
+
+  <section id="verdict-2">
+    <h2>11 · Verdict</h2>
+    <p class="when">What the two attempts support</p>
+    <div class="lesson"><strong>Fine-tuned, GLiNER2.5 plays Doom from instructions.</strong> With data that shows the
+      rules and an encoder that can learn them, both sizes matched the scripted teacher on every held-out state and
+      every conditional probe, followed instruction phrasings they never saw, and played without dying in the
+      evaluation games, in under four minutes of training on one GPU.</div>
+    <div class="prose">
+      <p>This is imitation of a hand-written teacher from a text description of the game, so it shows instruction
+        following within that vocabulary, not general Doom skill. The ModernBERT reference was not retrained on the new
+        data, so the comparison shows what each pipeline reached with its own training, not which encoder is better.</p>
+    </div>
     <ol class="next-steps">
-      <li><strong>From text to pixels</strong>The same question, can a model play without Doom training, was later asked
-        of a multimodal embedding model reading the screen; see the <a href="../embeddinggemma2/">EmbeddingGemma 2
-        journal</a>.</li>
-      <li><strong>The trained reference</strong>How the ModernBERT policy was built and recorded is in the
+      <li><strong>Retrain ModernBERT on the same 12,000 examples</strong>The fair architecture comparison.</li>
+      <li><strong>From text to pixels</strong>The same question without any training, reading the screen instead; see the
+        <a href="../embeddinggemma2/">EmbeddingGemma 2 journal</a>.</li>
+      <li><strong>The trained reference</strong>How the ModernBERT policy was built is in the
         <a href="../modernbert/">ModernBERT journal</a>.</li>
     </ol>
   </section>
 
 </main>
 
-<footer class="wrap"><p>Source, setup and reports: <a href="https://github.com/rozgo/doom-sandbox">rozgo/doom-sandbox</a>, <code>experiments/gliner2/</code>, <code>reports/gliner2-experiment/</code> (with a SHA-256 manifest and the raw predictions and game logs). Models: GLiNER2.5 Small and Base from fastino, ModernBERT-base from Answer.AI. Engine: ViZDoom with Freedoom assets. No video was recorded for this experiment.</p></footer>
+<footer class="wrap"><p>Source, data and reports: <a href="https://github.com/rozgo/doom-sandbox">rozgo/doom-sandbox</a>, <code>experiments/gliner2/</code> (second attempt: <code>run_v2.sh</code>, <code>teacher_data.py</code>, <code>finetune.py</code>), <code>data/gliner2-teacher-v2.jsonl</code>, <code>reports/gliner2-experiment/</code> and <code>reports/gliner2-v2/</code>, each with raw predictions, game logs and a SHA-256 manifest. Models: GLiNER2.5 Small and Base by Fastino AI (Apache-2.0); ModernBERT-base by Answer.AI (Apache-2.0). Fine-tuned weights are not stored; <code>finetune.py</code> rebuilds them in minutes. Engine: ViZDoom with Freedoom assets.</p></footer>
 </body>
 </html>
